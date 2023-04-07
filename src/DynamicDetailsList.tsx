@@ -49,7 +49,10 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
     constructor(props: any) {
         super(props);
 
-        debugger;  // eslint-disable-line no-debugger
+        if (this._isDebugMode) {
+            debugger;  // eslint-disable-line no-debugger
+        }
+
         this._pcfContext = props.context;
         this._primaryEntityName = props.primaryEntityName;
         this._fetchXml = props.fetchXml;
@@ -79,7 +82,9 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
                 onColumnClick: this._onColumnClick
             }));
 
-            console.log(`useDynamicsWebApi: ${useDynamicsWebApi}`);
+            if (this._isDebugMode) {
+                console.log(`useDynamicsWebApi: ${useDynamicsWebApi}`);
+            }
 
             if (useDynamicsWebApi) {
                 // 3rd party DynamicsWebApi library so we can get the _Formatted items back
@@ -99,6 +104,9 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
                         if (data && data.value && data.value.length > 0) {
                             this._allItems = data.value;
 
+                            if (this._isDebugMode) {
+                                console.log('_webApi.executeFetchXml : this._allItems', this._allItems);
+                            }
                             //this.state = {
                             //    items: this._allItems,
                             //    columns: this._columns,
@@ -116,7 +124,13 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
                         }
 
                     }).catch((e) => {
-                        debugger; // eslint-disable-line no-debugger
+                        if (this._isDebugMode) {
+                            console.log(e);
+                            debugger; // eslint-disable-line no-debugger
+                        }
+                        this.setState({
+                            announcedMessage: "Error fetching records"
+                        });
                     });
 
             }
@@ -127,7 +141,9 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
                         if (results && results.entities && results.entities.length > 0) {
                             //_accountActivitiesItems = this.populateRecords(results);
                             this._allItems = results.entities;
-
+                            if (this._isDebugMode) {
+                                console.log('webAPI.retrieveMultipleRecords : this._allItems', this._allItems);
+                            }
                             this.setState(
                                 {
                                     items: this._allItems,
@@ -138,16 +154,18 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
                         }
                     },
                     (error: any) => {
+                        if (this._isDebugMode) {
+                            console.log(error);
+                            debugger; // eslint-disable-line no-debugger
+                        }
                         this.setState({
                             announcedMessage: "Error fetching records"
                         });
-                    }
-                );
+                    });
             }
         }
         // If we don't have any data, use sample data
         else if (!props.fetchXml || !props.dataItems || props.dataItems.length < 1) {
-
             var sampleData = GetSampleData();
             if (sampleData.dataItems && sampleData.dataItems.length > 0) {
                 this._allItems = sampleData.dataItems;
@@ -176,42 +194,6 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
             }
         }
 
-        /*
-        this._columns = this._columns.map((column: IColumn) => ({
-            key: column.key,
-            name: column.name,
-            fieldName: column.fieldName,
-            minWidth: column.minWidth,
-            flexGrow: 1,
-            //maxWidth: 200,
-            isResizable: true,
-            onColumnClick: this._onColumnClick
-        }));
-        */
-        /*
-        this._columns = [
-            { key: 'name', name: 'Name', fieldName: 'name', flexGrow: 1, isResizable: true, minWidth: 200, data: 'string', onColumnClick: this._onColumnClick },
-            { key: 'accountid', name: 'Account Id', fieldName: 'accountid', flexGrow: 1, isResizable: true, minWidth: 100, onColumnClick: this._onColumnClick },
-            { key: 'contr.title', name: 'Contract Title', fieldName: 'contr.title', flexGrow: 1, isResizable: true, minWidth: 200, onColumnClick: this._onColumnClick },
-            { key: 'contr.activeon', name: 'Contract Start', fieldName: 'contr.activeon', flexGrow: 1, isResizable: true, minWidth: 100, data: 'string', onColumnClick: this._onColumnClick },
-            { key: 'contr.mcaogs_qptm_id', name: 'Contract #', fieldName: 'contr.mcaogs_qptm_id', flexGrow: 1, isResizable: true, minWidth: 100, data: 'string', onColumnClick: this._onColumnClick },
-            { key: 'mcaogs_sourcesystemname', name: 'Source', fieldName: 'mcaogs_sourcesystemname', flexGrow: 1, isResizable: true, minWidth: 100, onColumnClick: this._onColumnClick },
-            { key: 'mcaogs_sourcesystemid', name: 'Source Id', fieldName: 'mcaogs_sourcesystemid', flexGrow: 1, isResizable: true, minWidth: 100, onColumnClick: this._onColumnClick },
-        ];
-        */
-        /*
-         //Adding values to state
-         this.state = {
-             items: this._allItems,
-             columns: this._columns,
-             announcedMessage: this._announcedMessage
-             //fetchXml: this._fetchXml,
-             //rootEntityName: this._rootEntityName,
-             //context: this._pcfContext,
-             //announcedMessage: ""
-         };
-         */
-
         this.state = {
             items: this._allItems,
             columns: this._columns,
@@ -226,8 +208,8 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
     public render(): JSX.Element {
 
         const { columns, items, announcedMessage } = this.state;
-        console.log(items);
 
+        // if (this._isDebugMode) { console.log(items); }
         if (items) {
             return (
                 <>
@@ -257,6 +239,9 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
                                     }}
                                 />
                             </ScrollablePane>
+                            <Stack horizontalAlign='center'>
+                                <Text>Record Count: {items.length}</Text>
+                            </Stack>
                         </Stack>
                     </Stack>
                 </>
@@ -268,27 +253,13 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
     }
 
 
-
-    // private replaceFetchXmlPlaceholder(fetchXml: string, placeholder: string, recordId: string) {
-    //    return fetchXml.replace(placeholder, recordId);
-    //}
-
     private _onItemInvoked(item: any): void {
-        debugger;  // eslint-disable-line no-debugger
-        alert(`Item invoked: ${item.name
-            }`);
+        // debugger;  // eslint-disable-line no-debugger
+        // alert(`Item invoked: ${item.name}`);
 
         // Open the form.
         //Xrm.Navigation.openForm(entityFormOptions);
         this._pcfContext.navigation.openForm({ entityName: item.activitytypecode_Value, entityId: item.key });
-        /*
-        const record = this_items.records[item.key];
-        dataset.openDatasetItem(record.getNamedReference());
-        this._context.navigation.openForm({
-            entityName: "orb_pcftester",
-            entityId: "27a3e4a0-7ad2-ea11-a812-000d3a23cb53"
-        })
-        */
     }
 
     private link_Click(evt: Event): void {
@@ -316,9 +287,12 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
             if (newCol === currColumn) {
                 currColumn.isSortedDescending = !currColumn.isSortedDescending;
                 currColumn.isSorted = true;
-                this.setState({
-                    announcedMessage: `${currColumn.name} is sorted ${currColumn.isSortedDescending ? 'descending' : 'ascending'} `,
-                });
+                if (this._isDebugMode) {
+                    console.log(`${currColumn.name} is sorted ${currColumn.isSortedDescending ? 'descending' : 'ascending'} `);
+                }
+                //this.setState({
+                //    announcedMessage: `${currColumn.name} is sorted ${currColumn.isSortedDescending ? 'descending' : 'ascending'} `,
+                //});
             } else {
                 newCol.isSorted = false;
                 newCol.isSortedDescending = true;
