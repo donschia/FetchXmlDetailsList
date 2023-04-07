@@ -42,20 +42,20 @@
         "minWidth": 140
     },
     {
-        "key": "contr.onegas_qptmcontractstatus",
+        "key": "contr.onegas_qptmcontractstatus_Formatted",
         "fieldName": "contr.onegas_qptmcontractstatus_Formatted",
         "name": "Contract Status",
         "minWidth": 70
     },
     {
-        "key": "contr.activeon",
-        "fieldName": "contr.activeon",
+        "key": "contr.activeon_Formatted",
+        "fieldName": "contr.activeon_Formatted",
         "name": "Contract Start Date",
         "minWidth": 70
     },
     {
-        "key": "contr.onegas_contractenddate",
-        "fieldName": "contr.onegas_contractenddate",
+        "key": "contr.onegas_contractenddate_Formatted",
+        "fieldName": "contr.onegas_contractenddate_Formatted",
         "name": "Contract End Date",
         "minWidth": 70
     },
@@ -102,8 +102,8 @@
         "minWidth": 50
     },
     {
-        "key": "onegas_keyaccountrep",
-        "fieldName": "onegas_keyaccountrep",
+        "key": "_onegas_keyaccountrep_value_Formatted",
+        "fieldName": "_onegas_keyaccountrep_value_Formatted",
         "name": "Key Account Rep",
         "minWidth": 80
     },

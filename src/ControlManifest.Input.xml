@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <manifest>
+<!-- Schema is here: https://learn.microsoft.com/en-us/power-apps/developer/component-framework/manifest-schema-reference/property -->
   <control namespace="onegas" constructor="FetchXmlDetailsList" version="0.0.1" display-name-key="FetchXmlDetailsList" description-key="FetchXmlDetailsList description" control-type="virtual" >
     <!--external-service-usage node declares whether this 3rd party PCF control is using external service or not, if yes, this control will be considered as premium and please also add the external domain it is using.
     If it is not using any external service, please set the enabled="false" and DO NOT add any domain below. The "enabled" will be false by default.
@@ -28,8 +29,9 @@
     <property name="RecordIdPlaceholder" display-name-key="RecordId Placeholder" description-key="Will be replaced with RecordId. ie. [RECORDID] " of-type="SingleLine.Text" usage="input" required="true" />
     <property name="ControlAnchorField" display-name-key="ControlAnchorField" description-key="Dummy text field used to place grid." of-type="SingleLine.Text" usage="bound" required="true" />
     <property name="ColumnLayoutJson" display-name-key="Column Layout Json" description-key="Json list of Columns (name, fieldName)" of-type="Multiple" usage="input" required="false" />
-    <property name="ItemsPerPage" display-name-key="Items Per Page" description-key="Items Per Page (Defaults to 50)" of-type="Whole.None" usage="input" required="false" default-value="50"/>
-
+    <property name="ItemsPerPage" display-name-key="Items Per Page" description-key="Items Per Page (Defaults to 50)" of-type="Whole.None" usage="input" required="false" default-value="5000"/>
+    <property name="DebugMode" display-name-key="Run in Debug Mode" description-key="Write extra details to console.log" of-type="TwoOptions" usage="input" required="true" default-value="0"/>
+    
     <resources>
       <code path="index.ts" order="1"/>
       <platform-library name="React" version="16.8.6" />

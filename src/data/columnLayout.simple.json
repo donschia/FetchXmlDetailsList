@@ -1,59 +1,38 @@
 [
   {
-    "key": "name",
-    "name": "Account Name",
-    "fieldName": "name",
-    "minWidth": 200,
-    "data": "string"
+    "key": "contr.mcaogs_qptm_id",
+    "fieldName": "contr.mcaogs_qptm_id",
+    "name": "Contact#",
+    "minWidth": 60
   },
   {
-    "key": "accountid",
-    "name": "Account Id",
-    "fieldName": "accountid",
-    "minWidth": 100
+    "key": "mcaogs_bannerid",
+    "fieldName": "mcaogs_bannerid",
+    "name": "Banner Id#",
+    "minWidth": 120
   },
   {
     "key": "contr.title",
-    "name": "Contract Title",
     "fieldName": "contr.title",
-    "minWidth": 200
-  },
-  {
-    "key": "contr.activeon",
-    "name": "Contract Start",
-    "fieldName": "contr.activeon",
-    "minWidth": 100,
-    "data": "string"
-  },
-  {
-    "key": "contr.mcaogs_qptm_id",
-    "name": "Contract #",
-    "fieldName": "contr.mcaogs_qptm_id",
-    "minWidth": 100,
-    "data": "string"
-  },
-  {
-    "key": "mcaogs_sourcesystemname",
-    "name": "Source",
-    "fieldName": "mcaogs_sourcesystemname",
+    "name": "Contract Name",
     "minWidth": 100
   },
   {
-    "key": "mcaogs_sourcesystemid",
-    "name": "Source Id",
-    "fieldName": "mcaogs_sourcesystemid",
-    "minWidth": 100
+    "key": "name",
+    "fieldName": "name",
+    "name": "Account Name",
+    "minWidth": 160
   },
   {
-    "key": "banneraccount.mcaogs_name",
-    "name": "BannerAccount",
-    "fieldName": "banneraccount.mcaogs_name",
-    "minWidth": 100
+    "key": "contr.onegas_tspno",
+    "fieldName": "contr.onegas_tspno",
+    "name": "TSP No",
+    "minWidth": 30
   },
   {
-    "key": "banneraccount.mcaogs_premiseid",
-    "name": "BannerAccount PremiseId",
-    "fieldName": "banneraccount.mcaogs_premiseid",
-    "minWidth": 100
+    "key": "contr.onegas_rate",
+    "fieldName": "contr.onegas_rate",
+    "name": "Rate",
+    "minWidth": 50
   }
 ]

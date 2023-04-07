@@ -1,8 +1,9 @@
 import * as React from 'react';
-import { Fabric, DetailsList, IColumn, DetailsListLayoutMode, Stack } from '@fluentui/react';
+import { Fabric, DetailsList, IColumn, DetailsListLayoutMode, Stack, ConstrainMode } from '@fluentui/react';
 import { GetSampleData } from './GetSampleData';
 import { Text } from '@fluentui/react/lib/Text';
 import DynamicsWebApi = require('dynamics-web-api');
+import { ScrollablePane, ScrollbarVisibility } from '@fluentui/react'; //'office-ui-fabric-react';
 
 export interface IDynamicDetailsListProps {
     items: any[];
@@ -18,7 +19,7 @@ export interface IDynamicDetailsListProps {
 
 export interface IDynamicDetailsListState {
     columns: IColumn[];
-    items: any[];
+    items: any[]; //Record<string, string>[] //any[];
     fetchXml?: string;
     primaryEntityName?: string;
     announcedMessage?: string;
@@ -31,8 +32,8 @@ export interface IDynamicDetailsListState {
 
 
 export class DynamicDetailsList extends React.Component<any, IDynamicDetailsListState> {
-    _allItems: any[];
-    _columns: any;
+    private _allItems: any[];
+    private _columns: any;
     private _pcfContext: any;
     private _webApi: DynamicsWebApi;
 
@@ -41,6 +42,7 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
     private _fetchXml: string;
     private _announcedMessage: string;
     private _currentPageNumber: number;
+    private _isDebugMode: boolean;
     //private _fetchXmlIdPlaceholder: string;
     //private _recordId: string;
 
@@ -55,87 +57,96 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
         //this._recordId = props.recordId;
         this._allItems = props.items;
         this._columns = props.columns;
+        this._isDebugMode = props.isDebugMode;
+
         this._currentPageNumber = 1;
 
+        let useDynamicsWebApi: boolean = true;
+
         // Do we actually have a query to run, or are we using the sample data
+        // Don't bother with Web Api if we aren't actually fetching data
+        // This way we can quickly see changes in the PCF Test harness and not have to burn a full deploy cycle
         if (props.fetchXml) {
-            // Don't bother with Web Api if we aren't actually fetching data
-            // This way we can quickly see changes in the PCF Test harness and not have to burn a full deploy cycle
-            this._webApi = new DynamicsWebApi(
-                {
-                    dataApi: { version: '9.1' },
-                    useEntityNames: true
-                });
-            // query via FetchXML
-            // TODO: Switch it over to use 3rd party library so we can get the _Formatted items back?
-            this._webApi.executeFetchXml(this._primaryEntityName, this._fetchXml, "*", this._currentPageNumber, undefined, undefined)
-                .then((data) => {
-                    //debugger;
-                    // this._pagingCookie = data["@Microsoft.Dynamics.CRM.fetchxmlpagingcookie"];
-                    //this._totalNumberOfRecords =  data.count;
-                    // Sometimes data is an array[]                
-                    // parentThis.loadGrid(data.length && data.length > 0 ? data[0] : data);
-                    this._allItems = data.value;
-                    this._columns = this._columns.map((column: IColumn) => ({
-                        key: column.key,
-                        name: column.name,
-                        fieldName: column.fieldName,
-                        minWidth: column.minWidth,
-                        flexGrow: 1,
-                        //maxWidth: 200,
-                        isResizable: true,
-                        onColumnClick: this._onColumnClick
-                    }));
 
-                    this.setState(
-                        {
-                            items: this._allItems,
-                            columns: this._columns,
-                            announcedMessage: "Actual FetchXml Response used."
+            this._columns = this._columns.map((column: IColumn) => ({
+                key: column.key,
+                name: column.name,
+                fieldName: column.fieldName,
+                minWidth: column.minWidth,
+                flexGrow: 1,
+                //maxWidth: 200,
+                isResizable: true,
+                onColumnClick: this._onColumnClick
+            }));
+
+            console.log(`useDynamicsWebApi: ${useDynamicsWebApi}`);
+
+            if (useDynamicsWebApi) {
+                // 3rd party DynamicsWebApi library so we can get the _Formatted items back
+                this._webApi = new DynamicsWebApi(
+                    {
+                        dataApi: { version: '9.0' },
+                        useEntityNames: true
+                    });
+
+                this._webApi.executeFetchXml(this._primaryEntityName, this._fetchXml, "*", this._currentPageNumber, undefined, undefined)
+                    .then((data) => {
+                        //debugger;
+                        // this._pagingCookie = data["@Microsoft.Dynamics.CRM.fetchxmlpagingcookie"];
+                        //this._totalNumberOfRecords =  data.count;
+                        // Sometimes data is an array[]                
+                        // parentThis.loadGrid(data.length && data.length > 0 ? data[0] : data);
+                        if (data && data.value && data.value.length > 0) {
+                            this._allItems = data.value;
+
+                            //this.state = {
+                            //    items: this._allItems,
+                            //    columns: this._columns,
+                            //    fetchXml: this._fetchXml,
+                            //    announcedMessage: this._announcedMessage
+                            //};
+
+                            this.setState(
+                                {
+                                    items: this._allItems,
+                                    columns: this._columns,
+                                    //announcedMessage: "Actual FetchXml Response used."
+                                }
+                            );
                         }
-                    );
-                }).catch((e) => {
-                    debugger; // eslint-disable-line no-debugger
-                });
 
+                    }).catch((e) => {
+                        debugger; // eslint-disable-line no-debugger
+                    });
 
-            /*
-                       this._pcfContext.webAPI.retrieveMultipleRecords(this._rootEntityName, "?fetchXml=" + encodeURIComponent(this._fetchXml)).then(
-                           (results: any) => {
-                               if (results && results.entities.length > 0) {
-                                   //_accountActivitiesItems = this.populateRecords(results);
-                                   this._allItems = results.entities;
-                                   this._columns = this._columns.map((column: IColumn) => ({
-                                       key: column.key,
-                                       name: column.name,
-                                       fieldName: column.fieldName,
-                                       minWidth: column.minWidth,
-                                       flexGrow: 1,
-                                       //maxWidth: 200,
-                                       isResizable: true,
-                                       onColumnClick: this._onColumnClick
-                                   }));
-           
-                                   this.setState(
-                                       {
-                                           items: this._allItems,
-                                           columns: this._columns,
-                                           announcedMessage: "Actual FetchXml Response used."
-                                       }
-                                   );
-                               }
-                           },
-                           (error: any) => {
-                               this.setState({
-                                   announcedMessage: "Error fetching records"
-                               });
-                           }
-                       );
-            */
+            }
+            else {
+                // just use regular out of the box (lacks _Formatted helpers)
+                this._pcfContext.webAPI.retrieveMultipleRecords(this._primaryEntityName, "?fetchXml=" + encodeURIComponent(this._fetchXml)).then(
+                    (results: any) => {
+                        if (results && results.entities && results.entities.length > 0) {
+                            //_accountActivitiesItems = this.populateRecords(results);
+                            this._allItems = results.entities;
+
+                            this.setState(
+                                {
+                                    items: this._allItems,
+                                    columns: this._columns,
+                                    //announcedMessage: "Actual FetchXml Response used."
+                                }
+                            );
+                        }
+                    },
+                    (error: any) => {
+                        this.setState({
+                            announcedMessage: "Error fetching records"
+                        });
+                    }
+                );
+            }
         }
         // If we don't have any data, use sample data
         else if (!props.fetchXml || !props.dataItems || props.dataItems.length < 1) {
-            // ({this._allItems, this._columns, this._rootEntityName} = GetSampleData());
 
             var sampleData = GetSampleData();
             if (sampleData.dataItems && sampleData.dataItems.length > 0) {
@@ -155,13 +166,13 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
                 }));
 
                 this._announcedMessage = "Using sample data...";
-                // this.setState(
-                this.state = {
+                this.setState({
+                    //this.state = {
                     items: this._allItems,
                     columns: this._columns,
                     fetchXml: this._fetchXml,
                     announcedMessage: this._announcedMessage
-                };
+                });
             }
         }
 
@@ -215,6 +226,8 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
     public render(): JSX.Element {
 
         const { columns, items, announcedMessage } = this.state;
+        console.log(items);
+
         if (items) {
             return (
                 <>
@@ -225,23 +238,25 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
                             </Stack>
                         )}
                         <Stack>
-                            <DetailsList
-                                items={items}
-                                columns={columns}
-                                layoutMode={DetailsListLayoutMode.justified}
-                                compact={true}
-
-                                //onItemInvoked={this._onItemInvoked}
-                                onItemInvoked={(item: any) => {
-                                    // debugger;  // eslint-disable-line no-debugger
-                                    this._pcfContext.navigation.openForm(
-                                        {
-                                            entityName: this._primaryEntityName,
-                                            entityId: item[this._primaryEntityName + "id"]
-                                        }
-                                    );
-                                }}
-                            />
+                            <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto} style={{ top: '20px', zIndex: 0, bottom: '40px' }}>
+                                <DetailsList
+                                    items={items}
+                                    columns={columns}
+                                    layoutMode={DetailsListLayoutMode.justified}
+                                    compact={true}
+                                    // constrainMode={ConstrainMode.unconstrained}
+                                    //onItemInvoked={this._onItemInvoked}
+                                    onItemInvoked={(item: any) => {
+                                        // debugger;  // eslint-disable-line no-debugger
+                                        this._pcfContext.navigation.openForm(
+                                            {
+                                                entityName: this._primaryEntityName,
+                                                entityId: item[this._primaryEntityName + "id"]
+                                            }
+                                        );
+                                    }}
+                                />
+                            </ScrollablePane>
                         </Stack>
                     </Stack>
                 </>
@@ -260,7 +275,8 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
 
     private _onItemInvoked(item: any): void {
         debugger;  // eslint-disable-line no-debugger
-        alert(`Item invoked: ${item.name}`);
+        alert(`Item invoked: ${item.name
+            }`);
 
         // Open the form.
         //Xrm.Navigation.openForm(entityFormOptions);

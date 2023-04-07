@@ -16,6 +16,7 @@ export class FetchXmlDetailsList implements ComponentFramework.ReactControl<IInp
     private _columnLayout: Array<IColumn>;
     private _itemsPerPage: number | null;
     private _totalNumberOfRecords: number;
+    private _isDebugMode: boolean;
 
      /** General */
      private _context: ComponentFramework.Context<IInputs>;
@@ -48,9 +49,16 @@ export class FetchXmlDetailsList implements ComponentFramework.ReactControl<IInp
         this._context = context;
         this._notifyOutputChanged = notifyOutputChanged;
         this._container = container;
+        this._isDebugMode = false;
+        // Someday this will be configurable via input parameter, defaults to 5000
         this._itemsPerPage = 5000;
-
-        debugger;  // eslint-disable-line no-debugger
+        
+        if (this._context.parameters.DebugMode) {
+            this._isDebugMode = this._context.parameters.DebugMode.raw;
+        }
+        if (this._isDebugMode) { 
+            debugger;  // eslint-disable-line no-debugger
+        }
         if (this._context.parameters.ItemsPerPage) {
             this._itemsPerPage = this._context.parameters.ItemsPerPage.raw;
         }
@@ -70,9 +78,10 @@ export class FetchXmlDetailsList implements ComponentFramework.ReactControl<IInp
         let entityDisplayName = (<any>this._context.mode).contextInfo.entityRecordName;
         // This breaks when you use the PCF Test Harness.  Neat!
         //let baseUrl = (<any>this._context).page.getClientUrl();
+
         var recordId : string = entityId; //this._context.parameters.RecordId.raw ?? currentRecordId;
 
-        // Test harness passes in "val"
+        // Test harness always passes in "val"
         if (fetchXML != null && fetchXML != "val") {
             fetchXML =  fetchXML.replace(/"/g, "'");
             this._primaryEntityName = this.getPrimaryEntityName(fetchXML);
@@ -85,12 +94,8 @@ export class FetchXmlDetailsList implements ComponentFramework.ReactControl<IInp
         // this._fieldLayout = JSON.parse(fieldLayoutJson); //this.DEFAULT_FIELDLAYOUT);
         let columnLayoutJson = this._context.parameters.ColumnLayoutJson.raw;
         this._columnLayout = columnLayoutJson!= null && columnLayoutJson != "val"? JSON.parse(columnLayoutJson) : null;
-        //this._webApi = new DynamicsWebApi({ webApiVersion: '9.0' });
-        //this._headers = new Array<string>();
-        //this._headerDisplayNames = new Array<{ LogicalName: string, DisplayName: string }>();
 
-        // Configurable via input parameter, defaults to 50
-        this._itemsPerPage = 5000;
+
         //this._currentPageNumber = 1;
 
         //var globalContext = Xrm.Utility.getGlobalContext();
@@ -125,43 +130,35 @@ export class FetchXmlDetailsList implements ComponentFramework.ReactControl<IInp
      * @returns ReactElement root react element for the control
      */
     public updateView(context: ComponentFramework.Context<IInputs>): React.ReactElement {
-        debugger;  // eslint-disable-line no-debugger
+        // debugger;  // eslint-disable-line no-debugger
         //this.renderControl(context);
         //let dataAndLayout: any;
     
         //ReactDOM.render(React.createElement(FluentUIDetailsListControl, data, {}), this.container);
         //ata = require("../data/fetchXML.Response.json");
 
+        let props = {  columns: this._columnLayout, primaryEntityName: this._primaryEntityName, fetchXml: this._fetchXML, isDebugMode: this._isDebugMode, context: context };
+        return React.createElement(DynamicDetailsList, props, {});
+
         // TODO: Can we support a grid without a columnlayout?
+        // ie. Just use the fields in the dataset as the layout...
+        /*
         if (this._fetchXML && this._fetchXML != "" && this._columnLayout) {
-            let props = {  columns: this._columnLayout, primaryEntityName: this._primaryEntityName, fetchXml: this._fetchXML, context: context }         
-            
+            let props = {  columns: this._columnLayout, primaryEntityName: this._primaryEntityName, fetchXml: this._fetchXML, context: context }                     
             return React.createElement(DynamicDetailsList, props, {});
         }
         else{
             // Get some sample data while testing
             let sampleData = GetSampleData();
-            let props = { dataItems: sampleData.dataItems, columns: sampleData.columns, primaryEntityName: sampleData.primaryEntityName, fetchXml: "", context: context }         
-            
+            let props = { dataItems: sampleData.dataItems, columns: sampleData.columns, primaryEntityName: sampleData.primaryEntityName, fetchXml: "", context: context }                     
             return React.createElement(DynamicDetailsList, props, {});
         }
-        //return React.createElement(DetailsListSample, data, {})
+        */
 
         //const props: IHelloWorldProps = { name: 'Hello, World!' };
         //return React.createElement(
         //    HelloWorld, props
         //);
-    }
-    //used to render the DetailsListBasicExample Componant
-
-    private renderControl(context: ComponentFramework.Context<IInputs>) {
-
-        let data: any = context;
-        
-        //ReactDOM.render(React.createElement(FluentUIDetailsListControl, data, {}), this.container);
-        //React.createElement(FluentUIDetailsListControl, data, {})
-        // React.createElement(FluentUIDetailsListControl, data, {})
-
     }
 
     /**
