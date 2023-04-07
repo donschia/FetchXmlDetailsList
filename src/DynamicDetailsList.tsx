@@ -76,7 +76,7 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
                     //this._totalNumberOfRecords =  data.count;
                     // Sometimes data is an array[]                
                     // parentThis.loadGrid(data.length && data.length > 0 ? data[0] : data);
-                    this._allItems = data.value;
+                    this._allItems = data.value[0];
                     this._columns = this._columns.map((column: IColumn) => ({
                         key: column.key,
                         name: column.name,
