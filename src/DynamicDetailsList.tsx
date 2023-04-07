@@ -57,11 +57,10 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
         this._columns = props.columns;
         this._currentPageNumber = 1;
 
-
-        // 
-
+        // Do we actually have a query to run, or are we using the sample data
         if (props.fetchXml) {
-            // No Web Api if we aren't actually fetching via WebApi
+            // Don't bother with Web Api if we aren't actually fetching data
+            // This way we can quickly see changes in the PCF Test harness and not have to burn a full deploy cycle
             this._webApi = new DynamicsWebApi(
                 {
                     dataApi: { version: '9.1' },
@@ -134,7 +133,7 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
                        );
             */
         }
-        // If we don't have any data, then get some sample data
+        // If we don't have any data, use sample data
         else if (!props.fetchXml || !props.dataItems || props.dataItems.length < 1) {
             // ({this._allItems, this._columns, this._rootEntityName} = GetSampleData());
 
