@@ -37,9 +37,11 @@ export class FetchXmlDetailsList implements ComponentFramework.ReactControl<IInp
     public init(
         context: ComponentFramework.Context<IInputs>,
         notifyOutputChanged: () => void,
-        state: ComponentFramework.Dictionary
+        state: ComponentFramework.Dictionary, 
+        container: HTMLDivElement
     ): void {
         this.notifyOutputChanged = notifyOutputChanged;      
+        this.initVars(context, notifyOutputChanged, container);
     }
 
     private initVars(context: ComponentFramework.Context<IInputs>, notifyOutputChanged: () => void, container: HTMLDivElement): void {
@@ -48,44 +50,54 @@ export class FetchXmlDetailsList implements ComponentFramework.ReactControl<IInp
         this._container = container;
         this._itemsPerPage = 5000;
 
+        debugger;  // eslint-disable-line no-debugger
         if (this._context.parameters.ItemsPerPage) {
             this._itemsPerPage = this._context.parameters.ItemsPerPage.raw;
         }
         var fetchXML : string | null = this._context.parameters.FetchXML.raw; // ?? this.DEFAULT_FETCHXML;
         var recordIdPlaceholder : string | null = this._context.parameters.RecordIdPlaceholder.raw; // ?? "";  
 
-        // TODO: We need a supported generic way to get the current record Id for PETESSAKE
-        let currentRecordId =  "e1b50ead-1cf0-e811-8172-e0071b6af241"; //this._context.page.entityId;
         //let recordIdParameter = this._context.parameters.RecordId;
         var controlAnchorField : string | null = this._context.parameters.ControlAnchorField.raw;
         // const recordIdLookupValue: ComponentFramework.EntityReference = this._context.parameters.RecordId.raw[0];
-        var recordId : string = currentRecordId; //this._context.parameters.RecordId.raw ?? currentRecordId;
+       
+        // TODO: We need a supported generic way to get the current record Id for PETESSAKE
+        // let sampleRec =  "e1b50ead-1cf0-e811-8172-e0071b6af241"; //this._context.page.entityId;
 
         // Other values if we need them
         let entityId = (<any>this._context.mode).contextInfo.entityId;
         let entityTypeName = (<any>this._context.mode).contextInfo.entityTypeName;
         let entityDisplayName = (<any>this._context.mode).contextInfo.entityRecordName;
-        let baseUrl = (<any>this._context).page.getClientUrl();
+        // This breaks when you use the PCF Test Harness.  Neat!
+        //let baseUrl = (<any>this._context).page.getClientUrl();
+        var recordId : string = entityId; //this._context.parameters.RecordId.raw ?? currentRecordId;
 
-        // Replace the placeholder     
-        this._fetchXML = fetchXML != null ? this.replacePlaceholderWithId(fetchXML, recordId, recordIdPlaceholder ?? "") : null;
-        
+        // Test harness passes in "val"
+        if (fetchXML != null && fetchXML != "val") {
+            fetchXML =  fetchXML.replace(/"/g, "'");
+            this._primaryEntityName = this.getPrimaryEntityName(fetchXML);
+            // Replace the placeholder     
+            this._fetchXML = this.replacePlaceholderWithId(fetchXML, recordId, recordIdPlaceholder ?? "");
+        }
+
         // Layout provides field ordering, names, and widths
         // let fieldLayoutJson = this._context.parameters.FieldLayoutJson.raw;
         // this._fieldLayout = JSON.parse(fieldLayoutJson); //this.DEFAULT_FIELDLAYOUT);
         let columnLayoutJson = this._context.parameters.ColumnLayoutJson.raw;
-        this._columnLayout = columnLayoutJson!= null ? JSON.parse(columnLayoutJson) : null;
+        this._columnLayout = columnLayoutJson!= null && columnLayoutJson != "val"? JSON.parse(columnLayoutJson) : null;
         //this._webApi = new DynamicsWebApi({ webApiVersion: '9.0' });
         //this._headers = new Array<string>();
         //this._headerDisplayNames = new Array<{ LogicalName: string, DisplayName: string }>();
+
         // Configurable via input parameter, defaults to 50
-        this._itemsPerPage = 50;
+        this._itemsPerPage = 5000;
         //this._currentPageNumber = 1;
 
         //var globalContext = Xrm.Utility.getGlobalContext();
         //var appUrl = globalContext.getCurrentAppUrl();
 
-        this._container.style.overflow = "auto";
+        // this blows up
+        // this._container.style.overflow = "auto";
     }
 
     private replacePlaceholderWithId(fetchXML: string, recordId: string, recordIdPlaceholder: string) : string {
@@ -95,6 +107,17 @@ export class FetchXmlDetailsList implements ComponentFramework.ReactControl<IInp
             }
         }
         return fetchXML;
+    }
+
+    private getPrimaryEntityName(fetchXml: string): string {
+        let primaryEntityName: string = "";
+        // @ts-ignore
+        let filter = fetchXml.matchAll(/<entity name='(.*?)'>/g).next();
+        if (filter && filter.value && filter.value[1]) {
+            primaryEntityName = filter.value[1];
+        }
+        
+        return primaryEntityName;
     }
     /**
      * Called when any value in the property bag has changed. This includes field values, data-sets, global values such as container height and width, offline status, control metadata values such as label, visible, etc.
@@ -108,16 +131,17 @@ export class FetchXmlDetailsList implements ComponentFramework.ReactControl<IInp
     
         //ReactDOM.render(React.createElement(FluentUIDetailsListControl, data, {}), this.container);
         //ata = require("../data/fetchXML.Response.json");
-        if (this._fetchXML && this._fetchXML != "") {
-            //let dataAndLayout = GetSampleData();
-            let props = { rootEntityName: "account", fetchXml: this._fetchXML, context: context }         
+
+        // TODO: Can we support a grid without a columnlayout?
+        if (this._fetchXML && this._fetchXML != "" && this._columnLayout) {
+            let props = {  columns: this._columnLayout, primaryEntityName: this._primaryEntityName, fetchXml: this._fetchXML, context: context }         
             
             return React.createElement(DynamicDetailsList, props, {});
         }
         else{
             // Get some sample data while testing
-            let dataAndLayout = GetSampleData();
-            let props = { dataItems: dataAndLayout.dataItems, columns: dataAndLayout.columns, rootEntityName: "account", fetchXml: "", context: context }         
+            let sampleData = GetSampleData();
+            let props = { dataItems: sampleData.dataItems, columns: sampleData.columns, primaryEntityName: sampleData.primaryEntityName, fetchXml: "", context: context }         
             
             return React.createElement(DynamicDetailsList, props, {});
         }

@@ -21,3 +21,28 @@ minWidth allows for sizing of the columns.
 ]
 
 Inputs are hardcoded while we work out grid rendering issues.
+
+This would not compile with the dynamics-
+since it uses > 5 webpack.
+giving an error 
+ERROR in ./node_modules/dynamics-web-api/lib/utilities/Utility.js 2:14-31
+Module not found: Error: Can't resolve 'crypto' in 'C:\Projects\react\FetchXmlDetailsList\node_modules\dynamics-web-api\lib\utilities'
+
+So edited this file... and added fallback: { "crypto": false },
+C:\Projects\react\FetchXmlDetailsList\node_modules\pcf-scripts\webpackConfig.js
+
+BEFORE:
+resolve: {
+            // Tell webpack which extensions to try when it is looking for a file.
+            extensions: ['.ts', '.tsx', '.js', '.jsx'],
+        },
+
+AFTER:
+resolve: {
+            // Tell webpack which extensions to try when it is looking for a file.
+            extensions: ['.ts', '.tsx', '.js', '.jsx'],
+            fallback: {
+				"crypto": false
+			},
+        },
+And added 

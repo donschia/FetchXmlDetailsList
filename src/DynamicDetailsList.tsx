@@ -2,101 +2,168 @@ import * as React from 'react';
 import { Fabric, DetailsList, IColumn, DetailsListLayoutMode, Stack } from '@fluentui/react';
 import { GetSampleData } from './GetSampleData';
 import { Text } from '@fluentui/react/lib/Text';
+import DynamicsWebApi = require('dynamics-web-api');
 
 export interface IDynamicDetailsListProps {
     items: any[];
     columns: IColumn[];
 
-    fetchXml: string;
-    rootEntityName: string;
-    // announcedMessage: string;
+    fetchXml?: string;
+    rootEntityName?: string;
+    announcedMessage?: string;
     // context: any
 
 }
 
-/*
+
 export interface IDynamicDetailsListState {
     columns: IColumn[];
     items: any[];
-    selectionDetails: string;
-    isModalSelection: boolean;
-    isCompactMode: boolean;
+    fetchXml?: string;
+    primaryEntityName?: string;
     announcedMessage?: string;
-}
-*/
 
-export class DynamicDetailsList extends React.Component<any, any> {
-    _allItems: any;
+    //selectionDetails: string;
+    //isModalSelection: boolean;
+    //isCompactMode: boolean;
+
+}
+
+
+export class DynamicDetailsList extends React.Component<any, IDynamicDetailsListState> {
+    _allItems: any[];
     _columns: any;
     private _pcfContext: any;
+    private _webApi: DynamicsWebApi;
 
     // private _selection: Selection;
-    private _rootEntityName: string;
+    private _primaryEntityName: string;
     private _fetchXml: string;
     private _announcedMessage: string;
-    private _fetchXmlIdPlaceholder: string;
-    private _recordId: string;
+    private _currentPageNumber: number;
+    //private _fetchXmlIdPlaceholder: string;
+    //private _recordId: string;
 
     constructor(props: any) {
         super(props);
 
         debugger;  // eslint-disable-line no-debugger
         this._pcfContext = props.context;
-        this._rootEntityName = props.rootEntityName;
+        this._primaryEntityName = props.primaryEntityName;
         this._fetchXml = props.fetchXml;
-        this._fetchXmlIdPlaceholder = props.fetchXmlIdPlaceholder;
-        this._recordId = props.recordId;
+        //this._fetchXmlIdPlaceholder = props.fetchXmlIdPlaceholder;
+        //this._recordId = props.recordId;
         this._allItems = props.items;
         this._columns = props.columns;
+        this._currentPageNumber = 1;
+
 
         // 
 
         if (props.fetchXml) {
-            // Replace placeholder with Id
-            this._fetchXml = this.replaceFetchXmlPlaceholder(this._fetchXml, this._fetchXmlIdPlaceholder, this._recordId);
-
+            // No Web Api if we aren't actually fetching via WebApi
+            this._webApi = new DynamicsWebApi(
+                {
+                    dataApi: { version: '9.1' },
+                    useEntityNames: true
+                });
             // query via FetchXML
-            this._pcfContext.webAPI.retrieveMultipleRecords(this._rootEntityName, "?fetchXml=" + encodeURIComponent(this._fetchXml)).then(
-                (results: any) => {
-                    //_accountActivitiesItems = this.populateRecords(results);
-                    this.state = {
-                        items: this._allItems,
-                        columns: this._columns,
-                        fetchXml: this._fetchXml,
-                        //rootEntityName: this._rootEntityName,
-                        //context: this._pcfContext,
-                        //announcedMessage: ""
-                    };
-                },
-                (error: any) => {
-                    this.setState({
-                        announcedMessage: "Error while fetching records"
-                    });
-                }
-            );
+            // TODO: Switch it over to use 3rd party library so we can get the _Formatted items back?
+            this._webApi.executeFetchXml(this._primaryEntityName, this._fetchXml, "*", this._currentPageNumber, undefined, undefined)
+                .then((data) => {
+                    //debugger;
+                    // this._pagingCookie = data["@Microsoft.Dynamics.CRM.fetchxmlpagingcookie"];
+                    //this._totalNumberOfRecords =  data.count;
+                    // Sometimes data is an array[]                
+                    // parentThis.loadGrid(data.length && data.length > 0 ? data[0] : data);
+                    this._allItems = data.value;
+                    this._columns = this._columns.map((column: IColumn) => ({
+                        key: column.key,
+                        name: column.name,
+                        fieldName: column.fieldName,
+                        minWidth: column.minWidth,
+                        flexGrow: 1,
+                        //maxWidth: 200,
+                        isResizable: true,
+                        onColumnClick: this._onColumnClick
+                    }));
+
+                    this.setState(
+                        {
+                            items: this._allItems,
+                            columns: this._columns,
+                            announcedMessage: "Actual FetchXml Response used."
+                        }
+                    );
+                }).catch((e) => {
+                    debugger; // eslint-disable-line no-debugger
+                });
+
+
+            /*
+                       this._pcfContext.webAPI.retrieveMultipleRecords(this._rootEntityName, "?fetchXml=" + encodeURIComponent(this._fetchXml)).then(
+                           (results: any) => {
+                               if (results && results.entities.length > 0) {
+                                   //_accountActivitiesItems = this.populateRecords(results);
+                                   this._allItems = results.entities;
+                                   this._columns = this._columns.map((column: IColumn) => ({
+                                       key: column.key,
+                                       name: column.name,
+                                       fieldName: column.fieldName,
+                                       minWidth: column.minWidth,
+                                       flexGrow: 1,
+                                       //maxWidth: 200,
+                                       isResizable: true,
+                                       onColumnClick: this._onColumnClick
+                                   }));
+           
+                                   this.setState(
+                                       {
+                                           items: this._allItems,
+                                           columns: this._columns,
+                                           announcedMessage: "Actual FetchXml Response used."
+                                       }
+                                   );
+                               }
+                           },
+                           (error: any) => {
+                               this.setState({
+                                   announcedMessage: "Error fetching records"
+                               });
+                           }
+                       );
+            */
         }
         // If we don't have any data, then get some sample data
         else if (!props.fetchXml || !props.dataItems || props.dataItems.length < 1) {
             // ({this._allItems, this._columns, this._rootEntityName} = GetSampleData());
 
             var sampleData = GetSampleData();
-            this._allItems = sampleData.dataItems;
-            this._columns = sampleData.columns;
-            this._rootEntityName = sampleData.rootEntityIdField;
+            if (sampleData.dataItems && sampleData.dataItems.length > 0) {
+                this._allItems = sampleData.dataItems;
+                this._columns = sampleData.columns;
+                this._primaryEntityName = sampleData.primaryEntityName;
 
-            this._columns = this._columns.map((column: IColumn) => ({
-                key: column.key,
-                name: column.name,
-                fieldName: column.fieldName,
-                minWidth: column.minWidth,
-                flexGrow: 1,
-                //maxWidth: 200,
-                isResizable: true,
-                onColumnClick: this._onColumnClick
-            }));
+                this._columns = this._columns.map((column: IColumn) => ({
+                    key: column.key,
+                    name: column.name,
+                    fieldName: column.fieldName,
+                    minWidth: column.minWidth,
+                    flexGrow: 1,
+                    //maxWidth: 200,
+                    isResizable: true,
+                    onColumnClick: this._onColumnClick
+                }));
 
-            this._announcedMessage = "Using sample data...";
-
+                this._announcedMessage = "Using sample data...";
+                // this.setState(
+                this.state = {
+                    items: this._allItems,
+                    columns: this._columns,
+                    fetchXml: this._fetchXml,
+                    announcedMessage: this._announcedMessage
+                };
+            }
         }
 
         /*
@@ -122,56 +189,75 @@ export class DynamicDetailsList extends React.Component<any, any> {
             { key: 'mcaogs_sourcesystemid', name: 'Source Id', fieldName: 'mcaogs_sourcesystemid', flexGrow: 1, isResizable: true, minWidth: 100, onColumnClick: this._onColumnClick },
         ];
         */
-        //Adding values to state
+        /*
+         //Adding values to state
+         this.state = {
+             items: this._allItems,
+             columns: this._columns,
+             announcedMessage: this._announcedMessage
+             //fetchXml: this._fetchXml,
+             //rootEntityName: this._rootEntityName,
+             //context: this._pcfContext,
+             //announcedMessage: ""
+         };
+         */
+
         this.state = {
             items: this._allItems,
             columns: this._columns,
+            fetchXml: this._fetchXml,
             announcedMessage: this._announcedMessage
-            //fetchXml: this._fetchXml,
-            //rootEntityName: this._rootEntityName,
-            //context: this._pcfContext,
-            //announcedMessage: ""
         };
     }
 
-    public render() {
+    public componentDidUpdate(previousProps: any, previousState: IDynamicDetailsListProps) {
+    }
 
-        //const { columns, items, announcedMessage } = this.state;
+    public render(): JSX.Element {
 
-        return (
-            <>
-                {this.state.announcedMessage && (
-                    <Stack horizontalAlign='center'>
-                        <Text color='red'>{this.state.announcedMessage}</Text>
+        const { columns, items, announcedMessage } = this.state;
+        if (items) {
+            return (
+                <>
+                    <Stack>
+                        {announcedMessage && (
+                            <Stack horizontalAlign='center'>
+                                <Text color='red'>{announcedMessage}</Text>
+                            </Stack>
+                        )}
+                        <Stack>
+                            <DetailsList
+                                items={items}
+                                columns={columns}
+                                layoutMode={DetailsListLayoutMode.justified}
+                                compact={true}
+
+                                //onItemInvoked={this._onItemInvoked}
+                                onItemInvoked={(item: any) => {
+                                    // debugger;  // eslint-disable-line no-debugger
+                                    this._pcfContext.navigation.openForm(
+                                        {
+                                            entityName: this._primaryEntityName,
+                                            entityId: item[this._primaryEntityName + "id"]
+                                        }
+                                    );
+                                }}
+                            />
+                        </Stack>
                     </Stack>
-                )}
-                <DetailsList
-                    items={this.state.items}
-                    columns={this.state.columns}
-                    layoutMode={DetailsListLayoutMode.justified}
-                    compact={true}
+                </>
 
-                    //onItemInvoked={this._onItemInvoked}
-                    onItemInvoked={(item: any) => {
-                        // debugger;  // eslint-disable-line no-debugger
-                        this._pcfContext.navigation.openForm(
-                            {
-                                entityName: this._rootEntityName,
-                                entityId: item[this._rootEntityName + "id"]
-                            }
-                        );
-                    }}
-                />
-
-            </>
-
-        );
-
+            );
+        }
+        else
+            return (<Stack><Text>Grid is Loading</Text></Stack>);
     }
 
-    private replaceFetchXmlPlaceholder(fetchXml: string, placeholder: string, recordId: string) {
-        return fetchXml.replace(placeholder, recordId);
-    }
+
+
+    // private replaceFetchXmlPlaceholder(fetchXml: string, placeholder: string, recordId: string) {
+    //    return fetchXml.replace(placeholder, recordId);
+    //}
 
     private _onItemInvoked(item: any): void {
         debugger;  // eslint-disable-line no-debugger
@@ -216,7 +302,7 @@ export class DynamicDetailsList extends React.Component<any, any> {
                 currColumn.isSortedDescending = !currColumn.isSortedDescending;
                 currColumn.isSorted = true;
                 this.setState({
-                    announcedMessage: `${currColumn.name} is sorted ${currColumn.isSortedDescending ? 'descending' : 'ascending'}`,
+                    announcedMessage: `${currColumn.name} is sorted ${currColumn.isSortedDescending ? 'descending' : 'ascending'} `,
                 });
             } else {
                 newCol.isSorted = false;

@@ -18,6 +18,6 @@ export function GetSampleData() {
     //return require('../data/fetchXML.Response.json')
     //const sampleResponsedata = require("../data/fetchXML.Response.json");
 
-    return { dataItems : sampleResponsedata.value, columns : sampleResponseColumnLayout, rootEntityIdField : 'accountid'};
+    return { dataItems : sampleResponsedata.value, columns : sampleResponseColumnLayout, primaryEntityName : 'account' };
     //var dataArray = JSON.parse(fs.readFileSync('data.json', 'utf-8'))
   }
