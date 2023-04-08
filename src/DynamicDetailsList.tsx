@@ -1,9 +1,11 @@
 import * as React from 'react';
-import { Fabric, DetailsList, IColumn, DetailsListLayoutMode, Stack, ConstrainMode } from '@fluentui/react';
+import { Fabric, DetailsList, IColumn, DetailsListLayoutMode, Stack, ConstrainMode, SelectionMode, IDetailsListProps, IDetailsRowStyles, DetailsRow, getTheme, Label, Spinner, SpinnerSize } from '@fluentui/react';
 import { GetSampleData } from './GetSampleData';
 import { Text } from '@fluentui/react/lib/Text';
 import DynamicsWebApi = require('dynamics-web-api');
 import { ScrollablePane, ScrollbarVisibility } from '@fluentui/react'; //'office-ui-fabric-react';
+
+const theme = getTheme();
 
 export interface IDynamicDetailsListProps {
     items: any[];
@@ -45,6 +47,7 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
     private _isDebugMode: boolean;
     //private _fetchXmlIdPlaceholder: string;
     //private _recordId: string;
+
 
     constructor(props: any) {
         super(props);
@@ -215,18 +218,22 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
                 <>
                     <Stack>
                         {announcedMessage && (
-                            <Stack horizontalAlign='center'>
+                            <Stack.Item align="center">
                                 <Text color='red'>{announcedMessage}</Text>
-                            </Stack>
+                            </Stack.Item>
                         )}
-                        <Stack>
-                            <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto} style={{ top: '20px', zIndex: 0, bottom: '40px' }}>
+                        <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto} style={{ top: '10px', zIndex: 0, bottom: '10px' }}>
+                            <Stack.Item>
+
                                 <DetailsList
                                     items={items}
                                     columns={columns}
                                     layoutMode={DetailsListLayoutMode.justified}
                                     compact={true}
-                                    // constrainMode={ConstrainMode.unconstrained}
+                                    selectionMode={SelectionMode.none}
+                                    isHeaderVisible={true}
+                                    constrainMode={ConstrainMode.unconstrained}
+                                    onRenderRow={this._onRenderRow}
                                     //onItemInvoked={this._onItemInvoked}
                                     onItemInvoked={(item: any) => {
                                         // debugger;  // eslint-disable-line no-debugger
@@ -238,18 +245,25 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
                                         );
                                     }}
                                 />
-                            </ScrollablePane>
-                            <Stack horizontalAlign='center'>
-                                <Text>Record Count: {items.length}</Text>
-                            </Stack>
-                        </Stack>
-                    </Stack>
+
+
+
+                            </Stack.Item>
+                            <Stack.Item align="start" >
+                                <Text>Total Records: {items.length}</Text>
+                            </Stack.Item>
+                        </ScrollablePane>
+                    </Stack >
                 </>
 
             );
         }
         else
-            return (<Stack><Text>Grid is Loading</Text></Stack>);
+            return (
+                <Stack horizontal={true} verticalAlign={'center'} >
+                    <Spinner label="Loading Grid" size={SpinnerSize.medium} />
+                </Stack>
+            );
     }
 
 
@@ -310,4 +324,16 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
         }
     };
 
+    private _onRenderRow: IDetailsListProps['onRenderRow'] = props => {
+        const customStyles: Partial<IDetailsRowStyles> = {};
+        if (props) {
+            if (props.itemIndex % 2 === 0) {
+                // Every other row renders with a different background color
+                customStyles.root = { backgroundColor: theme.palette.themeLighterAlt };
+            }
+
+            return <DetailsRow {...props} styles={customStyles} />;
+        }
+        return null;
+    };
 }
