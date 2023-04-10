@@ -305,7 +305,6 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
                                     // Custom Rendering not working ATM
                                     // onRenderItemColumn={this._renderItemColumn}
 
-                                    //onItemInvoked={this._onItemInvoked}
                                     // Double clicking a row
                                     onItemInvoked={this._onItemInvoked}
                                 /*
