@@ -5,19 +5,20 @@ Open Terminal.
 To install dependencies run:
 	npm install
 
-To build and deploy using PAC PCF PUSH run
+To build and deploy to your currently configured DEV Environment using PAC PCF PUSH run:
 	buildAndDeploy.ps1
 
-This will build and put in temporary solution to get to a DEV environment.
-
+This will build the component, add it to a temporary solution (PowerAppsTools_onegas) , import to the DEV environment and publish all.
+Prerequitiste is to make sure you can connect to your DEV environment using the CLI tools.
 
 The grid has input parameters which must be set.
-FetchXML is the full FetchXml with the placeholder for the Record Id in place.
+
+FetchXML is the full FetchXml with a placeholder for the Record Id in place.
 
 RecordIdPlaceholder is the placeholder.  
 I.e. [RECORDID]
 
-RecordId is read from the parent at the moment as it's not super easy to get this.
+RecordId is read from the parent in a bit of a hack at the moment as it's not super easy to get this in the Power Apps framework.
 
 ColumnLayoutJson is a collection of columns used for the table layout.
 
@@ -51,7 +52,8 @@ to this:
 
 
 ------------
+
 Errors:
-If you get this runtime error you may need to use a _Formatted field.  For example, here it seems to be having a hard time with the date. 
+If you get this following runtime error you may need to use a _Formatted field.  For example, here it seems to be having a hard time with the date. 
 
 Objects are not valid as a React child (found: Wed Dec 31 9000 00:00:00 GMT-0600 (Central Standard Time)). If you meant to render a collection of children, use an array instead.

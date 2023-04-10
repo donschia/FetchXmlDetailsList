@@ -1,11 +1,12 @@
 import * as React from 'react';
-import { Fabric, DetailsList, IColumn, DetailsListLayoutMode, Stack, ConstrainMode, SelectionMode, IDetailsListProps, IDetailsRowStyles, DetailsRow, getTheme, Label, Spinner, SpinnerSize } from '@fluentui/react';
+import { Fabric, DetailsList, IColumn, DetailsListLayoutMode, Stack, ConstrainMode, SelectionMode, IDetailsListProps, IDetailsRowStyles, DetailsRow, getTheme, Label, Spinner, SpinnerSize, Link, TooltipHost } from '@fluentui/react';
 import { GetSampleData } from './GetSampleData';
 import { Text } from '@fluentui/react/lib/Text';
 import DynamicsWebApi = require('dynamics-web-api');
 import { ScrollablePane, ScrollbarVisibility } from '@fluentui/react'; //'office-ui-fabric-react';
 
 const theme = getTheme();
+const _LOOKUPLOGICALNAMEATTRIBUTE = "@Microsoft.Dynamics.CRM.lookuplogicalname";
 
 export interface IDynamicDetailsListProps {
     items: any[];
@@ -110,12 +111,6 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
                             if (this._isDebugMode) {
                                 console.log('_webApi.executeFetchXml : this._allItems', this._allItems);
                             }
-                            //this.state = {
-                            //    items: this._allItems,
-                            //    columns: this._columns,
-                            //    fetchXml: this._fetchXml,
-                            //    announcedMessage: this._announcedMessage
-                            //};
 
                             this.setState(
                                 {
@@ -178,12 +173,33 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
                 this._columns = this._columns.map((column: IColumn) => ({
                     key: column.key,
                     name: column.name,
+                    ariaLabel: column.name,
                     fieldName: column.fieldName,
                     minWidth: column.minWidth,
                     flexGrow: 1,
                     //maxWidth: 200,
                     isResizable: true,
-                    onColumnClick: this._onColumnClick
+
+                    // Sorting
+                    onColumnClick: this._onColumnClick,
+                    // Handle rendering lookup field links
+                    /*
+                    onRender: (item: any) => {
+                        //if (column.key.indexOf(_LOOKUPLOGICALNAMEATTRIBUTE) > -1) {
+                        if (item[column.key]) {
+                            if (item[column.key + _LOOKUPLOGICALNAMEATTRIBUTE]) {
+                                //let baseFieldName = column.key.replace(_LOOKUPLOGICALNAMEATTRIBUTE, "");
+                                <Link key={item} onClick={() => this._pcfContext.navigation.openForm({ entityName: item[column.key + _LOOKUPLOGICALNAMEATTRIBUTE], entityId: item[column.key] })}>
+                                    Link: {item[column.key]}
+                                </Link>
+                            }
+                            else {
+                                <span>{item[column.key]}</span>
+                            }
+                        }
+
+                    },
+                    */
                 }));
 
                 this._announcedMessage = "Using sample data...";
@@ -203,6 +219,56 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
             fetchXml: this._fetchXml,
             announcedMessage: this._announcedMessage
         };
+    }
+
+    private _onRenderDetailsHeader(props: any, defaultRender?: any) {
+        return defaultRender!({
+            ...props,
+            onRenderColumnHeaderTooltip: (tooltipHostProps: any) => {
+                return (
+                    <TooltipHost {...tooltipHostProps} />
+                )
+            }
+        });
+    }
+
+    private _renderItemColumn(item: any, index: number | undefined, column: any) {
+        debugger; // eslint-disable-line no-debugger
+        const fieldContent = item[column.fieldName as keyof any] as string;
+
+        if (item[column.key]) {
+            if (item[column.key + _LOOKUPLOGICALNAMEATTRIBUTE]) {
+                //let baseFieldName = column.key.replace(_LOOKUPLOGICALNAMEATTRIBUTE, "");
+                <Link key={item} onClick={() => this._pcfContext.navigation.openForm({ entityName: item[column.key + _LOOKUPLOGICALNAMEATTRIBUTE], entityId: item[column.key] })}>
+                    Link: {fieldContent}
+                </Link>
+            }
+            else {
+                <span>.. {fieldContent}</span>
+            }
+        }
+        /*
+            switch (column.key) {
+                case 'thumbnail':
+                return <Image src={fieldContent} width={50} height={50} imageFit={ImageFit.cover} />;
+        
+                case 'name':
+                return <Link href="#">{fieldContent}</Link>;
+        
+                case 'color':
+                return (
+                    <span
+                    data-selection-disabled={true}
+                    className={mergeStyles({ color: fieldContent, height: '100%', display: 'block' })}
+                    >
+                    {fieldContent}
+                    </span>
+                );
+        
+                default:
+                return <span>{fieldContent}</span>;
+            }
+        */
     }
 
     public componentDidUpdate(previousProps: any, previousState: IDynamicDetailsListProps) {
@@ -234,19 +300,26 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
                                     isHeaderVisible={true}
                                     constrainMode={ConstrainMode.unconstrained}
                                     onRenderRow={this._onRenderRow}
+                                    onRenderDetailsHeader={this._onRenderDetailsHeader}
+
+                                    // Custom Rendering not working ATM
+                                    // onRenderItemColumn={this._renderItemColumn}
+
                                     //onItemInvoked={this._onItemInvoked}
-                                    onItemInvoked={(item: any) => {
-                                        // debugger;  // eslint-disable-line no-debugger
-                                        this._pcfContext.navigation.openForm(
-                                            {
-                                                entityName: this._primaryEntityName,
-                                                entityId: item[this._primaryEntityName + "id"]
-                                            }
-                                        );
-                                    }}
+                                    // Double clicking a row
+                                    onItemInvoked={this._onItemInvoked}
+                                /*
+                                onItemInvoked={(item: any) => {
+                                    // debugger;  // eslint-disable-line no-debugger
+                                    this._pcfContext.navigation.openForm(
+                                        {
+                                            entityName: this._primaryEntityName,
+                                            entityId: item[this._primaryEntityName + "id"]
+                                        }
+                                    );
+                                }}
+                                */
                                 />
-
-
 
                             </Stack.Item>
                             <Stack.Item align="start" >
@@ -272,8 +345,14 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
         // alert(`Item invoked: ${item.name}`);
 
         // Open the form.
+        this._pcfContext.navigation.openForm(
+            {
+                entityName: this._primaryEntityName,
+                entityId: item[this._primaryEntityName + "id"]
+            }
+        );
         //Xrm.Navigation.openForm(entityFormOptions);
-        this._pcfContext.navigation.openForm({ entityName: item.activitytypecode_Value, entityId: item.key });
+        //this._pcfContext.navigation.openForm({ entityName: item.activitytypecode_Value, entityId: item.key });
     }
 
     private link_Click(evt: Event): void {
