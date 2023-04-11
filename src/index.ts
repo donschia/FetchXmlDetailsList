@@ -54,7 +54,7 @@ export class FetchXmlDetailsList implements ComponentFramework.ReactControl<IInp
         this._itemsPerPage = 5000;
         
         if (this._context.parameters.DebugMode) {
-            this._isDebugMode = this._context.parameters.DebugMode.raw;
+            this._isDebugMode = this._context.parameters.DebugMode.raw == "1";
         }
         if (this._isDebugMode) { 
             debugger;  // eslint-disable-line no-debugger
@@ -62,6 +62,8 @@ export class FetchXmlDetailsList implements ComponentFramework.ReactControl<IInp
         if (this._context.parameters.ItemsPerPage) {
             this._itemsPerPage = this._context.parameters.ItemsPerPage.raw;
         }
+        
+        // TODO: Validate the input parameters to make sure we get a friendly error instead of wierd errors
         var fetchXML : string | null = this._context.parameters.FetchXML.raw; // ?? this.DEFAULT_FETCHXML;
         var recordIdPlaceholder : string | null = this._context.parameters.RecordIdPlaceholder.raw; // ?? "";  
 

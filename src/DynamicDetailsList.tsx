@@ -71,6 +71,7 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
             this._columns = this._columns.map((column: IColumn) => ({
                 key: column.key,
                 name: column.name,
+                ariaLabel: column.name,
                 fieldName: column.fieldName,
                 minWidth: column.minWidth,
                 flexGrow: 1,
@@ -87,7 +88,7 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
                 // 3rd party DynamicsWebApi library allows access to the _Formatted items
                 this._webApi = new DynamicsWebApi(
                     {
-                        dataApi: { version: '9.2' },
+                        dataApi: { version: '9.0' },
                         useEntityNames: true
                     });
 
@@ -256,23 +257,21 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
                                     onRenderRow={this._onRenderRow}
                                     onRenderDetailsHeader={this._onRenderDetailsHeader}
                                     // Double clicking a row
-                                    onItemInvoked={this._onItemInvoked}
+                                    //onItemInvoked={this._onItemInvoked}
 
                                     // Custom Rendering to support entity linking
                                     onRenderItemColumn={this._renderItemColumn}
 
+                                    onItemInvoked={(item: any) => {
+                                        // debugger;  // eslint-disable-line no-debugger
+                                        this._pcfContext.navigation.openForm(
+                                            {
+                                                entityName: this._primaryEntityName,
+                                                entityId: item[this._primaryEntityName + "id"]
+                                            }
+                                        );
+                                    }}
 
-                                /*
-                                onItemInvoked={(item: any) => {
-                                    // debugger;  // eslint-disable-line no-debugger
-                                    this._pcfContext.navigation.openForm(
-                                        {
-                                            entityName: this._primaryEntityName,
-                                            entityId: item[this._primaryEntityName + "id"]
-                                        }
-                                    );
-                                }}
-                                */
                                 />
 
                             </Stack.Item>
@@ -293,7 +292,9 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
             );
     }
 
-    _renderItemColumn(item: any, index: number | undefined, column: any) {
+    //private _onColumnClick = (ev: React.MouseEvent<HTMLElement>, column: IColumn): void => {
+    // _renderItemColumn(item: any, index: number | undefined, column: any) {
+    private _renderItemColumn = (item: any, index: number | undefined, column: any): any => {
         // debugger; // eslint-disable-line no-debugger
         //const fieldContent = item[column.fieldName as keyof any] as string;
         let fieldContent = item[column.fieldName];
@@ -305,6 +306,10 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
                     {fieldContent}
                 </Link>
                 );
+            }
+            // URL field handling - open in a new tab/window
+            else if ((fieldContent as string).startsWith("http")) {
+                return (<Link key={item} href={fieldContent} target="_blank">External Link</Link>);
             }
             else {
                 return (<span>{fieldContent}</span>);
