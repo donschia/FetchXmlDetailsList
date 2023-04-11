@@ -22,6 +22,7 @@
 			<attribute name='onegas_meter_serial_number'/>
 			<attribute name='mcaogs_premiseid'/>
 			<attribute name='onegas_billing_history_url'/>
+			<attribute name='onegas_contractid'/>
 			<link-entity name='mcaogs_premise' from='mcaogs_premiseid' to='mcaogs_premiseid' link-type='outer' alias='premise'>
 				<attribute name='mcaogs_address1'/>
 				<attribute name='mcaogs_city'/>

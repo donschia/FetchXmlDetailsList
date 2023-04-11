@@ -1,134 +1,140 @@
 [
-    {
-        "key": "contr.mcaogs_qptm_id",
-        "fieldName": "contr.mcaogs_qptm_id",
-        "name": "Contact#",
-        "minWidth": 60
-    },
-    {
-        "key": "mcaogs_bannerid",
-        "fieldName": "mcaogs_bannerid",
-        "name": "Banner Id#",
-        "minWidth": 120
-    },
-    {
-        "key": "contr.title",
-        "fieldName": "contr.title",
-        "name": "Contract Name",
-        "minWidth": 100
-    },
-    {
-        "key": "name",
-        "fieldName": "name",
-        "name": "Account Name",
-        "minWidth": 160
-    },
-    {
-        "key": "contr.onegas_tspno",
-        "fieldName": "contr.onegas_tspno",
-        "name": "TSP No",
-        "minWidth": 30
-    },
-    {
-        "key": "contr.onegas_rate",
-        "fieldName": "contr.onegas_rate",
-        "name": "Rate",
-        "minWidth": 50
-    },
-    {
-        "key": "contr.onegas_tariff",
-        "fieldName": "contr.onegas_tariff",
-        "name": "Tariff",
-        "minWidth": 140
-    },
-    {
-        "key": "contr.onegas_qptmcontractstatus_Formatted",
-        "fieldName": "contr.onegas_qptmcontractstatus_Formatted",
-        "name": "Contract Status",
-        "minWidth": 70
-    },
-    {
-        "key": "contr.activeon_Formatted",
-        "fieldName": "contr.activeon_Formatted",
-        "name": "Contract Start Date",
-        "minWidth": 70
-    },
-    {
-        "key": "contr.onegas_contractenddate_Formatted",
-        "fieldName": "contr.onegas_contractenddate_Formatted",
-        "name": "Contract End Date",
-        "minWidth": 70
-    },
-    {
-        "key": "premise.mcaogs_address1",
-        "fieldName": "premise.mcaogs_address1",
-        "name": "Address",
-        "minWidth": 120
-    },
-    {
-        "key": "premise.mcaogs_city",
-        "fieldName": "premise.mcaogs_city",
-        "name": "City",
-        "minWidth": 80
-    },
-    {
-        "key": "premise.mcaogs_stateid",
-        "fieldName": "premise.mcaogs_stateid_Formatted",
-        "name": "State",
-        "minWidth": 40
-    },
-    {
-        "key": "premise.onegas_stationid",
-        "fieldName": "premise.onegas_stationid",
-        "name": "Station Id",
-        "minWidth": 60
-    },
-    {
-        "key": "contr.mcaogs_supplier",
-        "fieldName": "contr.mcaogs_supplier_Formatted",
-        "name": "Supplier",
-        "minWidth": 120
-    },
-    {
-        "key": "banneraccount.onegas_meter_serial_number",
-        "fieldName": "banneraccount.onegas_meter_serial_number",
-        "name": "Meter SN#",
-        "minWidth": 80
-    },
-    {
-        "key": "banneraccount.onegas_bannerstatus",
-        "fieldName": "banneraccount.onegas_bannerstatus_Formatted",
-        "name": "Banr Acct Status",
-        "minWidth": 50
-    },
-    {
-        "key": "_onegas_keyaccountrep_value_Formatted",
-        "fieldName": "_onegas_keyaccountrep_value_Formatted",
-        "name": "Key Account Rep",
-        "minWidth": 80
-    },
-    {
-        "key": "banneraccount.mcaogs_name",
-        "fieldName": "banneraccount.mcaogs_name",
-        "name": "Banner Account#",
-        "minWidth": 120
-    },
-    {
-        "key": "mcaogs_sourcesystemname",
-        "fieldName": "mcaogs_sourcesystemname",
-        "name": "SourceSystemName",
-        "minWidth": 80
-    },
-    {
-        "key": "mcaogs_sourcesystemid",
-        "fieldName": "mcaogs_sourcesystemid",
-        "name": "SourceSystemId",
-        "minWidth": 80
-    },
-    {
-        "key": "banneraccount.onegas_billing_history_url",
-        "fieldName": "banneraccount.onegas_billing_history_url",
-        "name": "Billing Url",
-        "minWidth": 80
-    }
+  {
+    "key": "contr.mcaogs_qptm_id",
+    "fieldName": "contr.mcaogs_qptm_id",
+    "name": "Contact#",
+    "minWidth": 60
+  },
+  {
+    "key": "mcaogs_bannerid",
+    "fieldName": "mcaogs_bannerid",
+    "name": "Banner Id#",
+    "minWidth": 120
+  },
+  {
+    "key": "contr.title",
+    "fieldName": "contr.title",
+    "name": "Contract Name",
+    "minWidth": 100
+  },
+  {
+    "key": "banneraccount.onegas_contractid",
+    "fieldName": "banneraccount.onegas_contractid",
+    "name": "Contract Name",
+    "minWidth": 100
+  },
+  {
+    "key": "name",
+    "fieldName": "name",
+    "name": "Account Name",
+    "minWidth": 160
+  },
+  {
+    "key": "contr.onegas_tspno",
+    "fieldName": "contr.onegas_tspno",
+    "name": "TSP No",
+    "minWidth": 30
+  },
+  {
+    "key": "contr.onegas_rate",
+    "fieldName": "contr.onegas_rate",
+    "name": "Rate",
+    "minWidth": 50
+  },
+  {
+    "key": "contr.onegas_tariff",
+    "fieldName": "contr.onegas_tariff",
+    "name": "Tariff",
+    "minWidth": 140
+  },
+  {
+    "key": "contr.onegas_qptmcontractstatus_Formatted",
+    "fieldName": "contr.onegas_qptmcontractstatus_Formatted",
+    "name": "Contract Status",
+    "minWidth": 70
+  },
+  {
+    "key": "contr.activeon_Formatted",
+    "fieldName": "contr.activeon_Formatted",
+    "name": "Contract Start Date",
+    "minWidth": 70
+  },
+  {
+    "key": "contr.onegas_contractenddate_Formatted",
+    "fieldName": "contr.onegas_contractenddate_Formatted",
+    "name": "Contract End Date",
+    "minWidth": 70
+  },
+  {
+    "key": "premise.mcaogs_address1",
+    "fieldName": "premise.mcaogs_address1",
+    "name": "Address",
+    "minWidth": 120
+  },
+  {
+    "key": "premise.mcaogs_city",
+    "fieldName": "premise.mcaogs_city",
+    "name": "City",
+    "minWidth": 80
+  },
+  {
+    "key": "premise.mcaogs_stateid",
+    "fieldName": "premise.mcaogs_stateid_Formatted",
+    "name": "State",
+    "minWidth": 40
+  },
+  {
+    "key": "premise.onegas_stationid",
+    "fieldName": "premise.onegas_stationid",
+    "name": "Station Id",
+    "minWidth": 60
+  },
+  {
+    "key": "contr.mcaogs_supplier",
+    "fieldName": "contr.mcaogs_supplier_Formatted",
+    "name": "Supplier",
+    "minWidth": 120
+  },
+  {
+    "key": "banneraccount.onegas_meter_serial_number",
+    "fieldName": "banneraccount.onegas_meter_serial_number",
+    "name": "Meter SN#",
+    "minWidth": 80
+  },
+  {
+    "key": "banneraccount.onegas_bannerstatus",
+    "fieldName": "banneraccount.onegas_bannerstatus_Formatted",
+    "name": "Banr Acct Status",
+    "minWidth": 50
+  },
+  {
+    "key": "_onegas_keyaccountrep_value_Formatted",
+    "fieldName": "_onegas_keyaccountrep_value_Formatted",
+    "name": "Key Account Rep",
+    "minWidth": 80
+  },
+  {
+    "key": "banneraccount.mcaogs_name",
+    "fieldName": "banneraccount.mcaogs_name",
+    "name": "Banner Account#",
+    "minWidth": 120
+  },
+  {
+    "key": "mcaogs_sourcesystemname",
+    "fieldName": "mcaogs_sourcesystemname",
+    "name": "SourceSystemName",
+    "minWidth": 80
+  },
+  {
+    "key": "mcaogs_sourcesystemid",
+    "fieldName": "mcaogs_sourcesystemid",
+    "name": "SourceSystemId",
+    "minWidth": 80
+  },
+  {
+    "key": "banneraccount.onegas_billing_history_url",
+    "fieldName": "banneraccount.onegas_billing_history_url",
+    "name": "Billing Url",
+    "minWidth": 80
+  }
 ]
