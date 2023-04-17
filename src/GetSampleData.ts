@@ -1,23 +1,12 @@
-/*
-import fs from 'fs'
-declare module "*.json" {
-  const value: any;
-  export default value;
-}
-*/
-
-
-//import {default as yourPreferredName} from '../data/fetchXML.Response.json';
-//import {IColumn } from '@fluentui/react';
-
-import * as sampleResponsedata from './data/KS_Data.json';
+import * as sampleResponsedata from './data/KS_Data_3rdparty.json';
 import * as sampleResponseColumnLayout from './data/columnLayout.json';
 
 
 export function GetSampleData() {
-    //return require('../data/fetchXML.Response.json')
-    //const sampleResponsedata = require("../data/fetchXML.Response.json");
+    
+    // For WebApi resposne with value node
+    //return { dataItems : sampleResponsedata.value, columns : sampleResponseColumnLayout, primaryEntityName : 'account' };
 
-    return { dataItems : sampleResponsedata.value, columns : sampleResponseColumnLayout, primaryEntityName : 'account' };
-    //var dataArray = JSON.parse(fs.readFileSync('data.json', 'utf-8'))
+    // For 3rd party response without value node
+    return { dataItems : sampleResponsedata, columns : sampleResponseColumnLayout, primaryEntityName : 'account' };
   }

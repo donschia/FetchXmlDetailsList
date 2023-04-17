@@ -2,7 +2,7 @@
     {
         "key": "contr.mcaogs_qptm_id",
         "fieldName": "contr.mcaogs_qptm_id",
-        "name": "Contact#",
+        "name": "Contract#",
         "minWidth": 60
     },
     {
@@ -124,6 +124,12 @@
         "fieldName": "mcaogs_sourcesystemid",
         "name": "SourceSystemId",
         "minWidth": 80
+    },
+    {
+        "key": "onegas_totalactivitycount",
+        "fieldName": "onegas_totalactivitycount_Formatted",
+        "name": "Activity Count",
+        "minWidth": 30
     },
     {
         "key": "banneraccount.onegas_billing_history_url",

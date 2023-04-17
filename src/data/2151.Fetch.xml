@@ -6,6 +6,7 @@
 		<attribute name='mcaogs_bannerid'/>
 		<attribute name='mcaogs_sourcesystemname'/>
 		<attribute name='mcaogs_sourcesystemid'/>
+		<attribute name='onegas_totalactivitycount' />
 		<filter>
 			<condition attribute='statuscode' operator='eq' value='1'/>
 			<condition attribute='onegas_company' operator='eq' value='[RECORDID]'/>
