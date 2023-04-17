@@ -230,9 +230,7 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
     }
 
     public render(): JSX.Element {
-
         const { columns, items, announcedMessage } = this.state;
-
         // if (this._isDebugMode) { console.log(items); }
         if (items) {
             return (
@@ -245,7 +243,6 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
                         )}
                         <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto} style={{ top: '10px', zIndex: 0, bottom: '10px' }}>
                             <Stack.Item>
-
                                 <DetailsList
                                     items={items}
                                     columns={columns}
@@ -258,7 +255,6 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
                                     onRenderDetailsHeader={this._onRenderDetailsHeader}
                                     // Double clicking a row
                                     //onItemInvoked={this._onItemInvoked}
-
                                     // Custom Rendering to support entity linking
                                     onRenderItemColumn={this._renderItemColumn}
 
@@ -271,9 +267,7 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
                                             }
                                         );
                                     }}
-
                                 />
-
                             </Stack.Item>
                             <Stack.Item align="start" >
                                 <Text>Total Records: {items.length}</Text>
@@ -308,7 +302,7 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
                 );
             }
             // URL field handling - open in a new tab/window
-            else if ((fieldContent as string).startsWith("http")) {
+            else if (fieldContent && (fieldContent as string).startsWith("http")) {
                 return (<Link key={item} href={fieldContent} target="_blank">External Link</Link>);
             }
             else {
