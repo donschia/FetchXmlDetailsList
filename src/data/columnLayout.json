@@ -15,7 +15,10 @@
         "key": "banneraccount.onegas_contractid",
         "fieldName": "banneraccount.onegas_contractid_Formatted",
         "name": "Contract Name(BA)",
-        "minWidth": 100
+        "minWidth": 100,
+        "data": {
+            "url": "[BASED365URL]/main.aspx?etc=1010&pagetype=entityrecord&id=[ID]"
+        }
     },
     {
         "key": "name",
@@ -48,16 +51,20 @@
         "minWidth": 70
     },
     {
-        "key": "contr.activeon_Formatted",
-        "fieldName": "contr.activeon_Formatted",
+        "key": "contr.activeon",
+        "fieldName": "contr.activeon",
         "name": "Contract Start Date",
-        "minWidth": 70
+        "minWidth": 70,
+        "data": {
+            "format": "date"
+        }
     },
     {
         "key": "contr.onegas_contractenddate_Formatted",
         "fieldName": "contr.onegas_contractenddate_Formatted",
         "name": "Contract End Date",
-        "minWidth": 70
+        "minWidth": 70,
+        "data": "number"
     },
     {
         "key": "premise.mcaogs_address1",
@@ -127,14 +134,20 @@
     },
     {
         "key": "onegas_totalactivitycount",
-        "fieldName": "onegas_totalactivitycount_Formatted",
+        "fieldName": "onegas_totalactivitycount",
         "name": "Activity Count",
-        "minWidth": 30
+        "minWidth": 30,
+        "data": {
+            "type": "number"
+        }
     },
     {
         "key": "banneraccount.onegas_billing_history_url",
         "fieldName": "banneraccount.onegas_billing_history_url",
         "name": "Documents/Billing Url",
-        "minWidth": 80
+        "minWidth": 80,
+        "data": {
+            "url": ""
+        }
     }
 ]
