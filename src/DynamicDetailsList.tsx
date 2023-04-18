@@ -7,6 +7,8 @@ import { ScrollablePane, ScrollbarVisibility } from '@fluentui/react'; //'office
 
 const theme = getTheme();
 const _LOOKUPLOGICALNAMEATTRIBUTE = "@Microsoft.Dynamics.CRM.lookuplogicalname";
+const _BASE_D365_URL_PLACEHOLDER = "[BASED365URL]";
+const _RECORD_ID_URL_PLACEHOLDER = "[ID]";
 
 export interface IDynamicDetailsListProps {
     items: any[];
@@ -14,6 +16,7 @@ export interface IDynamicDetailsListProps {
     fetchXml?: string;
     rootEntityName?: string;
     announcedMessage?: string;
+    baseD365Url?: string;
 }
 
 
@@ -23,7 +26,7 @@ export interface IDynamicDetailsListState {
     fetchXml?: string;
     primaryEntityName?: string;
     announcedMessage?: string;
-
+    baseD365Url?: string;
 }
 
 
@@ -39,6 +42,8 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
     private _announcedMessage: string;
     private _currentPageNumber: number;
     private _isDebugMode: boolean;
+    private _baseD365Url?: string;
+
     //private _fetchXmlIdPlaceholder: string;
     //private _recordId: string;
 
@@ -58,6 +63,7 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
         this._allItems = props.items;
         this._columns = props.columns;
         this._isDebugMode = props.isDebugMode;
+        this._baseD365Url = props.baseD365Url;
 
         this._currentPageNumber = 1;
 
@@ -75,6 +81,7 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
                 fieldName: column.fieldName,
                 minWidth: column.minWidth,
                 flexGrow: 1,
+                data: column.data,
                 //maxWidth: 200,
                 isResizable: true,
                 onColumnClick: this._onColumnClick
@@ -173,7 +180,7 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
                     flexGrow: 1,
                     //maxWidth: 200,
                     isResizable: true,
-
+                    data: column.data,
                     // Sorting
                     onColumnClick: this._onColumnClick,
                     // Handle rendering lookup field links
@@ -260,12 +267,10 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
 
                                     onItemInvoked={(item: any) => {
                                         // debugger;  // eslint-disable-line no-debugger
-                                        this._pcfContext.navigation.openForm(
-                                            {
-                                                entityName: this._primaryEntityName,
-                                                entityId: item[this._primaryEntityName + "id"]
-                                            }
-                                        );
+                                        this._pcfContext.navigation.openForm({
+                                            entityName: this._primaryEntityName,
+                                            entityId: item[this._primaryEntityName + "id"]
+                                        });
                                     }}
                                 />
                             </Stack.Item>
@@ -294,19 +299,28 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
         let fieldContent = item[column.fieldName];
 
         if (item[column.key]) {
-            if (item[column.key + _LOOKUPLOGICALNAMEATTRIBUTE]) {
+            if (column.data && column.data.url && column.data.url !== "") {
+                let url = column.data.url
+                    .replace(_BASE_D365_URL_PLACEHOLDER, this._baseD365Url)
+                    .replace(_RECORD_ID_URL_PLACEHOLDER, item[column.key]);
+                return (<Link key={item} href={url} target="_blank">{fieldContent}</Link>);
+            }
+            // URL field handling - open in a new tab/window
+            //else if (fieldContent && String(fieldContent).startsWith("http")) {
+            else if (column.data && column.data.url === "") {
+                return (<Link key={item} href={fieldContent} target="_blank">External Link</Link>);
+            }
+            // Support linking to other entities
+            else if (item[column.key + _LOOKUPLOGICALNAMEATTRIBUTE]) {
                 //let baseFieldName = column.key.replace(_LOOKUPLOGICALNAMEATTRIBUTE, "");
                 return (<Link key={item} onClick={() => this._pcfContext.navigation.openForm({ entityName: item[column.key + _LOOKUPLOGICALNAMEATTRIBUTE], entityId: item[column.key] })}>
                     {fieldContent}
                 </Link>
                 );
             }
-            // URL field handling - open in a new tab/window
-            else if (fieldContent && (fieldContent as string).startsWith("http")) {
-                return (<Link key={item} href={fieldContent} target="_blank">External Link</Link>);
-            }
+
             else {
-                return (<span>{fieldContent}</span>);
+                return (<span>{fieldContent.toString()}</span>);
             }
         }
     }

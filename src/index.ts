@@ -17,6 +17,8 @@ export class FetchXmlDetailsList implements ComponentFramework.ReactControl<IInp
     private _itemsPerPage: number | null;
     private _totalNumberOfRecords: number;
     private _isDebugMode: boolean;
+    private _baseD365Url?: string;
+    
 
      /** General */
      private _context: ComponentFramework.Context<IInputs>;
@@ -79,8 +81,12 @@ export class FetchXmlDetailsList implements ComponentFramework.ReactControl<IInp
         let entityTypeName = (<any>this._context.mode).contextInfo.entityTypeName;
         let entityDisplayName = (<any>this._context.mode).contextInfo.entityRecordName;
         // This breaks when you use the PCF Test Harness.  Neat!
-        //let baseUrl = (<any>this._context).page.getClientUrl();
-
+        try{
+            this._baseD365Url = (<any>this._context)?.page?.getClientUrl();
+        }
+        catch(ex){
+            this._baseD365Url = "";
+        }
         var recordId : string = entityId; //this._context.parameters.RecordId.raw ?? currentRecordId;
 
         // Test harness always passes in "val"
@@ -139,7 +145,7 @@ export class FetchXmlDetailsList implements ComponentFramework.ReactControl<IInp
         //ReactDOM.render(React.createElement(FluentUIDetailsListControl, data, {}), this.container);
         //ata = require("../data/fetchXML.Response.json");
 
-        let props = {  columns: this._columnLayout, primaryEntityName: this._primaryEntityName, fetchXml: this._fetchXML, isDebugMode: this._isDebugMode, context: context };
+        let props = {  columns: this._columnLayout, primaryEntityName: this._primaryEntityName, fetchXml: this._fetchXML, isDebugMode: this._isDebugMode, context: context, baseD365Url: this._baseD365Url };
         return React.createElement(DynamicDetailsList, props, {});
 
         // TODO: Can we support a grid without a columnlayout?
