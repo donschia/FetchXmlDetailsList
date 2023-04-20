@@ -56,7 +56,7 @@
         "name": "Contract Start Date",
         "minWidth": 70,
         "data": {
-            "format": "date"
+            "dateFormat": "yyyy-MM-dd"
         }
     },
     {
@@ -64,7 +64,9 @@
         "fieldName": "contr.onegas_contractenddate_Formatted",
         "name": "Contract End Date",
         "minWidth": 70,
-        "data": "number"
+        "data": {
+            "dateFormat": "yyyy-MM-dd"
+        }
     },
     {
         "key": "premise.mcaogs_address1",
@@ -82,7 +84,10 @@
         "key": "premise.mcaogs_stateid",
         "fieldName": "premise.mcaogs_stateid_Formatted",
         "name": "State",
-        "minWidth": 30
+        "minWidth": 30,
+        "data": {
+            "entityLinking": false
+        }
     },
     {
         "key": "premise.onegas_stationid",
@@ -94,7 +99,10 @@
         "key": "contr.mcaogs_supplier",
         "fieldName": "contr.mcaogs_supplier_Formatted",
         "name": "Supplier",
-        "minWidth": 120
+        "minWidth": 120,
+        "data": {
+            "entityLinking": false
+        }
     },
     {
         "key": "banneraccount.onegas_meter_serial_number",
@@ -109,10 +117,13 @@
         "minWidth": 50
     },
     {
-        "key": "_onegas_keyaccountrep_value_Formatted",
+        "key": "_onegas_keyaccountrep_value",
         "fieldName": "_onegas_keyaccountrep_value_Formatted",
         "name": "Key Account Rep",
-        "minWidth": 80
+        "minWidth": 80,
+        "data": {
+            "entityLinking": true
+        }
     },
     {
         "key": "banneraccount.mcaogs_name",
@@ -147,7 +158,7 @@
         "name": "Documents/Billing Url",
         "minWidth": 80,
         "data": {
-            "url": ""
+            "url": "[USE_VALUE]"
         }
     }
 ]

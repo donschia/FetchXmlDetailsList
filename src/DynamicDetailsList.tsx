@@ -4,11 +4,21 @@ import { GetSampleData } from './GetSampleData';
 import { Text } from '@fluentui/react/lib/Text';
 import DynamicsWebApi = require('dynamics-web-api');
 import { ScrollablePane, ScrollbarVisibility } from '@fluentui/react'; //'office-ui-fabric-react';
+import { format } from 'date-fns';
+
 
 const theme = getTheme();
+
 const _LOOKUPLOGICALNAMEATTRIBUTE = "@Microsoft.Dynamics.CRM.lookuplogicalname";
+// URL Placeholder is replaced with Dynamics365 Base URL (if available)
 const _BASE_D365_URL_PLACEHOLDER = "[BASED365URL]";
+// URL Placeholder is replaced with record ID
 const _RECORD_ID_URL_PLACEHOLDER = "[ID]";
+// USE_VALUE uses the record's text value as the absolute URL
+const _USE_VALUE_URL_PLACEHOLDER = "[USE_VALUE]";
+
+// format options are here: https://date-fns.org/v2.29.3/docs/format
+const _DEFAULT_DATE_FORMAT = "yyyy-MM-dd hh:mm:ss";
 
 export interface IDynamicDetailsListProps {
     items: any[];
@@ -222,20 +232,11 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
         };
     }
 
-    private _onRenderDetailsHeader(props: any, defaultRender?: any) {
-        return defaultRender!({
-            ...props,
-            onRenderColumnHeaderTooltip: (tooltipHostProps: any) => {
-                return (
-                    <TooltipHost {...tooltipHostProps} />
-                )
-            }
-        });
-    }
-
     public componentDidUpdate(previousProps: any, previousState: IDynamicDetailsListProps) {
     }
 
+    // DetailsList documentation here:
+    // https://developer.microsoft.com/en-us/fluentui#/controls/web/detailslist
     public render(): JSX.Element {
         const { columns, items, announcedMessage } = this.state;
         // if (this._isDebugMode) { console.log(items); }
@@ -299,6 +300,21 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
         let fieldContent = item[column.fieldName];
 
         if (item[column.key]) {
+            // Handle any custom Date Formats via date=fns format string
+            // DateFormat string options are here: https://date-fns.org/v2.29.3/docs/format
+            // i.e.  "yyyy-dd-MM hh:mm:ss"
+            if (column.data && column.data.dateFormat) {
+                try {
+                    let dateValue = new Date(fieldContent);
+                    let dateFormat = column.data.dateFormat || _DEFAULT_DATE_FORMAT;
+                    return (<span>{format(dateValue, column.data.dateFormat)}</span>);
+                }
+                catch (ex) {
+                    // ignore
+                    return (<span>{fieldContent}</span>);
+                }
+            }
+
             if (column.data && column.data.url && column.data.url !== "") {
                 let url = column.data.url
                     .replace(_BASE_D365_URL_PLACEHOLDER, this._baseD365Url)
@@ -307,18 +323,22 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
             }
             // URL field handling - open in a new tab/window
             //else if (fieldContent && String(fieldContent).startsWith("http")) {
-            else if (column.data && column.data.url === "") {
+            else if (column.data && column.data.url === _USE_VALUE_URL_PLACEHOLDER) {
                 return (<Link key={item} href={fieldContent} target="_blank">External Link</Link>);
             }
             // Support linking to other entities
             else if (item[column.key + _LOOKUPLOGICALNAMEATTRIBUTE]) {
-                //let baseFieldName = column.key.replace(_LOOKUPLOGICALNAMEATTRIBUTE, "");
-                return (<Link key={item} onClick={() => this._pcfContext.navigation.openForm({ entityName: item[column.key + _LOOKUPLOGICALNAMEATTRIBUTE], entityId: item[column.key] })}>
-                    {fieldContent}
-                </Link>
-                );
+                if (column.data && column.data.entityLinking && column.data.entityLinking == true) {
+                    //let baseFieldName = column.key.replace(_LOOKUPLOGICALNAMEATTRIBUTE, "");
+                    return (<Link key={item} onClick={() => this._pcfContext.navigation.openForm({ entityName: item[column.key + _LOOKUPLOGICALNAMEATTRIBUTE], entityId: item[column.key] })}>
+                        {fieldContent}
+                    </Link>
+                    );
+                }
+                else {
+                    return (<span>{fieldContent.toString()}</span>);
+                }
             }
-
             else {
                 return (<span>{fieldContent.toString()}</span>);
             }
@@ -379,6 +399,18 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
             return items.slice(0).sort((a: T, b: T) => ((isSortedDescending ? a[key] < b[key] : a[key] > b[key]) ? 1 : -1));
         }
     };
+
+
+    private _onRenderDetailsHeader(props: any, defaultRender?: any) {
+        return defaultRender!({
+            ...props,
+            onRenderColumnHeaderTooltip: (tooltipHostProps: any) => {
+                return (
+                    <TooltipHost {...tooltipHostProps} />
+                )
+            }
+        });
+    }
 
     private _onRenderRow: IDetailsListProps['onRenderRow'] = props => {
         const customStyles: Partial<IDetailsRowStyles> = {};

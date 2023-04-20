@@ -55,11 +55,9 @@ to this:
 
 Errors:
 If you get this following runtime error you may need to use a _Formatted field.  For example, here it seems to be having a hard time with the date. 
-
 Objects are not valid as a React child (found: Wed Dec 31 9000 00:00:00 GMT-0600 (Central Standard Time)). If you meant to render a collection of children, use an array instead.
-
+Another option to format the output.
 
 TODO:
-Sorting is always string, so dates and numbers don't sort correctly.
-Fix this.
+No paging support currently.  Page size is locked at 5000 for now.
 
