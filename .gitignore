@@ -15,4 +15,7 @@
 
 # MSBuild Binary and Structured Log
 *.binlog
-.vs
+.vs\
+
+# igonore backups too  
+*.zip

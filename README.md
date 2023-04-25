@@ -1,12 +1,14 @@
 # FetchXml DetailsList
 ## Description
-PCF Control for showing subgrids from FetchXml queries.  The query can be a complex as needed with many linked entities.  This will allow getting around the limits of most Model Driven App views.  You will include an ID Placeholder to replace with the current record id.
+This PCF Control generates a FluentUI DetailsList for subgrids loaded with FetchXml queries.  The query can be as complex as needed with many linked entities.  This extends what is possible and goes beyond the capabilities of the Model-Driven App subgrid.  You need to include an ID Placeholder which is replaced with the current record id. 
+
+---
 [SCREENSHOT]
 
-Also you need to provide a columnLayout json to define all column details. 
+You provide a columnLayout to define all column details. 
 ## Features
 - Dynamic queries can be more complex than views allow.  
-- Uses Placeholder to filter by current record id.
+- Uses Placeholder to filter by record id.
 - Look and Feel is similar to out of the box Model Driven App read only subgrid.  Supports sorting and resizing of columns.
 - Quick rendering.
 - Double clicking the row navigates to the base record.
@@ -15,18 +17,31 @@ Also you need to provide a columnLayout json to define all column details.
 - Debug mode to see examine data returned from FetchXml query for building column layout.
   
 ***
-## Initial Setup
-1. Open VS Code to this folder.
-2. Open Terminal (Control + Shift + ~)
-3. Run <code>npm install</code>
-   
-## Build and Deploy
-Simply run <code> npm start</code> to launch the FetchXmlDetailsList in the PCF Test Harness.  This loads sample data along with a sample columnLayout.  Linking is disabled since this is not allowed in the tester.
+## Setup
 
+1. If you don’t have Node.js installed, [install it from here](https://nodejs.org/en/)
+
+2. Clone this repository
+
+3. Navigate into the project directory in terminal.
+   ```bash
+   $ cd FetchXmlDetailsList
+   ```
+4. Install the dependencies
+   ```bash
+   $ npm install
+   ```
+5. Run using sample data and column layout in PCF Test Harness. Linking is disabled since this is not allowed in the tester.
+   ```bash
+   $ npm start   
+## Build and Deploy
 You can build and deploy to your currently configured DEVELOPMENT Environment using the CLI [PAC PCF PUSH](https://learn.microsoft.com/en-us/power-platform/developer/cli/reference/pcf#pac-pcf-push) by running:  <code>buildAndDeploy.ps1</code>.  Note that the CLI requires connecting to your development org first. See the documentation for more details.
 You will need to ensure you have installed the [Microsoft PowerApps CLI](https://learn.microsoft.com/en-us/power-platform/developer/cli/introduction#install-power-apps-cli). 
    - <code>buildAndDeploy.ps1</code> will build the component, add it to a temporary solution (PowerAppsTools_YourOrg) , import to your DEV environment and Publish All.
 Prerequitiste is to make sure you can connect to your DEV environment using the CLI tools.
+```bash
+   $ buildAndDeploy.ps1
+   ```
 
 ## Input Parameters (Properties)
 The grid has input parameters which must be set.
@@ -66,16 +81,37 @@ This is a list of [IColumn](https://learn.microsoft.com/en-us/javascript/api/sp-
 |entityLinking | No | Boolean | Set to False to prevent linkign to linked entities. Otherwise links are enabled. |
 |url | No | String | Absolute URL.  Or can be relative from the [BASED365URL] path. |
 
-Sample:
-<code>
-"key": "banneraccount.onegas_contractid",
+ColumnLayoutJson Example:
+```json
+[
+  {
+    "key": "name",
+    "fieldName": "name",
+    "name": "Account Name",
+    "minWidth": 160
+  },
+  {
+    "key": "createdon",
+    "fieldName": "createdon",
+    "name": "Created On",
+    "minWidth": 70,
+    "data": {
+      "dateFormat": "yyyy-MM-dd"
+    }
+  },
+  {
+    "key": "banneraccount.onegas_contractid",
     "fieldName": "banneraccount.onegas_contractid_Formatted",
     "name": "Contract Name(BA)",
     "minWidth": 100,
     "data": {
       "url": "[BASED365URL]/main.aspx?etc=1010&pagetype=entityrecord&id=[ID]"
     }
-</code>
+]
+````
+## Dependency on dynamics-web-api
+For ease of use, this control uses the dynamics-web-api.  You can reference the field name with the _Formatted suffix.  if you prefer to just use the out of the box xrm web api, you will have to use the full names in your columnLayoutJson.
+
 
 # Issues
 There seems to be an issue with the dynamics-web-api 3rd party library. This gives a strange crypto error. I was able to fix it by hacking the webpackConfig for pcf-scripts to tell it to ignore it.
@@ -87,7 +123,6 @@ resolve: {
         // Tell webpack which extensions to try when it is looking for a file.
         extensions: ['.ts', '.tsx', '.js', '.jsx'],
 },
-
 ```
 
 to this:
@@ -95,9 +130,10 @@ to this:
 resolve: {
         // Tell webpack which extensions to try when it is looking for a file.
         extensions: ['.ts', '.tsx', '.js', '.jsx'],
-        fallback: { "crypto": false },
+       fallback: { "crypto": false },
 },
 ```
+
 ---
 
 ## Errors
@@ -108,4 +144,12 @@ Another option to format the output.
 ***
 
 ## TODOs:
-No paging support currently. Page size is locked at 5000 for now.
+- Make documentation better!
+
+- Make sure this can work without the dynamics-xrm-api dependency since there is an issue with it initially.  Perhaps configure this to be toggled via input parameter.
+  
+- Paging!  No paging support currently. Page size is locked at 5000 for now.
+  
+- Add an example FetchXml using out of the box entities instead of the current one with custom entities.  Try to include a number of entities and solve a real problem.  Could also include the Contract entity to show how you can support the deprecated/removed contract entity links to the old non-UCI interface.
+
+- Perhaps allow styling via input parameter.  i.e. alternate row color endable/disable, etc.

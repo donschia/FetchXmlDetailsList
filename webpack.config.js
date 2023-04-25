@@ -1,7 +1,11 @@
 // eslint-disable-next-line no-undef
 module.exports = {
-    resolve: {
-        // eslint-disable-next-line no-undef
-        fallback: { "crypto": false },  
-    }
-}
+  devtool: "cheap-module-source-map",
+  "process.env": {
+    NODE_ENV: JSON.stringify("production"),
+  },
+  resolve: {
+    // eslint-disable-next-line no-undef
+    fallback: { crypto: false },
+  },
+};

@@ -1,15 +1,18 @@
 import * as React from 'react';
-import { Fabric, DetailsList, IColumn, DetailsListLayoutMode, Stack, ConstrainMode, SelectionMode, IDetailsListProps, IDetailsRowStyles, DetailsRow, getTheme, Label, Spinner, SpinnerSize, Link, TooltipHost } from '@fluentui/react';
+import { DetailsList, IColumn, DetailsListLayoutMode, Stack, ConstrainMode, SelectionMode, IDetailsListProps, IDetailsRowStyles, DetailsRow, getTheme, Spinner, SpinnerSize, Link, TooltipHost } from '@fluentui/react';
 import { GetSampleData } from './GetSampleData';
 import { Text } from '@fluentui/react/lib/Text';
 import DynamicsWebApi = require('dynamics-web-api');
-import { ScrollablePane, ScrollbarVisibility } from '@fluentui/react'; //'office-ui-fabric-react';
-import { format } from 'date-fns';
+import { ScrollablePane, ScrollbarVisibility } from '@fluentui/react';
+import format from 'date-fns/format';
 
 
 const theme = getTheme();
 
 const _LOOKUPLOGICALNAMEATTRIBUTE = "@Microsoft.Dynamics.CRM.lookuplogicalname";
+const _FORMATTEDVALUE = "@OData.Community.Display.V1.FormattedValue";
+const _ATTRIBUTENAME = "@OData.Community.Display.V1.AttributeName";
+
 // URL Placeholder is replaced with Dynamics365 Base URL (if available)
 const _BASE_D365_URL_PLACEHOLDER = "[BASED365URL]";
 // URL Placeholder is replaced with record ID
@@ -324,6 +327,10 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
                 else {
                     return (<span>{fieldContent.toString()}</span>);
                 }
+            }
+            // Support using FormattedValue when available
+            else if (item[column.key + _FORMATTEDVALUE]) {
+                return (<span>{item[column.key + _FORMATTEDVALUE].toString()}</span>);
             }
             else {
                 return (<span>{fieldContent.toString()}</span>);
