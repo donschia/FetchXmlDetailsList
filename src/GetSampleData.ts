@@ -1,4 +1,4 @@
-import * as sampleResponsedata from './data/KS_Data_3rdparty.json';
+import * as sampleResponsedata from './data/KS_Data_DynamicsXrmApi.Formatting.json';
 import * as sampleResponseColumnLayout from './data/columnLayout.json';
 
 

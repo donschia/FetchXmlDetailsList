@@ -76,10 +76,14 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
         // Test harness will not have FetchXml input varaible available when debugging in test harness
         if (props.fetchXml) {
 
-            // columnLayout
             // columnLayout with click handler added
+            // set ariaLabel to column.name to see the full column name when hovering over header columns
+            // setting isResizable globally to reduce layout size
             this._columns = this._columns.map((column: IColumn) => ({
                 ...column,
+                ariaLabel: column.name,
+                flexGrow: 1,
+                isResizable: true,
                 onColumnClick: this._onColumnClick,
             }));
 
@@ -170,8 +174,13 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
                 this._primaryEntityName = sampleData.primaryEntityName;
 
                 // columnLayout with click handler added
+                // set ariaLabel to column.name to see the full column name when hovering over header columns
+                // setting isResizable globally to reduce layout size
                 this._columns = this._columns.map((column: IColumn) => ({
                     ...column,
+                    ariaLabel: column.name,
+                    flexGrow: 1,
+                    isResizable: true,
                     onColumnClick: this._onColumnClick,
                 }));
                 /*
