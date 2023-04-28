@@ -1,6 +1,6 @@
 # FetchXml DetailsList
 ## Description
-This PCF Control generates a FluentUI DetailsList for subgrids loaded with FetchXml queries.  The query can be as complex as needed with many linked entities.  This extends what is possible and goes beyond the capabilities of the Model-Driven App subgrid.  You need to include an ID Placeholder which is replaced with the current record id. 
+This PCF Control generates a FluentUI DetailsList for subgrids loaded via a custom FetchXml query and column layout.  The query can be as complex as needed with many linked entities.  This extends what is possible and goes beyond the capabilities of the Model-Driven App subgrid.  You need to include an ID Placeholder which is replaced with the current record id. 
 
 ---
 [SCREENSHOT]
