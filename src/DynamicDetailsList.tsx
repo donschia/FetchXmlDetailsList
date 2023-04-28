@@ -5,6 +5,7 @@ import { Text } from '@fluentui/react/lib/Text';
 import DynamicsWebApi = require('dynamics-web-api');
 import { ScrollablePane, ScrollbarVisibility } from '@fluentui/react';
 import format from 'date-fns/format';
+import { ExportToCSVUtil } from './GridExport';
 
 
 const theme = getTheme();
@@ -126,7 +127,7 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
                             debugger; // eslint-disable-line no-debugger
                         }
                         this.setState({
-                            announcedMessage: "Error fetching records"
+                            announcedMessage: `Error fetching records. ${e.message}`
                         });
                     });
             }
@@ -149,13 +150,13 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
                             );
                         }
                     },
-                    (error: any) => {
+                    (e: any) => {
                         if (this._isDebugMode) {
-                            console.log(error);
+                            console.log(e);
                             debugger; // eslint-disable-line no-debugger
                         }
                         this.setState({
-                            announcedMessage: "Error fetching records"
+                            announcedMessage: `Error fetching records. ${e.message}`
                         });
                     });
             }
@@ -225,9 +226,10 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
     public componentDidUpdate(previousProps: any, previousState: IDynamicDetailsListProps) {
     }
 
-    // FluentUI DetailsList documentation here:
+    // FluentUI DetailsList documentation:
     // https://developer.microsoft.com/en-us/fluentui#/controls/web/detailslist
     // ScollablePane is helpful to recreate the standard Model-driven app experience
+    // But seems to not play super nice with the PCF Test Harness as it can overlay the fields on the left side
     public render(): JSX.Element {
         const { columns, items, announcedMessage } = this.state;
         // if (this._isDebugMode) { console.log(items); }
@@ -237,7 +239,7 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
                     <Stack>
                         {announcedMessage && (
                             <Stack.Item align="center">
-                                <Text color='red'>{announcedMessage}</Text>
+                                <Text>{announcedMessage}</Text>
                             </Stack.Item>
                         )}
                         <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto} style={{ top: '10px', zIndex: 0, bottom: '10px' }}>
@@ -255,7 +257,7 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
                                     // Custom Rendering to support entity linking, Absolute Urls, formatted dates, etc.
                                     onRenderItemColumn={this._renderItemColumn}
                                     // Double clicking a row opens the record in Model Driven App
-                                    // Test harness will give error "Your control is trying to open a form. This is not yet supported."
+                                    // PCF test harness will instead give error "Your control is trying to open a form. This is not yet supported."
                                     onItemInvoked={(item: any) => {
                                         this._pcfContext.navigation.openForm({
                                             entityName: this._primaryEntityName,
@@ -265,19 +267,29 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
                                 />
                             </Stack.Item>
                             <Stack.Item align="start" >
-                                <Text>Total Records: {items.length}</Text>
+                                <Text>Total Records: {items.length} ...  </Text>
+                                <Link onClick={() => ExportToCSVUtil(items, `export.${Date.now()}.csv`)}>[ Export dataset to CSV ] </Link>
                             </Stack.Item>
                         </ScrollablePane>
                     </Stack >
                 </>
             );
         }
-        else
+        else if (announcedMessage) {
+            return (
+                <Stack horizontal={true} verticalAlign={'center'} >
+                    <Text>{announcedMessage}</Text>
+                </Stack>
+
+            );
+        }
+        else {
             return (
                 <Stack horizontal={true} verticalAlign={'center'} >
                     <Spinner label="Loading Grid" size={SpinnerSize.medium} />
                 </Stack>
             );
+        }
     }
 
     private _renderItemColumn = (item: any, index: number | undefined, column: any): any => {

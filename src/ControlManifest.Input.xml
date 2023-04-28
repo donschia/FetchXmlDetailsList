@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <manifest>
-<!-- Schema is here: https://learn.microsoft.com/en-us/power-apps/developer/component-framework/manifest-schema-reference/property -->
-  <control namespace="onegas" constructor="FetchXmlDetailsList" version="0.0.1" display-name-key="FetchXmlDetailsList" description-key="FetchXmlDetailsList description" control-type="virtual" >
+  <!-- Manifest schema reference: https://learn.microsoft.com/en-us/power-apps/developer/component-framework/manifest-schema-reference/ -->
+  <control namespace="Schiavone" constructor="FetchXmlDetailsList" version="0.0.2" display-name-key="FetchXml DetailsList" description-key="Control generates a FluentUI DetailsList for subgrids loaded via a custom FetchXml query and column layout" control-type="virtual" >
     <!--external-service-usage node declares whether this 3rd party PCF control is using external service or not, if yes, this control will be considered as premium and please also add the external domain it is using.
     If it is not using any external service, please set the enabled="false" and DO NOT add any domain below. The "enabled" will be false by default.
     Example1:
@@ -25,8 +25,9 @@
       <property-set name="samplePropertySet" display-name-key="Property_Display_Key" description-key="Property_Desc_Key" of-type="SingleLine.Text" usage="bound" required="true" />
       -->
     <!-- </data-set> -->
+    <!-- Property schema reference: https://learn.microsoft.com/en-us/power-apps/developer/component-framework/manifest-schema-reference/property -->
     <property name="FetchXML" display-name-key="FetchXML Query" description-key="FetchXML Query with RecordId Placeholder in Filter" of-type="Multiple" usage="input" required="true" />
-    <property name="RecordIdPlaceholder" display-name-key="RecordId Placeholder" description-key="Will be replaced with RecordId. ie. [RECORDID] " of-type="SingleLine.Text" usage="input" required="true" />
+    <property name="RecordIdPlaceholder" display-name-key="RecordId Placeholder" description-key="Will be replaced with RecordId. ie. [RECORDID] " of-type="SingleLine.Text" usage="input" required="true" default-value="[RECORDID]" />
     <property name="ControlAnchorField" display-name-key="ControlAnchorField" description-key="Dummy text field used to place grid." of-type="SingleLine.Text" usage="bound" required="true" />
     <property name="ColumnLayoutJson" display-name-key="Column Layout Json" description-key="Json list of Columns (name, fieldName)" of-type="Multiple" usage="input" required="false" />
     <property name="ItemsPerPage" display-name-key="Items Per Page" description-key="Items Per Page (Defaults to 5000)" of-type="Whole.None" usage="input" required="false" default-value="5000"/>
