@@ -153,3 +153,6 @@ Another option to format the output.
 - Add an example FetchXml using out of the box entities instead of the current one with custom entities.  Try to include a number of entities and solve a real problem.  Could also include the Contract entity to show how you can support the deprecated/removed contract entity links to the old non-UCI interface.
 
 - Perhaps allow styling via input parameter.  i.e. alternate row color endable/disable, etc.
+
+- For some reason the two option (boolean) input parameter Is Debug Mode doesn't work with legacy designer.  It only seems to work with the new designer experience.
+- 

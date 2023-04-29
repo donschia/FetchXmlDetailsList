@@ -284,7 +284,9 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
         // debugger; // eslint-disable-line no-debugger
         //const fieldContent = item[column.fieldName as keyof any] as string;
         let fieldContent = item[column.fieldName];
-
+        if (item[column.key + _FORMATTEDVALUE]) {
+            fieldContent = item[column.key + _FORMATTEDVALUE];
+        }
         console.log(fieldContent, column, column.data);
 
         if (item[column.key]) {
