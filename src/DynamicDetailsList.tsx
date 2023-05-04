@@ -286,7 +286,7 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
         else {
             return (
                 <Stack horizontal={true} verticalAlign={'center'} >
-                    <Spinner label="Loading Grid" size={SpinnerSize.medium} />
+                    <Spinner label="Loading Grid                                                        " size={SpinnerSize.medium} />
                 </Stack>
             );
         }
