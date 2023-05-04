@@ -89,6 +89,31 @@ export class FetchXmlDetailsList implements ComponentFramework.ReactControl<IInp
         }
         var recordId : string = entityId; //this._context.parameters.RecordId.raw ?? currentRecordId;
 
+        // See if we can use and Id from a field specified on the form
+        // Wish we could use the Lookup property type
+        // https://butenko.pro/2021/03/21/pcf-lookup-attribute-lets-take-look-under-the-hood/
+        //  This may not work
+        // TODO you are going to have to webapi fetch the id 
+        // https://github.com/shivuparagi/GenericLookupPCFControl/blob/main/GenericLookupPCFComponent/components/CalloutControlComponent.tsx
+        // Look at LoadData  function
+        var overriddenRecordIdFieldName : string | null = this._context.parameters.OverriddenRecordIdFieldName.raw; // ?? "";
+        if (overriddenRecordIdFieldName) {
+            let overriddernEntityId = (<any>this._context.mode).contextInfo.entityId;
+            try{
+                 // @ts-ignore
+                let tmpLookupField = Xrm.Page.getAttribute(overriddenRecordIdFieldName);
+
+                let control = (<any>this._context)?.page.getControl(overriddenRecordIdFieldName);
+                if (control && control.id){
+                    recordId = control.id;
+                }
+
+            }
+            catch(ex){
+                //this._baseD365Url = "";
+            }
+        }
+
         // Test harness always passes in "val"
         if (fetchXML != null && fetchXML != "val") {
             fetchXML =  fetchXML.replace(/"/g, "'");
