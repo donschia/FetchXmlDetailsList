@@ -98,19 +98,30 @@ export class FetchXmlDetailsList implements ComponentFramework.ReactControl<IInp
         // Look at LoadData  function
         var overriddenRecordIdFieldName : string | null = this._context.parameters.OverriddenRecordIdFieldName.raw; // ?? "";
         if (overriddenRecordIdFieldName) {
-            let overriddernEntityId = (<any>this._context.mode).contextInfo.entityId;
             try{
+                // Hack to get the field value from parent Model Driven App
                  // @ts-ignore
                 let tmpLookupField = Xrm.Page.getAttribute(overriddenRecordIdFieldName);
-
-                let control = (<any>this._context)?.page.getControl(overriddenRecordIdFieldName);
-                if (control && control.id){
-                    recordId = control.id;
+                if (tmpLookupField && tmpLookupField.getValue() && tmpLookupField.getValue()[0] && tmpLookupField.getValue()[0].id) {
+                    recordId = tmpLookupField.getValue()[0].id;
+                    if (this._isDebugMode){
+                        console.log(`overriddenRecordIdFieldName '${overriddenRecordIdFieldName}' value used: ${recordId}.`)
+                    }
                 }
-
+                else {
+                    if (this._isDebugMode){
+                        console.log(`Could not find id from overriddenRecordIdFieldName '${overriddenRecordIdFieldName}'.`)
+                    }
+                }
+                //let control = (<any>this._context)?.page.getControl(overriddenRecordIdFieldName);
+                //if (control && control.id){
+                //    recordId = control.id;
+                //}
             }
             catch(ex){
-                //this._baseD365Url = "";
+                if (this._isDebugMode){
+                    console.log(`Error trying to find id from overriddenRecordIdFieldName '${overriddenRecordIdFieldName}'. ${ex}`)
+                }
             }
         }
 

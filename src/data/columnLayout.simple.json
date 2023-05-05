@@ -12,6 +12,15 @@
     "minWidth": 120
   },
   {
+    "key": "banneraccount.onegas_contractid",
+    "fieldName": "banneraccount.onegas_contractid_Formatted",
+    "name": "Contract Name(BA)",
+    "minWidth": 100,
+    "data": {
+      "url": "[BASED365URL]/main.aspx?etc=1010&pagetype=entityrecord&id=[ID]"
+    }
+  },
+  {
     "key": "contr.title",
     "fieldName": "contr.title",
     "name": "Contract Name",
