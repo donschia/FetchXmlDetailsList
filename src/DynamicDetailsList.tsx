@@ -57,10 +57,6 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
     constructor(props: any) {
         super(props);
 
-        if (this._isDebugMode) {
-            debugger;  // eslint-disable-line no-debugger
-        }
-
         this._pcfContext = props.context;
         this._primaryEntityName = props.primaryEntityName;
         this._fetchXml = props.fetchXml;
@@ -69,7 +65,15 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
         this._isDebugMode = props.isDebugMode;
         this._baseD365Url = props.baseD365Url;
         this._currentPageNumber = 1;
-        let useDynamicsWebApi: boolean = true;
+        let useDynamicsWebApi: boolean = false;
+
+        // Debug mode will console log all important settings including fetchXml, column layout, set debugger breakpoint
+        if (this._isDebugMode) {
+            console.log("DynamicDetailsList primaryEntityName", this._primaryEntityName);
+            console.log("DynamicDetailsList fetchXml", this._fetchXml);
+            console.log("DynamicDetailsList columnLayout", this._columns);
+            debugger;  // eslint-disable-line no-debugger
+        }
 
         // Check we actually have a query to run, otherwise try to use sample data
         // Don't bother with Web Api if we aren't actually fetching data
@@ -110,7 +114,7 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
                             this._allItems = data.value;
 
                             if (this._isDebugMode) {
-                                console.log('_webApi.executeFetchXml : this._allItems', this._allItems);
+                                console.log('DynamicsWebApi.executeFetchXml : this._allItems', this._allItems);
                             }
 
                             this.setState(
@@ -120,6 +124,15 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
                                     //announcedMessage: "Actual FetchXml Response used."
                                 }
                             );
+                        }
+                        else {
+                            this._announcedMessage = 'DynamicsWebApi.executeFetchXml has no results.';
+                            this.setState({
+                                announcedMessage: this._announcedMessage
+                            });
+                            if (this._isDebugMode) {
+                                console.log(this._announcedMessage);
+                            }
                         }
                     }).catch((e) => {
                         if (this._isDebugMode) {
@@ -149,6 +162,15 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
                                 }
                             );
                         }
+                        else {
+                            this._announcedMessage = "webAPI.executeFetchXml has no results.";
+                            this.setState({
+                                announcedMessage: this._announcedMessage
+                            });
+                            if (this._isDebugMode) {
+                                this._announcedMessage = 'webAPI.executeFetchXml has no results.';
+                            }
+                        }
                     },
                     (e: any) => {
                         if (this._isDebugMode) {
@@ -165,9 +187,9 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
         else if (!props.fetchXml || !props.dataItems || props.dataItems.length < 1) {
             var sampleData = GetSampleData();
 
-            if (this._isDebugMode) {
-                console.log(`Sample Data`, sampleData);
-            }
+            //if (this._isDebugMode) {
+            //    console.log(`Sample Data`, sampleData);
+            //}
 
             if (sampleData.dataItems && sampleData.dataItems.length > 0) {
                 this._allItems = sampleData.dataItems;
@@ -299,7 +321,7 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
         if (item[column.key + _FORMATTEDVALUE]) {
             fieldContent = item[column.key + _FORMATTEDVALUE];
         }
-        console.log(fieldContent, column, column.data);
+        // console.log(fieldContent, column, column.data);
 
         if (item[column.key]) {
             // Handle any custom Date Formats via date=fns format string
@@ -322,15 +344,24 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
             }
 
             // URL Handling
-            // URL field handling - opens in a new tab/window
-            //else if (fieldContent && String(fieldContent).startsWith("http")) {
+            // Absolute URL, opens in a new tab/window
+            // Use the value of the field as the URL and as the Link Text
+            // "data" : { "url": "[USE_VALUE]", "urlLinkText": "[USE_VALUE]" }
+            // Use the value of the field as the URL, but show customized link text
+            //  "data" : { "url": "[USE_VALUE]", "urlLinkText": "Custom Link Text Here" }
+            // Use the value of the field as the URL and default Link Text "External Link"
+            // "data" : { "url": "[USE_VALUE]" }
             if (column.data && column.data.url == _USE_VALUE_URL_PLACEHOLDER) {
                 let linkText = (column.data.urlLinkText && column.data.urlLinkText == _USE_VALUE_URL_PLACEHOLDER) ? fieldContent :
                     column.data.urlLinkText && column.data.urlLinkTextfieldContent != "" ? column.data.urlLinkText :
                         "External Link";
                 return (<Link key={item} href={fieldContent} target="_blank">{linkText}</Link>);
             }
-            // Absolute URL Handling (with or without placeholders)
+            // URL Handling (with placeholders)
+            // This is one approach to link to the Dynamics365 Legacy web interface for Contracts for instance
+            // [BASED365URL] is replaced with Base Dynamics365 Url
+            // [ID] is replaced with the id of an entity field
+            //  "data": {  "url": "[BASED365URL]/main.aspx?etc=1010&pagetype=entityrecord&id=[ID]"  }
             else if (column.data && column.data.url && column.data.url !== "") {
                 let url = column.data.url
                     .replace(_BASE_D365_URL_PLACEHOLDER, this._baseD365Url)
@@ -338,6 +369,7 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
                 return (<Link key={item} href={url} target="_blank">{fieldContent}</Link>);
             }
             // Support navigation to entity links
+            // "data" : {"entityLinking": true}
             // Test harness will give error "Your control is trying to open a form. This is not yet supported."
             else if (item[column.key + _LOOKUPLOGICALNAMEATTRIBUTE]) {
                 if (column.data && column.data.entityLinking && column.data.entityLinking == true) {
