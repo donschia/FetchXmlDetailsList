@@ -15,7 +15,7 @@ const _FORMATTEDVALUE = "@OData.Community.Display.V1.FormattedValue";
 const _ATTRIBUTENAME = "@OData.Community.Display.V1.AttributeName";
 
 // URL Placeholder is replaced with Dynamics365 Base URL (if available)
-const _BASE_D365_URL_PLACEHOLDER = "[BASED365URL]";
+const _BASE_ENVIRONMENT_URL_PLACEHOLDER = "[BASE_ENVIRONMENT_URL]";
 // URL Placeholder is replaced with record ID
 const _RECORD_ID_URL_PLACEHOLDER = "[ID]";
 // USE_VALUE uses the record's text value as the absolute URL
@@ -30,7 +30,7 @@ export interface IDynamicDetailsListProps {
     fetchXml?: string;
     rootEntityName?: string;
     announcedMessage?: string;
-    baseD365Url?: string;
+    baseEnvironmentUrl?: string;
 }
 
 export interface IDynamicDetailsListState {
@@ -39,7 +39,7 @@ export interface IDynamicDetailsListState {
     fetchXml?: string;
     primaryEntityName?: string;
     announcedMessage?: string;
-    baseD365Url?: string;
+    baseEnvironmentUrl?: string;
 }
 
 export class DynamicDetailsList extends React.Component<any, IDynamicDetailsListState> {
@@ -52,7 +52,7 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
     private _announcedMessage: string;
     private _currentPageNumber: number;
     private _isDebugMode: boolean;
-    private _baseD365Url?: string;
+    private _baseEnvironmentUrl?: string;
 
     constructor(props: any) {
         super(props);
@@ -63,7 +63,7 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
         this._allItems = props.items;
         this._columns = props.columns;
         this._isDebugMode = props.isDebugMode;
-        this._baseD365Url = props.baseD365Url;
+        this._baseEnvironmentUrl = props.baseD365Url;
         this._currentPageNumber = 1;
         let useDynamicsWebApi: boolean = false;
 
@@ -107,7 +107,7 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
                 this._webApi.executeFetchXml(this._primaryEntityName, this._fetchXml, "*", this._currentPageNumber, undefined, undefined)
                     .then((data) => {
                         // this._pagingCookie = data["@Microsoft.Dynamics.CRM.fetchxmlpagingcookie"];
-                        //this._totalNumberOfRecords =  data.count;
+                        // this._totalNumberOfRecords =  data.count;
                         // Sometimes data is an array[]                
                         // parentThis.loadGrid(data.length && data.length > 0 ? data[0] : data);
                         if (data && data.value && data.value.length > 0) {
@@ -145,7 +145,7 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
                     });
             }
             else {
-                // or just use regular out of the box (but lacks _Formatted helpers)
+                // use the regular out of the box Web Api (lacks _Formatted helpers)
                 this._pcfContext.webAPI.retrieveMultipleRecords(this._primaryEntityName, "?fetchXml=" + encodeURIComponent(this._fetchXml)).then(
                     (results: any) => {
                         if (results && results.entities && results.entities.length > 0) {
@@ -308,7 +308,7 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
         else {
             return (
                 <Stack horizontal={true} verticalAlign={'center'} >
-                    <Spinner label="Loading Grid                                                        " size={SpinnerSize.medium} />
+                    <Spinner label="Loading Grid" size={SpinnerSize.medium} />
                 </Stack>
             );
         }
@@ -316,12 +316,13 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
 
     private _renderItemColumn = (item: any, index: number | undefined, column: any): any => {
         // debugger; // eslint-disable-line no-debugger
-        //const fieldContent = item[column.fieldName as keyof any] as string;
+        // const fieldContent = item[column.fieldName as keyof any] as string;
         let fieldContent = item[column.fieldName];
         if (item[column.key + _FORMATTEDVALUE]) {
             fieldContent = item[column.key + _FORMATTEDVALUE];
         }
         // console.log(fieldContent, column, column.data);
+        console.count(column.key);
 
         if (item[column.key]) {
             // Handle any custom Date Formats via date=fns format string
@@ -331,7 +332,7 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
                 try {
                     let dateValue = new Date(fieldContent);
                     let dateFormat = column.data.dateFormat || _DEFAULT_DATE_FORMAT;
-                    return (<span>{format(dateValue, column.data.dateFormat)}</span>);
+                    return (<span>{format(dateValue, dateFormat)}</span>);
                 }
                 catch (ex) {
                     if (this._isDebugMode) {
@@ -364,7 +365,7 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
             //  "data": {  "url": "[BASED365URL]/main.aspx?etc=1010&pagetype=entityrecord&id=[ID]"  }
             else if (column.data && column.data.url && column.data.url !== "") {
                 let url = column.data.url
-                    .replace(_BASE_D365_URL_PLACEHOLDER, this._baseD365Url)
+                    .replace(_BASE_ENVIRONMENT_URL_PLACEHOLDER, this._baseEnvironmentUrl)
                     .replace(_RECORD_ID_URL_PLACEHOLDER, item[column.key]);
                 return (<Link key={item} href={url} target="_blank">{fieldContent}</Link>);
             }

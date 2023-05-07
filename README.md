@@ -1,20 +1,20 @@
 # FetchXml DetailsList
 ## Description
-This PCF Control generates a FluentUI DetailsList for subgrids loaded via a custom FetchXml query and column layout.  The query can be as complex as needed with many linked entities.  This extends what is possible and goes beyond the capabilities of the Model-Driven App subgrid.  You need to include an ID Placeholder which is replaced with the current record id. 
+This PCF Control generates a FluentUI DetailsList for subgrids loaded via a custom FetchXml query and column layout. This extends what is possible and goes beyond the capabilities of the Model-Driven App subgrid.  You need to include an ID Placeholder which is replaced with the current record id. 
 
 ---
 [SCREENSHOT]
 
 You provide a columnLayout to define all column details. 
 ## Features
-- Dynamic queries can be more complex than views allow.  
-- Uses Placeholder to filter by record id.
+- Dynamic queries can be more complex than views allow.  The query can be as complex as needed with many linked entities.  You can even include links to entities that have been removed such as Contract.
 - Look and Feel is similar to out of the box Model Driven App read only subgrid.  Supports sorting and resizing of columns.
 - Quick rendering.
 - Double clicking the row navigates to the base record.
 - Support navigating to linked entities.
 - Customization options for each column include date formatting, toggleable entity linking, absolute urls, relative urls, and so on.
 - Debug mode to see examine data returned from FetchXml query for building column layout.
+- Uses Placeholder to filter by a record id.  This defaults to the current record.  But this can be overridden with another lookup on the current form.
   
 ***
 ## Setup
@@ -47,17 +47,18 @@ Prerequitiste is to make sure you can connect to your DEV environment using the 
 The grid has input parameters which must be set.
 
 - <code>FetchXml</code> is the full FetchXml with a placeholder for the Record Id in place.
+  [SHOW FETCHXML EXAMPLES]
 
 - <code>RecordIdPlaceholder</code> is the placeholder text. This will be replaced with the current record id.  
 i.e. <code>[RECORDID]</code>
 
-- The <code>RecordId</code> is read from the parent in a bit of a hack at the moment as it's not super easy to get this in the Power Apps framework.
+- The <code>RecordId</code> is read from the current record in a bit of a hack at the moment as it's not super easy to get this in the Power Apps framework.  This can also be overridden with another lookup on the current form.  Simply set the <code>OverriddenRecordIdFieldName</code> to a lookup field on the current form and this id will be used instead of the id of the current record.
 
 - <code>ColumnLayoutJson</code> is a collection of columns used for the table layout.
-- <code>ItemsPerPage</code> is current defaulted to 5000 as paging is currently not implemented.  // [NOT SUPPORTED CURRENTLY] ItemsPerPage is how many items to show per page. For now this is set at 5000 since paging and sorting seem to be at odds with eachother.
+- <code>ItemsPerPage</code> is currently defaulted to 5000 as paging is currently not implemented.  // [NOT SUPPORTED CURRENTLY] ItemsPerPage is how many items to show per page. For now this is set at 5000 since paging and sorting seem to be at odds with eachother.
 - <code>DebugMode</code> can be set to <code>On</code> or <code>Off</code>.  When enabled, this will write extra details to console, break when entering the main control, and break on handled exceptions.
 
-## Set Up Note
+## Set Up Notes
 Both the new and legacy designers will likely not allow you to paste in text long enough to be useful so you have to use a [workaround to extend the field length](https://powerusers.microsoft.com/t5/Power-Apps-Pro-Dev-ISV/Problem-with-maximum-length-of-Input-parameters-which-are-of/td-p/288295).
 
 Essentially you use the legacy designer and hack the input box via F11 dev tools to set the maxlength to something like 9999 instead of the default 2000 if your text doesn't fit.
@@ -77,9 +78,9 @@ This is a list of [IColumn](https://learn.microsoft.com/en-us/javascript/api/sp-
 ### data Object
 | Field Name | Required | Type | Description |
 | --- | --- | -- | -- |
-|dateFormat | No | String | You can force a date into a particular format by specifying this.  This uses [date-fns placeholders](https://date-fns.org/v2.29.3/docs/format) i.e. "yyyy-MM-dd" |
-|entityLinking | No | Boolean | Set to False to prevent linkign to linked entities. Otherwise links are enabled. |
-|url | No | String | Absolute URL.  Or can be relative from the [BASED365URL] path. |
+|dateFormat | No | String | You can force a date into a particular format by specifying this.  This uses [date-fns format strings](https://date-fns.org/v2.29.3/docs/format) i.e. <code>yyyy-MM-dd</code> |
+|entityLinking | No | Boolean | Set to <code>False</code> to prevent navigation to linked entities. Otherwise links are enabled. |
+|url | No | String | Absolute URL.  Or can be relative from the <code>[BASE_ENVIRONMENT_URL]</code> path.  You can include the current record id by using the <code>[ID]</code> placeholder.|
 
 ColumnLayoutJson Example:
 ```json
@@ -105,16 +106,17 @@ ColumnLayoutJson Example:
     "name": "Contract Name(BA)",
     "minWidth": 100,
     "data": {
-      "url": "[BASED365URL]/main.aspx?etc=1010&pagetype=entityrecord&id=[ID]"
+      "url": "[BASE_ENVIRONMENT_URL]/main.aspx?etc=1010&pagetype=entityrecord&id=[ID]"
     }
 ]
 ````
-## Dependency on dynamics-web-api
-For ease of use, this control uses the dynamics-web-api.  You can reference the field name with the _Formatted suffix.  if you prefer to just use the out of the box xrm web api, you will have to use the full names in your columnLayoutJson.
-
 
 # Issues
-There seems to be an issue with the dynamics-web-api 3rd party library. This gives a strange crypto error. I was able to fix it by hacking the webpackConfig for pcf-scripts to tell it to ignore it.
+## Dynamics-Web-Api library initial set up issue
+For ease of use, this control can be switched to use the dynamics-web-api library.  You can reference the field name with the _Formatted suffix.  But the default is to just use the out of the box xrm web api.
+
+There seems to be an issue with the dynamics-web-api 3rd party library. This gives a strange crypto error. You can either use the out of the box Web Api, or you can fix it by hacking the webpackConfig.js for pcf-scripts to tell it to ignore it.
+
 ../FetchXmlDetailsList/blob/master/node_modules/pcf-scripts/webpackConfig.js#L61
 
 Change this:
@@ -137,14 +139,14 @@ resolve: {
 ---
 
 ## Errors
-If you get this following runtime error you may need to use a \_Formatted field. For example, here it seems to be having a hard time with the date.
-Objects are not valid as a React child (found: Wed Dec 31 9000 00:00:00 GMT-0600 (Central Standard Time)). If you meant to render a collection of children, use an array instead.
-Another option to format the output.
+If you get runtime errors you may need to use a _Formatted field. For example, here it seems to be having a hard time with the date. <code>
+Objects are not valid as a React child (found: Wed Dec 31 9000 00:00:00 GMT-0600 (Central Standard Time)). If you meant to render a collection of children, use an array instead.</code>
+Another option if it's a date issue is to be sure to use a dateFormat in the column layout data object.
 
 ***
 
 ## TODOs:
-- Make documentation better!
+- Make this documentation better!
 
 - Make sure this can work without the dynamics-xrm-api dependency since there is an issue with it initially.  Perhaps configure this to be toggled via input parameter.
   
@@ -154,5 +156,4 @@ Another option to format the output.
 
 - Perhaps allow styling via input parameter.  i.e. alternate row color endable/disable, etc.
 
-- For some reason the two option (boolean) input parameter Is Debug Mode doesn't work with legacy designer.  It only seems to work with the new designer experience.
 - 

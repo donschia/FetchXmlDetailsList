@@ -10,15 +10,12 @@ export class FetchXmlDetailsList implements ComponentFramework.ReactControl<IInp
     private notifyOutputChanged: () => void;
 
     private _primaryEntityName: string;
-    private _primaryEntityNamePlural: string;
     private _fetchXML: string | null;
-    private _fieldLayout: Array<{ Order: number, Name: string, Width: number, FullSchemaName: string } >;
     private _columnLayout: Array<IColumn>;
-    private _itemsPerPage: number | null;
-    private _totalNumberOfRecords: number;
     private _isDebugMode: boolean;
-    private _baseD365Url?: string;
-    
+    private _baseEnvironmentUrl?: string;
+    private _itemsPerPage: number | null;
+    // private _totalNumberOfRecords: number;    
 
      /** General */
      private _context: ComponentFramework.Context<IInputs>;
@@ -52,7 +49,6 @@ export class FetchXmlDetailsList implements ComponentFramework.ReactControl<IInp
         this._notifyOutputChanged = notifyOutputChanged;
         this._container = container;
         this._isDebugMode = false;
-        // Someday this will be configurable via input parameter, defaults to 5000
         this._itemsPerPage = 5000;
         
         if (this._context.parameters.DebugMode) {
@@ -70,6 +66,7 @@ export class FetchXmlDetailsList implements ComponentFramework.ReactControl<IInp
         var recordIdPlaceholder : string | null = this._context.parameters.RecordIdPlaceholder.raw; // ?? "";  
 
         //let recordIdParameter = this._context.parameters.RecordId;
+        // This is just the simple control where the subgrid will be placed on the form
         var controlAnchorField : string | null = this._context.parameters.ControlAnchorField.raw;
         // const recordIdLookupValue: ComponentFramework.EntityReference = this._context.parameters.RecordId.raw[0];
        
@@ -82,23 +79,23 @@ export class FetchXmlDetailsList implements ComponentFramework.ReactControl<IInp
         let entityDisplayName = (<any>this._context.mode).contextInfo.entityRecordName;
         // This breaks when you use the PCF Test Harness.  Neat!
         try{
-            this._baseD365Url = (<any>this._context)?.page?.getClientUrl();
+            this._baseEnvironmentUrl = (<any>this._context)?.page?.getClientUrl();
         }
         catch(ex){
-            this._baseD365Url = "";
+            this._baseEnvironmentUrl = "";
         }
         var recordId : string = entityId; //this._context.parameters.RecordId.raw ?? currentRecordId;
 
-        // See if we can use and Id from a field specified on the form
-        // Wish we could use the Lookup property type
+        // See if we can use an Id from a lookup field specified on the current form
+        // Wish we could use the Lookup property type, but doesn't appear to be supported yet
         // https://butenko.pro/2021/03/21/pcf-lookup-attribute-lets-take-look-under-the-hood/
-        //  This may not work
-        // TODO you are going to have to webapi fetch the id 
+        // So using a hack to get the value from the Xrm.Page.  This is not recommended.
+        // TODO: you may need to webapi fetch the id 
         // https://github.com/shivuparagi/GenericLookupPCFControl/blob/main/GenericLookupPCFComponent/components/CalloutControlComponent.tsx
-        // Look at LoadData  function
+        // Look at LoadData function
         var overriddenRecordIdFieldName : string | null = this._context.parameters.OverriddenRecordIdFieldName.raw; // ?? "";
         if (overriddenRecordIdFieldName) {
-            try{
+            try {
                 // Hack to get the field value from parent Model Driven App
                  // @ts-ignore
                 let tmpLookupField = Xrm.Page.getAttribute(overriddenRecordIdFieldName);
@@ -125,20 +122,21 @@ export class FetchXmlDetailsList implements ComponentFramework.ReactControl<IInp
             }
         }
 
-        // Test harness always passes in "val"
+        // Update FetchXml, replace Record Id Placeholder with an actual Id
+        // Grab primary entity Name from FetchXml and re
+        // Test harness always initially passes in "val", so we can skip the following
         if (fetchXML != null && fetchXML != "val") {
             fetchXML =  fetchXML.replace(/"/g, "'");
-            this._primaryEntityName = this.getPrimaryEntityName(fetchXML);
+            this._primaryEntityName = this.getPrimaryEntityNameFromFetchXml(fetchXML);
             // Replace the placeholder     
             this._fetchXML = this.replacePlaceholderWithId(fetchXML, recordId, recordIdPlaceholder ?? "");
         }
 
-        // Layout provides field ordering, names, and widths
+        // Column Layout provides field ordering, names, and widths
         // let fieldLayoutJson = this._context.parameters.FieldLayoutJson.raw;
         // this._fieldLayout = JSON.parse(fieldLayoutJson); //this.DEFAULT_FIELDLAYOUT);
         let columnLayoutJson = this._context.parameters.ColumnLayoutJson.raw;
-        this._columnLayout = columnLayoutJson!= null && columnLayoutJson != "val"? JSON.parse(columnLayoutJson) : null;
-
+        this._columnLayout = columnLayoutJson != null && columnLayoutJson != "val" ? JSON.parse(columnLayoutJson) : null;
 
         //this._currentPageNumber = 1;
 
@@ -158,7 +156,7 @@ export class FetchXmlDetailsList implements ComponentFramework.ReactControl<IInp
         return fetchXML;
     }
 
-    private getPrimaryEntityName(fetchXml: string): string {
+    private getPrimaryEntityNameFromFetchXml(fetchXml: string): string {
         let primaryEntityName: string = "";
         // @ts-ignore
         let filter = fetchXml.matchAll(/<entity name='(.*?)'>/g).next();
@@ -181,7 +179,7 @@ export class FetchXmlDetailsList implements ComponentFramework.ReactControl<IInp
         //ReactDOM.render(React.createElement(FluentUIDetailsListControl, data, {}), this.container);
         //ata = require("../data/fetchXML.Response.json");
 
-        let props = {  columns: this._columnLayout, primaryEntityName: this._primaryEntityName, fetchXml: this._fetchXML, isDebugMode: this._isDebugMode, context: context, baseD365Url: this._baseD365Url };
+        let props = {  columns: this._columnLayout, primaryEntityName: this._primaryEntityName, fetchXml: this._fetchXML, isDebugMode: this._isDebugMode, context: context, baseD365Url: this._baseEnvironmentUrl };
         return React.createElement(DynamicDetailsList, props, {});
 
         // TODO: Can we support a grid without a columnlayout?
