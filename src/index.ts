@@ -64,14 +64,10 @@ export class FetchXmlDetailsList implements ComponentFramework.ReactControl<IInp
         // TODO: Validate the input parameters to make sure we get a friendly error instead of wierd errors
         var fetchXML : string | null = this._context.parameters.FetchXML.raw; // ?? this.DEFAULT_FETCHXML;
         var recordIdPlaceholder : string | null = this._context.parameters.RecordIdPlaceholder.raw; // ?? "";  
-
-        //let recordIdParameter = this._context.parameters.RecordId;
+    
         // This is just the simple control where the subgrid will be placed on the form
         var controlAnchorField : string | null = this._context.parameters.ControlAnchorField.raw;
         // const recordIdLookupValue: ComponentFramework.EntityReference = this._context.parameters.RecordId.raw[0];
-       
-        // TODO: We need a supported generic way to get the current record Id for PETESSAKE
-        // let sampleRec =  "e1b50ead-1cf0-e811-8172-e0071b6af241"; //this._context.page.entityId;
 
         // Other values if we need them
         let entityId = (<any>this._context.mode).contextInfo.entityId;
@@ -82,7 +78,7 @@ export class FetchXmlDetailsList implements ComponentFramework.ReactControl<IInp
             this._baseEnvironmentUrl = (<any>this._context)?.page?.getClientUrl();
         }
         catch(ex){
-            this._baseEnvironmentUrl = "";
+            this._baseEnvironmentUrl = "https://localhost/";
         }
         var recordId : string = entityId; //this._context.parameters.RecordId.raw ?? currentRecordId;
 
