@@ -1,0 +1,19 @@
+<fetch>
+  <entity name='contract'>
+    <attribute name='contractid' />
+    <attribute name='title' />
+    <attribute name='contractnumber' />
+    <attribute name='createdon' />
+    <attribute name='activeon' />
+    <attribute name='expireson' />
+    <attribute name='customerid' />
+    <attribute name='billingcustomerid' />
+    <filter type='or'>
+      <condition attribute='customerid' operator='eq' value='[RECORDID]' />
+      <condition attribute='billingcustomerid' operator='eq' value='[RECORDID]' />
+    </filter>
+    <link-entity name='systemuser' from='systemuserid' to='owninguser'>
+      <attribute name='internalemailaddress' />
+    </link-entity>
+  </entity>
+</fetch>

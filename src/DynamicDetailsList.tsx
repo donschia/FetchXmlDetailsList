@@ -153,6 +153,7 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
                             //_accountActivitiesItems = this.populateRecords(results);
                             this._allItems = results.entities;
                             if (this._isDebugMode) {
+                                console.log('webAPI.retrieveMultipleRecords : results', results);
                                 console.log('webAPI.retrieveMultipleRecords : this._allItems', this._allItems);
                             }
                             this.setState(
@@ -303,7 +304,6 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
                 <Stack horizontal={true} verticalAlign={'center'} >
                     <Text>{announcedMessage}</Text>
                 </Stack>
-
             );
         }
         else {
@@ -366,7 +366,10 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
                 let url = column.data.url
                     .replace(_BASE_ENVIRONMENT_URL_PLACEHOLDER, this._baseEnvironmentUrl)
                     .replace(_RECORD_ID_URL_PLACEHOLDER, item[column.key]);
-                return (<Link key={item} href={url} target="_blank">{fieldContent}</Link>);
+                let linkText = (column.data.urlLinkText && column.data.urlLinkText == _USE_VALUE_URL_PLACEHOLDER) ? fieldContent :
+                    column.data.urlLinkText && column.data.urlLinkTextfieldContent != "" ? column.data.urlLinkText :
+                        "Link";
+                return (<Link key={item} href={url} target="_blank">{linkText}</Link>);
             }
             // Support navigation to entity links
             // "data" : {"entityLinking": true}

@@ -1,7 +1,7 @@
-import * as sampleResponsedata from './data/sample_Response.webapi.json';
-//KS_Data_DynamicsXrmApi.Formatting.json';
-import * as sampleResponseColumnLayout from './data/sample_columnLayout.webapi.json';
-
+//import * as sampleResponsedata from './data/sample.Onegas.Response.webapi.json';
+//import * as sampleResponseColumnLayout from './data/sample.Onegas.columnLayout.webapi.json';
+import * as sampleResponsedata from './data/sample.Contracts.Response.webapi.json';
+import * as sampleResponseColumnLayout from './data/sample.Contracts.columnLayout.webapi.json';
 
 export function GetSampleData() {
     // For WebApi resposne with value node

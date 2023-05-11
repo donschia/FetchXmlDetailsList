@@ -6,7 +6,7 @@ $buildTotalTime = "BUILD: {0:HH:mm:ss}" -f ([datetime]$elapsedTime.Ticks)
 $buildTotalTime
 
 $StartTime = $(get-date)
-pac pcf push --publisher-prefix onegas
+pac pcf push --publisher-prefix schiavone
 $elapsedTime = $(get-date) - $StartTime
 $pushTotalTime = "PCF PCF PUSH: {0:HH:mm:ss}" -f ([datetime]$elapsedTime.Ticks)
 
