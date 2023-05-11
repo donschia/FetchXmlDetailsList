@@ -1,6 +1,6 @@
-import * as sampleResponsedata from './data/KS_Data_XrmWebApi_Formatting.json';
+import * as sampleResponsedata from './data/sample_Response.webapi.json';
 //KS_Data_DynamicsXrmApi.Formatting.json';
-import * as sampleResponseColumnLayout from './data/columnLayout.webapi.json';
+import * as sampleResponseColumnLayout from './data/sample_columnLayout.webapi.json';
 
 
 export function GetSampleData() {

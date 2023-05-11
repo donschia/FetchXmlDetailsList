@@ -1,0 +1,48 @@
+<fetch>
+	<entity name='account'>
+		<attribute name='name'/>
+		<attribute name='accountid'/>
+		<attribute name='onegas_keyaccountrep'/>
+		<attribute name='mcaogs_bannerid'/>
+		<attribute name='mcaogs_sourcesystemname'/>
+		<attribute name='mcaogs_sourcesystemid'/>
+		<attribute name='onegas_totalactivitycount' />
+		<filter>
+			<condition attribute='statuscode' operator='eq' value='1'/>
+			<condition attribute='onegas_company' operator='eq' value='[RECORDID]'/>
+		</filter>
+		<order attribute='mcaogs_bannerid' descending='false'/>
+		<link-entity name='onegas_primary_company' from='onegas_primary_companyid' to='onegas_company' alias='company'>
+			<attribute name='onegas_name'/>
+			<attribute name='onegas_ldc_customer_number'/>
+			<attribute name='onegas_taxid'/>
+		</link-entity>
+		<link-entity name='mcaogs_banneraccount' from='mcaogs_banneraccountid' to='onegas_banneraccount' link-type='outer' alias='banneraccount'>
+			<attribute name='mcaogs_name'/>
+			<attribute name='onegas_bannerstatus'/>
+			<attribute name='onegas_meter_serial_number'/>
+			<attribute name='mcaogs_premiseid'/>
+			<attribute name='onegas_billing_history_url'/>
+			<attribute name='onegas_contractid'/>
+			<link-entity name='mcaogs_premise' from='mcaogs_premiseid' to='mcaogs_premiseid' link-type='outer' alias='premise'>
+				<attribute name='mcaogs_address1'/>
+				<attribute name='mcaogs_city'/>
+				<attribute name='mcaogs_stateid'/>
+			</link-entity>
+			<link-entity name='contract' from='contractid' to='onegas_contractid' link-type='outer' alias='contr'>
+				<attribute name='mcaogs_qptm_id'/>
+				<attribute name='title'/>
+				<attribute name='onegas_qptmcontractstatus'/>
+				<attribute name='onegas_tspno'/>
+				<attribute name='onegas_customercontractedbanneraccounts'/>
+				<attribute name='activeon'/>
+				<attribute name='onegas_contractenddate'/>
+				<attribute name='mcaogs_supplier'/>
+				<attribute name='onegas_rate'/>
+				<attribute name='onegas_tariff'/>
+				<attribute name='mcaogs_sourcesystemid'/>
+				<order attribute='mcaogs_qptm_id'/>
+			</link-entity>
+		</link-entity>
+	</entity>
+</fetch>

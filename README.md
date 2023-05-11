@@ -17,32 +17,14 @@ This PCF Control generates a FluentUI DetailsList for subgrids loaded via a cust
 - Uses Placeholder to filter by a record id.  This defaults to the current record.  But this can be overridden with another lookup on the current form.
   
 ***
-## Setup
 
-1. If you don’t have Node.js installed, [install it from here](https://nodejs.org/en/)
+## Quick Start using Pre-Built Solution
+[Managed](solution\bin\Release\FetchXmlDetailsList.Solution_managed.zip) and [Unmanaged](solution\bin\Release\FetchXmlDetailsList.Solution.zip) Solutions are available to download and install in your development environment.  
 
-2. Clone this repository
+After installing, you add this new PCF Control to your form via the legacy or modern designer.  Simply add a text field and bind this control to it.  Now you have to set the Input Parameters.
 
-3. Navigate into the project directory in terminal.
-   ```bash
-   $ cd FetchXmlDetailsList
-   ```
-4. Install the dependencies
-   ```bash
-   $ npm install
-   ```
-5. Run using sample data and column layout in PCF Test Harness. Linking is disabled since this is not allowed in the tester.
-   ```bash
-   $ npm start   
-## Build and Deploy
-You can build and deploy to your currently configured DEVELOPMENT Environment using the CLI [PAC PCF PUSH](https://learn.microsoft.com/en-us/power-platform/developer/cli/reference/pcf#pac-pcf-push) by running:  <code>buildAndDeploy.ps1</code>.  Note that the CLI requires connecting to your development org first. See the documentation for more details.
-You will need to ensure you have installed the [Microsoft PowerApps CLI](https://learn.microsoft.com/en-us/power-platform/developer/cli/introduction#install-power-apps-cli). 
-   - <code>buildAndDeploy.ps1</code> will build the component, add it to a temporary solution (PowerAppsTools_YourOrg) , import to your DEV environment and Publish All.
-Prerequitiste is to make sure you can connect to your DEV environment using the CLI tools.
-```bash
-   $ buildAndDeploy.ps1
-   ```
 
+***
 ## Input Parameters (Properties)
 The grid has input parameters which must be set.
 
@@ -111,6 +93,36 @@ ColumnLayoutJson Example:
 ]
 ````
 
+***
+## Initial Setup
+
+1. If you don’t have Node.js installed, [install it from here](https://nodejs.org/en/)
+
+2. Clone this repository
+
+3. Navigate into the project directory in terminal.
+   ```bash
+   $ cd FetchXmlDetailsList
+   ```
+4. Install the dependencies
+   ```bash
+   $ npm install
+   ```
+5. Demo the subgrid with sample data and column layout in PCF Test Harness. Linking is disabled since this is not allowed in the tester.
+   ```bash
+   $ npm start  
+   ```
+
+## Build and Deploy
+You can build and deploy to your currently configured DEVELOPMENT Environment using the CLI [PAC PCF PUSH](https://learn.microsoft.com/en-us/power-platform/developer/cli/reference/pcf#pac-pcf-push) by running:  <code>buildAndDeploy.ps1</code>.  Note that the CLI requires connecting to your development org first. See the documentation for more details.
+You will need to ensure you have installed the [Microsoft PowerApps CLI](https://learn.microsoft.com/en-us/power-platform/developer/cli/introduction#install-power-apps-cli). 
+   - <code>buildAndDeploy.ps1</code> will build the component, add it to a temporary solution (PowerAppsTools_YourOrg) , import to your DEV environment and Publish All.
+Prerequitiste is to make sure you can connect to your DEV environment using the CLI tools.
+```bash
+$ buildAndDeploy.ps1
+```
+
+
 # Issues
 ## Dynamics-Web-Api library initial set up issue
 For ease of use, this control can be switched to use the dynamics-web-api library.  You can reference the field name with the _Formatted suffix.  But the default is to just use the out of the box xrm web api.
@@ -146,14 +158,14 @@ Another option if it's a date issue is to be sure to use a dateFormat in the col
 ***
 
 ## TODOs:
-- Make this documentation better!
-
-- Make sure this can work without the dynamics-xrm-api dependency since there is an issue with it initially.  Perhaps configure this to be toggled via input parameter.
-  
-- Paging!  No paging support currently. Page size is locked at 5000 for now.
+- Make documentation better!
+ 
+- Paging!  Paging is not implemented yet. Page size is locked at 5000 for now.
   
 - Add an example FetchXml using out of the box entities instead of the current one with custom entities.  Try to include a number of entities and solve a real problem.  Could also include the Contract entity to show how you can support the deprecated/removed contract entity links to the old non-UCI interface.
 
 - Perhaps allow styling via input parameter.  i.e. alternate row color endable/disable, etc.
 
-- 
+- When not using the Dynamics-Web-Api 3rd party libary, don't include (require) it.  This will make the final bundle.js smaller.
+  
+- Export is very rudimentary.  It would be much better if the header was the actual column name instead of column fieldName.

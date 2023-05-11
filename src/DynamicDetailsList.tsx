@@ -9,6 +9,8 @@ import { ExportToCSVUtil } from './GridExport';
 
 
 const theme = getTheme();
+// If true, this will use 3rd party Dynamics-Web-Api library instead of out of box Xrm Web Api
+const _useDynamicsWebApi: boolean = false;
 
 const _LOOKUPLOGICALNAMEATTRIBUTE = "@Microsoft.Dynamics.CRM.lookuplogicalname";
 const _FORMATTEDVALUE = "@OData.Community.Display.V1.FormattedValue";
@@ -65,7 +67,6 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
         this._isDebugMode = props.isDebugMode;
         this._baseEnvironmentUrl = props.baseD365Url;
         this._currentPageNumber = 1;
-        let useDynamicsWebApi: boolean = false;
 
         // Debug mode will console log all important settings including fetchXml, column layout, set debugger breakpoint
         if (this._isDebugMode) {
@@ -93,11 +94,11 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
             }));
 
             if (this._isDebugMode) {
-                console.log(`useDynamicsWebApi: ${useDynamicsWebApi}`);
+                console.log(`useDynamicsWebApi: ${_useDynamicsWebApi}`);
             }
 
             // 3rd party DynamicsWebApi library allows access to the _Formatted items
-            if (useDynamicsWebApi) {
+            if (_useDynamicsWebApi) {
                 this._webApi = new DynamicsWebApi(
                     {
                         dataApi: { version: '9.0' },
@@ -315,14 +316,12 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
     }
 
     private _renderItemColumn = (item: any, index: number | undefined, column: any): any => {
-        // debugger; // eslint-disable-line no-debugger
         // const fieldContent = item[column.fieldName as keyof any] as string;
         let fieldContent = item[column.fieldName];
         if (item[column.key + _FORMATTEDVALUE]) {
             fieldContent = item[column.key + _FORMATTEDVALUE];
         }
         // console.log(fieldContent, column, column.data);
-        console.count(column.key);
 
         if (item[column.key]) {
             // Handle any custom Date Formats via date=fns format string
@@ -451,32 +450,5 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
         }
         return null;
     };
-
-    // TODO: REMOVED UNUSED
-    // UNUSED 
-    private _onItemInvoked(item: any): void {
-        // Open the form
-        this._pcfContext.navigation.openForm(
-            {
-                entityName: this._primaryEntityName,
-                entityId: item[this._primaryEntityName + "id"]
-            }
-        );
-    }
-
-    // UNUSED
-    private link_Click(evt: Event): void {
-        var currentItem = evt.currentTarget;
-
-        // @ts-ignore
-        var data = currentItem.dataset;
-        var recordId = data.recordId;
-        var recordLogicalName = data.recordLogicalName;
-
-        var entityFormOptions: { entityName?: string, entityId?: string, openInNewWindow?: boolean } = {};
-        entityFormOptions.entityName = recordLogicalName;
-        entityFormOptions.entityId = recordId;
-        //entityFormOptions.openInNewWindow = window.event.ctrlKey;
-    }
 
 }
