@@ -153,7 +153,7 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
                             //_accountActivitiesItems = this.populateRecords(results);
                             this._allItems = results.entities;
                             if (this._isDebugMode) {
-                                console.log('webAPI.retrieveMultipleRecords : results', results);
+                                // console.log('webAPI.retrieveMultipleRecords : results', results);
                                 console.log('webAPI.retrieveMultipleRecords : this._allItems', this._allItems);
                             }
                             this.setState(

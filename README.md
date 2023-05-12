@@ -3,8 +3,7 @@
 This PCF Control generates a FluentUI DetailsList for subgrids loaded via a custom FetchXml query and column layout. This extends the query capabilities beyond the standard Model-Driven App subgrid.  You need to include an ID Placeholder which is replaced at runtime with the current record id.  It is also possible to pass in an id from the current record to be replaced in the same fashion.
 
 ---
-[SCREENSHOT]
-
+![Alt text](images/ContractSubgrid.png)
 
 ## Features
 - Dynamic queries can be more complex than model driven apps views allow, for example with many more linked entities.  You can even include links to entities that are no longer available in the new user interface (i.e. Contract).
@@ -19,9 +18,18 @@ This PCF Control generates a FluentUI DetailsList for subgrids loaded via a cust
 ## Quick Start using Pre-Built Solution
 A [Managed or Unmanaged Solution](https://github.com/donschia/FetchXmlDetailsList/tree/master/solution/bin/Release) is available to download and install in your development environment.  
 
-After installing, you add this new PCF Control to your form via the legacy or modern designer.  Simply add a text field and bind this control to it.  Now you have to set the Input Parameters.
+After installing, you add this new PCF Control to your form via the legacy or modern designer (I use legacy due to field length issue described later).  Simply add any text field and bind this control to it.  
+![Alt text](images/LegacyDesigner_AddTextField.png)
+Be sure to hide the label. 
+![Alt text](images/LegacyDesigner_AddTextField2.png)
+Go to the Controls tab and pick the `FetchXml DetailsList`.
 
+![Alt text](images/AddControl_Pick.png)
+Set the radio buttons so the control is visiable, and set the Input Parameters.
+![Alt text](images/AddControl_SetProperties.png)
 
+### Set Up Notes
+Both the new and legacy designers will likely not allow you to paste in text long enough for more elaborate FetchXml queries and Column Layouts, so you have to use the legacy designer and a [workaround to extend the field length](https://powerusers.microsoft.com/t5/Power-Apps-Pro-Dev-ISV/Problem-with-maximum-length-of-Input-parameters-which-are-of/td-p/288295).
 ***
 ## Input Parameters (Properties)
 The grid has input parameters which must be set.
@@ -38,8 +46,6 @@ i.e. <code>[RECORDID]</code>
 - <code>ItemsPerPage</code> is currently defaulted to 5000 as paging is currently not implemented.  // [NOT SUPPORTED CURRENTLY] ItemsPerPage is how many items to show per page. For now this is set at 5000 since paging and sorting seem to be at odds with eachother.
 - <code>DebugMode</code> can be set to <code>On</code> or <code>Off</code>.  When enabled, this will write extra details to console, break when entering the main control, and break on handled exceptions.
 
-## Set Up Notes
-Both the new and legacy designers will likely not allow you to paste in text long enough to be useful so you have to use a [workaround to extend the field length](https://powerusers.microsoft.com/t5/Power-Apps-Pro-Dev-ISV/Problem-with-maximum-length-of-Input-parameters-which-are-of/td-p/288295).
 
 Essentially you use the legacy designer and hack the input box via F11 dev tools to set the maxlength to something like 9999 instead of the default 2000 if your text doesn't fit.
 
@@ -119,7 +125,10 @@ Prerequitiste is to make sure you can connect to your DEV environment using the 
 ```bash
 $ buildAndDeploy.ps1
 ```
-
+# Notes
+## Response Details
+The response to the FetchXml get multiple query should have details in it which we need for the rendering to work.  Essentially the Xrm Web Api sets the headers and returns details we can work with.
+`prefer: odata.include-annotations="*"`
 
 # Issues
 ## Dynamics-Web-Api library initial set up issue

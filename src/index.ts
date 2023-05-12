@@ -62,7 +62,7 @@ export class FetchXmlDetailsList implements ComponentFramework.ReactControl<IInp
         }
         
         // TODO: Validate the input parameters to make sure we get a friendly error instead of wierd errors
-        var fetchXML : string | null = this._context.parameters.FetchXML.raw; // ?? this.DEFAULT_FETCHXML;
+        var fetchXML : string | null = this._context.parameters.FetchXml.raw; // ?? this.DEFAULT_FETCHXML;
         var recordIdPlaceholder : string | null = this._context.parameters.RecordIdPlaceholder.raw; // ?? "";  
     
         // This is just the simple control where the subgrid will be placed on the form
@@ -78,7 +78,7 @@ export class FetchXmlDetailsList implements ComponentFramework.ReactControl<IInp
             this._baseEnvironmentUrl = (<any>this._context)?.page?.getClientUrl();
         }
         catch(ex){
-            this._baseEnvironmentUrl = "https://localhost/";
+            this._baseEnvironmentUrl = "https://localhost";
         }
         var recordId : string = entityId; //this._context.parameters.RecordId.raw ?? currentRecordId;
 
@@ -93,7 +93,7 @@ export class FetchXmlDetailsList implements ComponentFramework.ReactControl<IInp
         if (overriddenRecordIdFieldName) {
             try {
                 // Hack to get the field value from parent Model Driven App
-                 // @ts-ignore
+                // @ts-ignore
                 let tmpLookupField = Xrm.Page.getAttribute(overriddenRecordIdFieldName);
                 if (tmpLookupField && tmpLookupField.getValue() && tmpLookupField.getValue()[0] && tmpLookupField.getValue()[0].id) {
                     recordId = tmpLookupField.getValue()[0].id;
@@ -146,12 +146,18 @@ export class FetchXmlDetailsList implements ComponentFramework.ReactControl<IInp
     private replacePlaceholderWithId(fetchXML: string, recordId: string, recordIdPlaceholder: string) : string {
         if (recordId && recordIdPlaceholder) {
             if (fetchXML.indexOf(recordIdPlaceholder) > -1) {
-                return fetchXML.replace(recordIdPlaceholder, recordId);
+                //return fetchXML.replace(recordIdPlaceholder, recordId); // only replaces first occurance of string       
+                return this.replaceAll(fetchXML, recordIdPlaceholder, recordId);
             }
         }
         return fetchXML;
     }
 
+    private replaceAll(source: string, find: string, replace: string) : string{
+        // eslint-disable-next-line no-useless-escape
+        return source.replace(new RegExp(find.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&'), 'g'), replace);
+    }
+    
     private getPrimaryEntityNameFromFetchXml(fetchXml: string): string {
         let primaryEntityName: string = "";
         // @ts-ignore

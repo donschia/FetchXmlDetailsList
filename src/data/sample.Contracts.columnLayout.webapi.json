@@ -9,9 +9,9 @@
   {
     "key": "contractid",
     "fieldName": "contractid",
-    "name": "Contract",
-    "minWidth": 50,
-    "maxWidth": 60,
+    "name": "Contract Link",
+    "minWidth": 60,
+    "maxWidth": 70,
     "data": {
       "url": "[BASE_ENVIRONMENT_URL]/main.aspx?etc=1010&pagetype=entityrecord&id=[ID]",
       "urlLinkText": "Contract Link"
@@ -62,6 +62,15 @@
     }
   },
   {
+    "key": "duration",
+    "fieldName": "duration",
+    "name": "Duration (Days)",
+    "minWidth": 30,
+    "data": {
+      "type": "number"
+    }
+  },
+  {
     "key": "_modifiedby_value",
     "fieldName": "_modifiedby_value",
     "name": "Modified By",
@@ -77,5 +86,15 @@
     "name": "Owning User Email",
     "minWidth": 100,
     "mmaxWidth": 120
+  },
+  {
+    "key": "mcaogs_contractlink",
+    "fieldName": "mcaogs_contractlink",
+    "name": "Contract Link",
+    "minWidth": 100,
+    "data": {
+      "url": "[USE_VALUE]",
+      "urlLinkText": "[USE_VALUE]"
+    }
   }
 ]

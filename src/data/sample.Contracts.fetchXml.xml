@@ -1,18 +1,24 @@
 <fetch>
   <entity name='contract'>
+    <attribute name='contractnumber' />
     <attribute name='contractid' />
     <attribute name='title' />
-    <attribute name='contractnumber' />
+    <attribute name='statuscode' />
     <attribute name='createdon' />
     <attribute name='activeon' />
     <attribute name='expireson' />
+    <attribute name='duration' />
+    <attribute name='modifiedby' />
     <attribute name='customerid' />
     <attribute name='billingcustomerid' />
+    <attribute name='totalprice' />
+    <attribute name='ownerid' />
+    <attribute name='mcaogs_contractlink' />
     <filter type='or'>
       <condition attribute='customerid' operator='eq' value='[RECORDID]' />
       <condition attribute='billingcustomerid' operator='eq' value='[RECORDID]' />
     </filter>
-    <link-entity name='systemuser' from='systemuserid' to='owninguser'>
+    <link-entity name='systemuser' from='systemuserid' to='owninguser' alias='owninguser'>
       <attribute name='internalemailaddress' />
     </link-entity>
   </entity>
