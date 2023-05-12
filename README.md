@@ -35,7 +35,33 @@ Both the new and legacy designers will likely not allow you to paste in text lon
 The grid has input parameters which must be set.
 
 - <code>FetchXml</code> is the full FetchXml with a placeholder for the Record Id in place.
-  [SHOW FETCHXML EXAMPLES]
+```xml
+<fetch>
+  <entity name='contract'>
+    <attribute name='contractnumber' />
+    <attribute name='contractid' />
+    <attribute name='title' />
+    <attribute name='statuscode' />
+    <attribute name='createdon' />
+    <attribute name='activeon' />
+    <attribute name='expireson' />
+    <attribute name='duration' />
+    <attribute name='modifiedby' />
+    <attribute name='customerid' />
+    <attribute name='billingcustomerid' />
+    <attribute name='totalprice' />
+    <attribute name='ownerid' />
+    <attribute name='mcaogs_contractlink' />
+    <filter type='or'>
+      <condition attribute='customerid' operator='eq' value='[RECORDID]' />
+      <condition attribute='billingcustomerid' operator='eq' value='[RECORDID]' />
+    </filter>
+    <link-entity name='systemuser' from='systemuserid' to='owninguser' alias='owninguser'>
+      <attribute name='internalemailaddress' />
+    </link-entity>
+  </entity>
+</fetch>
+```
 
 - <code>RecordIdPlaceholder</code> is the placeholder text. This will be replaced with the current record id.  
 i.e. <code>[RECORDID]</code>
@@ -72,28 +98,103 @@ ColumnLayoutJson Example:
 ```json
 [
   {
-    "key": "name",
-    "fieldName": "name",
-    "name": "Account Name",
-    "minWidth": 160
+    "key": "contractnumber",
+    "fieldName": "contractnumber",
+    "name": "Contract #",
+    "minWidth": 60,
+    "maxWidth": 100
+  },
+  {
+    "key": "contractid",
+    "fieldName": "contractid",
+    "name": "Contract Link",
+    "minWidth": 60,
+    "maxWidth": 70,
+    "data": {
+      "url": "[BASE_ENVIRONMENT_URL]/main.aspx?etc=1010&pagetype=entityrecord&id=[ID]",
+      "urlLinkText": "Contract Link"
+    }
+  },
+  {
+    "key": "title",
+    "fieldName": "title",
+    "name": "Contract Title",
+    "minWidth": 100,
+    "maxWidth": 170
+  },
+  {
+    "key": "statuscode",
+    "fieldName": "statuscode",
+    "name": "Contract Status",
+    "minWidth": 50,
+    "maxWidth": 70
   },
   {
     "key": "createdon",
     "fieldName": "createdon",
     "name": "Created On",
-    "minWidth": 70,
+    "minWidth": 50,
+    "mmaxWidth": 60,
     "data": {
       "dateFormat": "yyyy-MM-dd"
     }
   },
   {
-    "key": "banneraccount.onegas_contractid",
-    "fieldName": "banneraccount.onegas_contractid_Formatted",
-    "name": "Contract Name(BA)",
+    "key": "activeon",
+    "fieldName": "activeon",
+    "name": "Contract Start Date",
+    "minWidth": 50,
+    "mmaxWidth": 60,
+    "data": {
+      "dateFormat": "yyyy-MM-dd"
+    }
+  },
+  {
+    "key": "expireson",
+    "fieldName": "expireson",
+    "name": "Contract End Date",
+    "minWidth": 50,
+    "mmaxWidth": 60,
+    "data": {
+      "dateFormat": "yyyy-MM-dd"
+    }
+  },
+  {
+    "key": "duration",
+    "fieldName": "duration",
+    "name": "Duration (Days)",
+    "minWidth": 30,
+    "data": {
+      "type": "number"
+    }
+  },
+  {
+    "key": "_modifiedby_value",
+    "fieldName": "_modifiedby_value",
+    "name": "Modified By",
+    "minWidth": 100,
+    "mmaxWidth": 120,
+    "data": {
+      "entityLinking": true
+    }
+  },
+  {
+    "key": "owninguser.internalemailaddress",
+    "fieldName": "owninguser.internalemailaddress",
+    "name": "Owning User Email",
+    "minWidth": 100,
+    "mmaxWidth": 120
+  },
+  {
+    "key": "mcaogs_contractlink",
+    "fieldName": "mcaogs_contractlink",
+    "name": "Contract Link",
     "minWidth": 100,
     "data": {
-      "url": "[BASE_ENVIRONMENT_URL]/main.aspx?etc=1010&pagetype=entityrecord&id=[ID]"
+      "url": "[USE_VALUE]",
+      "urlLinkText": "[USE_VALUE]"
     }
+  }
 ]
 ````
 
