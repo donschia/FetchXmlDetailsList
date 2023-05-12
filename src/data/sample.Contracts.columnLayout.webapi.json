@@ -28,13 +28,15 @@
     "key": "statuscode",
     "fieldName": "statuscode",
     "name": "Contract Status",
-    "minWidth": 70
+    "minWidth": 50,
+    "maxWidth": 70
   },
   {
     "key": "createdon",
     "fieldName": "createdon",
     "name": "Created On",
-    "minWidth": 120,
+    "minWidth": 50,
+    "mmaxWidth": 60,
     "data": {
       "dateFormat": "yyyy-MM-dd"
     }
@@ -43,7 +45,8 @@
     "key": "activeon",
     "fieldName": "activeon",
     "name": "Contract Start Date",
-    "minWidth": 70,
+    "minWidth": 50,
+    "mmaxWidth": 60,
     "data": {
       "dateFormat": "yyyy-MM-dd"
     }
@@ -52,7 +55,8 @@
     "key": "expireson",
     "fieldName": "expireson",
     "name": "Contract End Date",
-    "minWidth": 70,
+    "minWidth": 50,
+    "mmaxWidth": 60,
     "data": {
       "dateFormat": "yyyy-MM-dd"
     }
@@ -61,7 +65,8 @@
     "key": "_modifiedby_value",
     "fieldName": "_modifiedby_value",
     "name": "Modified By",
-    "minWidth": 120,
+    "minWidth": 100,
+    "mmaxWidth": 120,
     "data": {
       "entityLinking": true
     }
@@ -70,6 +75,7 @@
     "key": "owninguser.internalemailaddress",
     "fieldName": "owninguser.internalemailaddress",
     "name": "Owning User Email",
-    "minWidth": 120
+    "minWidth": 100,
+    "mmaxWidth": 120
   }
 ]

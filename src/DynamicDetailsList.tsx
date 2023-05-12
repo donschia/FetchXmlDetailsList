@@ -271,11 +271,11 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
                                 <DetailsList
                                     items={items}
                                     columns={columns}
-                                    layoutMode={DetailsListLayoutMode.justified}
+                                    /* layoutMode={DetailsListLayoutMode.justified} */
                                     compact={true}
                                     selectionMode={SelectionMode.none}
                                     isHeaderVisible={true}
-                                    constrainMode={ConstrainMode.unconstrained}
+                                    /* constrainMode={ConstrainMode.unconstrained}*/
                                     onRenderRow={this._onRenderRow}
                                     onRenderDetailsHeader={this._onRenderDetailsHeader}
                                     // Custom Rendering to support entity linking, Absolute Urls, formatted dates, etc.
