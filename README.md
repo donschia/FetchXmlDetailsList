@@ -1,19 +1,19 @@
-# FetchXml DetailsList
+# [FetchXml DetailsList](https://github.com/donschia/FetchXmlDetailsList)
 ## Description
-This PCF Control generates a FluentUI DetailsList for subgrids loaded via a custom FetchXml query and column layout. This extends what is possible for the Model-Driven App subgrid.  You need to include an ID Placeholder which is replaced with the current record id. 
+This PCF Control generates a FluentUI DetailsList for subgrids loaded via a custom FetchXml query and column layout. This extends the query capabilities beyond the standard Model-Driven App subgrid.  You need to include an ID Placeholder which is replaced at runtime with the current record id.  It is also possible to pass in an id from the current record to be replaced in the same fashion.
 
 ---
 [SCREENSHOT]
 
 
 ## Features
-- Dynamic queries can be more complex than views allow.  The query can be as complex as needed with many linked entities.  You can even include links to entities that have been removed such as Contract.
-- Look and Feel is similar to out of the box Model Driven App read only subgrid.  Supports sorting and resizing of columns.
-- Quick rendering.
-- Double clicking the row navigates to the base record.
-- Support navigating to linked entities.
+- Dynamic queries can be more complex than views allow, for example with many more linked entities.  You can even include links to entities that are no longer available in the new user interface such as Contract.
+- Look and Feel is similar to the out of the box Model Driven read only subgrid.  Supports sorting and resizing of columns.
+- Quick rendering, even for fairly large datasets.
+- Double clicking a row navigates to the base record.
+- Supports navigating to linked entities.
 - Customization options for each column include date formatting, toggleable entity linking, absolute urls, relative urls, and so on.
-- Debug mode to see examine data returned from FetchXml query for building column layout.
+- Debug mode shows all data returned from FetchXml query for building the column layout.
 - Uses Placeholder to filter by a record id.  This defaults to the current record.  But this can be overridden with another lookup on the current form.
   
 ***

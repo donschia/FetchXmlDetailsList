@@ -3,15 +3,15 @@
     "key": "contractnumber",
     "fieldName": "contractnumber",
     "name": "Contract #",
-    "minWidth": 50,
-    "maxWidth": 50
+    "minWidth": 60,
+    "maxWidth": 100
   },
   {
     "key": "contractid",
     "fieldName": "contractid",
     "name": "Contract",
-    "minWidth": 40,
-    "maxWidth": 40,
+    "minWidth": 50,
+    "maxWidth": 60,
     "data": {
       "url": "[BASE_ENVIRONMENT_URL]/main.aspx?etc=1010&pagetype=entityrecord&id=[ID]",
       "urlLinkText": "Contract Link"
@@ -21,7 +21,8 @@
     "key": "title",
     "fieldName": "title",
     "name": "Contract Title",
-    "minWidth": 170
+    "minWidth": 100,
+    "maxWidth": 170
   },
   {
     "key": "statuscode",

@@ -18,4 +18,4 @@
 .vs\
 
 # igonore backups too  
-*.zip
+#*.zip
