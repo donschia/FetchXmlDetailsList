@@ -19,7 +19,7 @@ This PCF Control generates a FluentUI DetailsList for subgrids loaded via a cust
 ***
 
 ## Quick Start using Pre-Built Solution
-[Managed](solution\bin\Release\FetchXmlDetailsList.Solution_managed.zip) and [Unmanaged](solution\bin\Release\FetchXmlDetailsList.Solution.zip) Solutions are available to download and install in your development environment.  
+[Managed](https://github.com/donschia/FetchXmlDetailsList/solution/bin/Release/FetchXmlDetailsList.Solution_managed.zip) and [Unmanaged](https://github.com/donschia/FetchXmlDetailsList/solution/bin/Release/FetchXmlDetailsList.Solution.zip) Solutions are available to download and install in your development environment.  
 
 After installing, you add this new PCF Control to your form via the legacy or modern designer.  Simply add a text field and bind this control to it.  Now you have to set the Input Parameters.
 
