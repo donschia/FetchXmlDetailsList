@@ -7,7 +7,7 @@ This PCF Control generates a FluentUI DetailsList for subgrids loaded via a cust
 
 
 ## Features
-- Dynamic queries can be more complex than model driven apps views allow, for example with many more linked entities.  You can even links to entities that are no longer available in the new user interface (i.e. Contract).
+- Dynamic queries can be more complex than model driven apps views allow, for example with many more linked entities.  You can even include links to entities that are no longer available in the new user interface (i.e. Contract).
 - Uses [FluentUI DetailsList]( https://developer.microsoft.com/en-us/fluentui#/controls/web/detailslist) with a familiar look and feel  similar to model-driven read-only subgrid, supporting basic sorting and resizing of columns.  
 - Double clicking a row navigates to the base record and gridsupports navigation to linked entities.
 - Customization options for each column include date formatting, toggleable entity linking, absolute urls, relative urls, and so on.
