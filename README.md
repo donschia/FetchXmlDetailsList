@@ -18,18 +18,20 @@ This PCF Control generates a FluentUI DetailsList for subgrids loaded via a cust
 ## Quick Start using Pre-Built Solution
 A [Managed or Unmanaged Solution](https://github.com/donschia/FetchXmlDetailsList/tree/master/solution/bin/Release) is available to download and install in your development environment.  
 
-After installing, you add this new PCF Control to your form via the legacy or modern designer (I use legacy due to field length issue described later).  Simply add any text field and bind this control to it.  
+1. After installing, you add this new PCF Control to your form via the legacy or modern designer (I use legacy due to field length issue described later).  Simply add any text field and bind this control to it. 
 ![Alt text](images/LegacyDesigner_AddTextField.png)
-Be sure to hide the label. 
-![Alt text](images/LegacyDesigner_AddTextField2.png)
-Go to the Controls tab and pick the `FetchXml DetailsList`.
 
+2. Be sure to hide the label. 
+![Alt text](images/LegacyDesigner_AddTextField2.png)
+
+3. Go to the Controls tab and pick the `FetchXml DetailsList`.
 ![Alt text](images/AddControl_Pick.png)
-Set the radio buttons so the control is visiable, and set the Input Parameters.
+4. Set the radio buttons so the control is visiable, and set the Input Parameters.
 ![Alt text](images/AddControl_SetProperties.png)
 
 ### Set Up Notes
-Both the new and legacy designers will likely not allow you to paste in text long enough for more elaborate FetchXml queries and Column Layouts, so you have to use the legacy designer and a [workaround to extend the field length](https://powerusers.microsoft.com/t5/Power-Apps-Pro-Dev-ISV/Problem-with-maximum-length-of-Input-parameters-which-are-of/td-p/288295).
+Both the new and legacy designers will likely not allow you to paste in text long enough for more elaborate FetchXml queries and Column Layouts, so you have to use the legacy designer and a [workaround to extend the field length](https://powerusers.microsoft.com/t5/Power-Apps-Pro-Dev-ISV/Problem-with-maximum-length-of-Input-parameters-which-are-of/td-p/288295).  
+Essentially you use the legacy designer and hack the input box via F11 dev tools to set the maxlength to something like 9999 instead of the default 2000 if your text doesn't fit.
 ***
 ## Input Parameters (Properties)
 The grid has input parameters which must be set.
@@ -66,14 +68,12 @@ The grid has input parameters which must be set.
 - <code>RecordIdPlaceholder</code> is the placeholder text. This will be replaced with the current record id.  
 i.e. <code>[RECORDID]</code>
 
-- The <code>RecordId</code> is read from the current record in a bit of a hack at the moment as it's not super easy to get this in the Power Apps framework.  This can also be overridden with another lookup on the current form.  Simply set the <code>OverriddenRecordIdFieldName</code> to a lookup field on the current form and this id will be used instead of the id of the current record.
+- The <code>Record Id</code> is read from the current record in a bit of a hack at the moment as it's not super easy to get this in the Power Apps framework.  This can also be overridden with another lookup on the current form.  Simply set the <code>OverriddenRecordIdFieldName</code> to a lookup field on the current form and this id will be used instead of the id of the current record.
 
-- <code>ColumnLayoutJson</code> is a collection of columns used for the table layout.
-- <code>ItemsPerPage</code> is currently defaulted to 5000 as paging is currently not implemented.  // [NOT SUPPORTED CURRENTLY] ItemsPerPage is how many items to show per page. For now this is set at 5000 since paging and sorting seem to be at odds with eachother.
+- <code>ColumnLayoutJson</code> is a collection of columns used for the table layout.  See details below.
+- <code>ItemsPerPage</code> is defaults to 5000 as paging is currently not implemented.  // [NOT SUPPORTED CURRENTLY] ItemsPerPage is how many items to show per page. For now this is set at 5000 since paging and sorting seem to be at odds with eachother.
 - <code>DebugMode</code> can be set to <code>On</code> or <code>Off</code>.  When enabled, this will write extra details to console, break when entering the main control, and break on handled exceptions.
 
-
-Essentially you use the legacy designer and hack the input box via F11 dev tools to set the maxlength to something like 9999 instead of the default 2000 if your text doesn't fit.
 
 ## ColumnLayoutJson
 This is a list of [IColumn](https://learn.microsoft.com/en-us/javascript/api/sp-listview-extensibility/icolumn?view=sp-typescript-latest) from the [FluentUI DetailsList]( https://developer.microsoft.com/en-us/fluentui#/controls/web/detailslist).  Simply include all of the required fields for each column your data grid.  The options <code>data</code> object can be helpful for extra customization.
@@ -201,9 +201,9 @@ ColumnLayoutJson Example:
 ***
 ## Initial Setup
 
-1. If you don’t have Node.js installed, [install it from here](https://nodejs.org/en/)
+1. Ensure you have [Node.js](https://nodejs.org/en/) installed, 
 
-2. Clone this repository
+2. Clone this repository.
 
 3. Navigate into the project directory in terminal.
    ```bash
