@@ -1,5 +1,3 @@
-//import * as sampleResponsedata from './data/sample.Onegas.Response.webapi.json';
-//import * as sampleResponseColumnLayout from './data/sample.Onegas.columnLayout.webapi.json';
 import * as sampleResponsedata from './data/sample.Contracts.Response.webapi.json';
 import * as sampleResponseColumnLayout from './data/sample.Contracts.columnLayout.webapi.json';
 
