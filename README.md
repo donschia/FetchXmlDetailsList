@@ -5,7 +5,7 @@ This PCF Control generates a FluentUI DetailsList for subgrids loaded via a cust
 ---
 ![Alt text](img/ContractSubgrid.png)
 
-This solution was created to meet some recent challenges.  Specifically, I have fairly complex data models that vary based on some data points.  I am able to create multiple subgrids and switch between them via simple form JavaScript.  Another challenge was when Microsoft removed the Contract entity making it longer possible to view in the modern UI.  So until we are able to migrate all of the data (and the super complex data models) to a new entity, we need to be able to navigate to Contract records.  This solution allows us to render links to Contracts using the classic web interface.
+This solution was created to meet some recent challenges.  Specifically, I have fairly complex data models that vary based on some data points.  I am able to create multiple subgrids and switch between them via simple form JavaScript.  Another challenge was when Microsoft removed the Contract entity making it no longer possible to view in the modern UI.  So until we are able to migrate all of the data (and the super complex data models) to a new entity, we need to be able to navigate to Contract records.  This solution allows us to render links to Contracts using the classic web interface.
 
 I had searched in vain for a similar FetchXml driven subgrid control so this seemed like a good enough reason to roll up the sleeves and try my hand at a PCF control.  It's far from perfect and uses some hacks, but it does solve some real issues for us in the meantime.
 
@@ -40,7 +40,7 @@ Essentially you use the legacy designer and hack the input box via F11 dev tools
 ## Input Parameters (Properties)
 The grid has input parameters which must be set.
 
-- <code>FetchXml</code> is the full FetchXml with a placeholder for the Record Id in place.
+- <code>FetchXml</code> is the full FetchXml with a placeholder for the Record Id in place. In this example we can show all contracts where the current Account is the Customer or the Billing Customer.  
 ```xml
 <fetch>
   <entity name='contract'>
@@ -201,13 +201,13 @@ ColumnLayoutJson Example:
   }
 ]
 ````
-## ColumnLayoutJson Tips
+## Initial Configuration Tips
 If you have DebugMode turned on you can see in the console log three important items: `DynamicDetailsList fetchXml` (with the RecordIdPlaceholder replaced), `DynamicDetailsList columnLayout `, and `webAPI.retrieveMultipleRecords : this._allItems` which shows the records returned.
 ![Alt text](img/DebugModeOn-ShowConsoleLog.png)
 
 ***
 
-# Initial Setup to Build
+# Initial Setup for Building Solution
 
 1. Ensure you have [Node.js](https://nodejs.org/en/) installed, 
 
@@ -234,18 +234,20 @@ Prerequisite is to make sure you can connect to your DEV environment using the C
 ```bash
 buildAndDeploy.ps1
 ```
-Or if you want to rebuild the managed and unmanaged solution in the solution folder, you can go to a Visual Studio developer prompt and use these commands.  Otherwise you need to get the msbuild command available in your path.
+## Build Managed and Unmanaged Solutions
+To rebuild the managed and unmanaged solution in the solution folder, you need the `msbuild` command available in your path.  You can go to a Visual Studio developer prompt if you have that available.  
+
 The first time you need to also do a restore:
 ```bash
 msbuild /t:build /restore
 ```
 
-To Build Debug solutions
+To build Debug solutions
 ```bash
 msbuild
 ```
 
-To Build Release solutions
+To build Release solutions
 ```bash
 msbuild /p:configuration=Release
 ```
@@ -289,7 +291,7 @@ Another option if it's a date issue is to be sure to use a dateFormat in the col
 
 ***
 
-## TODOs:
+# TODOs:
 - Improve documentation.
  
 - Paging!  Paging is not implemented yet. Page size is locked at 5000 for now.
