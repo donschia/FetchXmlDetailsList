@@ -3,9 +3,9 @@
 This PCF Control generates a FluentUI DetailsList for subgrids loaded via a custom FetchXml query and column layout. This extends the query capabilities beyond the standard Model-Driven App subgrid.  You need to include an ID Placeholder which is replaced at runtime with the current record id.  It is also possible to pass in an id from the current record to be replaced in the same fashion.
 
 ---
-![Alt text](images/ContractSubgrid.png)
+![Alt text](img/ContractSubgrid.png)
 
-This solution was created to meet some recent challenges.  Specifically, I have fairly complex data model that varies based on some data points.  I am able to create multiple subgrids and switch between via simple form JavaScript.  Another challenge was when Microsoft removed the Contract entity making it longer possible to view in the modern UI.  So until we are able to migrate all of the data (and the super complex data models) to a new entity, we need to be able to navigate to Contract records.  This solution allows us to render links to Contracts using the classic web interface.
+This solution was created to meet some recent challenges.  Specifically, I have fairly complex data models that vary based on some data points.  I am able to create multiple subgrids and switch between them via simple form JavaScript.  Another challenge was when Microsoft removed the Contract entity making it longer possible to view in the modern UI.  So until we are able to migrate all of the data (and the super complex data models) to a new entity, we need to be able to navigate to Contract records.  This solution allows us to render links to Contracts using the classic web interface.
 
 I had searched in vain for a similar FetchXml driven subgrid control so this seemed like a good enough reason to roll up the sleeves and try my hand at a PCF control.  It's far from perfect and uses some hacks, but it does solve some real issues for us in the meantime.
 
@@ -23,15 +23,15 @@ I had searched in vain for a similar FetchXml driven subgrid control so this see
 A [Managed or Unmanaged Solution](https://github.com/donschia/FetchXmlDetailsList/tree/master/solution/bin/Release) is available to download and install in your development environment.  
 
 1. After installing, you add the control to your form via the legacy or modern designer (I use legacy due to field length issue described later).  Simply add any text field and bind this control to it. 
-![Alt text](images/LegacyDesigner_AddTextField.png)
+![Alt text](img/LegacyDesigner_AddTextField.png)
 
 2. Be sure to hide the label. 
-![Alt text](images/LegacyDesigner_AddTextField2.png)
+![Alt text](img/LegacyDesigner_AddTextField2.png)
 
 3. Go to the Controls tab and pick the `FetchXml DetailsList`.
-![Alt text](images/AddControl_Pick.png)
+![Alt text](img/AddControl_Pick.png)
 4. Set the radio buttons so the control is visible, and set the Input Parameters.
-![Alt text](images/AddControl_SetProperties.png)
+![Alt text](img/AddControl_SetProperties.png)
 
 ### Set Up Notes
 Both the new and legacy designers will likely not allow you to paste in text long enough for more elaborate FetchXml queries and Column Layouts, so you have to use the legacy designer and a [workaround to extend the field length](https://powerusers.microsoft.com/t5/Power-Apps-Pro-Dev-ISV/Problem-with-maximum-length-of-Input-parameters-which-are-of/td-p/288295).  
@@ -203,7 +203,7 @@ ColumnLayoutJson Example:
 ````
 ## ColumnLayoutJson Tips
 If you have DebugMode turned on you can see in the console log three important items: `DynamicDetailsList fetchXml` (with the RecordIdPlaceholder replaced), `DynamicDetailsList columnLayout `, and `webAPI.retrieveMultipleRecords : this._allItems` which shows the records returned.
-![Alt text](images/DebugModeOn-ShowConsoleLog.png)
+![Alt text](img/DebugModeOn-ShowConsoleLog.png)
 
 ***
 
@@ -215,15 +215,15 @@ If you have DebugMode turned on you can see in the console log three important i
 
 3. Navigate into the project directory in terminal.
    ```bash
-   $ cd FetchXmlDetailsList
+   cd FetchXmlDetailsList
    ```
 4. Install the dependencies
    ```bash
-   $ npm install
+   npm install
    ```
 5. Demo the subgrid with sample data and column layout in PCF Test Harness. Linking is disabled since this is not allowed in the tester.
    ```bash
-   $ npm start  
+   npm start  
    ```
 
 ## Build and Deploy
@@ -232,8 +232,24 @@ You will need to ensure you have installed the [Microsoft PowerApps CLI](https:/
    - <code>buildAndDeploy.ps1</code> will build the component, add it to a temporary solution (PowerAppsTools_YourOrg) , import to your DEV environment and Publish All.
 Prerequisite is to make sure you can connect to your DEV environment using the CLI tools.
 ```bash
-$ buildAndDeploy.ps1
+buildAndDeploy.ps1
 ```
+Or if you want to rebuild the managed and unmanaged solution in the solution folder, you can go to a Visual Studio developer prompt and use these commands.  Otherwise you need to get the msbuild command available in your path.
+The first time you need to also do a restore:
+```bash
+msbuild /t:build /restore
+```
+
+To Build Debug solutions
+```bash
+msbuild
+```
+
+To Build Release solutions
+```bash
+msbuild /p:configuration=Release
+```
+
 # Notes
 ## Response Details
 The response to the FetchXml get multiple query should have details in it which we need for the rendering to work.  Essentially the Xrm Web Api sets the headers and returns details we can work with.
