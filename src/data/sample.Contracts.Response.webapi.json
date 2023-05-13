@@ -2,7 +2,7 @@
   "@odata.context": "https://myorg.crm.dynamics.com/api/data/v9.2/$metadata#contracts(expireson,_billingcustomerid_value,billingcustomerid_account,statuscode,_customerid_value,customerid_account,title,activeon,_modifiedby_value,contractnumber,createdon,contractid,modifiedby,billingcustomerid_account(),customerid_account(),modifiedby())",
   "@Microsoft.Dynamics.CRM.totalrecordcount": -1,
   "@Microsoft.Dynamics.CRM.totalrecordcountlimitexceeded": false,
-  "@Microsoft.Dynamics.CRM.globalmetadataversion": "2911210167",
+  "@Microsoft.Dynamics.CRM.globalmetadataversion": "2911210168",
   "@owninguser.OData.Community.Display.V1.CurrentEntityField": "ownerid",
   "value": [
     {

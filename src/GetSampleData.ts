@@ -7,4 +7,5 @@ export function GetSampleData() {
 
     // For dynamics-web-api response without value node
     // return { dataItems : sampleResponsedata,  columns : sampleResponseColumnLayout,  primaryEntityName : 'account' };
+    
   }
