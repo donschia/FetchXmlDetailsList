@@ -5,10 +5,14 @@ This PCF Control generates a FluentUI DetailsList for subgrids loaded via a cust
 ---
 ![Alt text](images/ContractSubgrid.png)
 
+This solution was created to meet some recent challenges.  Specifically I have fairly complex data model that varies based on some data points.  I am able to create multiple subgrids and switch between via simple form JavaScript.  Another challange was when Microsoft removed the Contract entity making it longer possible to view in the modern UI.  So until we are able to migrate all of the data (and the super complex data models) to a new entity, we need to be able to navigate to Contract records.  This solution allow us to render links to Contracts using the classic web interface.
+
+I had searched in vain for a similar FetchXml driven subgrid control so this seemed like a good enough reason to roll up the sleeves and try my hand at a PCF control.  It's far from perfect and uses some hacks, but it does solve some real issues fopr us in the meantime.
+
 ## Features
 - Dynamic queries can be more complex than model driven apps views allow, for example with many more linked entities.  You can even include links to entities that are no longer available in the new user interface (i.e. Contract).
-- Uses [FluentUI DetailsList]( https://developer.microsoft.com/en-us/fluentui#/controls/web/detailslist) with a familiar look and feel  similar to model-driven read-only subgrid, supporting basic sorting and resizing of columns.  
-- Double clicking a row navigates to the base record and gridsupports navigation to linked entities.
+- Uses [FluentUI DetailsList]( https://developer.microsoft.com/en-us/fluentui#/controls/web/detailslist) with a familiar look and feel - similar to model-driven read-only subgrid, supporting basic sorting and resizing of columns.  
+- Double clicking a row navigates to the base record and supports navigation to linked entities.
 - Customization options for each column include date formatting, toggleable entity linking, absolute urls, relative urls, and so on.
 - Debug mode shows all data returned from FetchXml query for building the column layout.
 - Uses Placeholder to filter by a record id.  This defaults to the current record.  But this can be overridden with another lookup on the current form.
@@ -18,7 +22,7 @@ This PCF Control generates a FluentUI DetailsList for subgrids loaded via a cust
 ## Quick Start using Pre-Built Solution
 A [Managed or Unmanaged Solution](https://github.com/donschia/FetchXmlDetailsList/tree/master/solution/bin/Release) is available to download and install in your development environment.  
 
-1. After installing, you add this new PCF Control to your form via the legacy or modern designer (I use legacy due to field length issue described later).  Simply add any text field and bind this control to it. 
+1. After installing, you add the control to your form via the legacy or modern designer (I use legacy due to field length issue described later).  Simply add any text field and bind this control to it. 
 ![Alt text](images/LegacyDesigner_AddTextField.png)
 
 2. Be sure to hide the label. 
@@ -197,9 +201,13 @@ ColumnLayoutJson Example:
   }
 ]
 ````
+## ColumnLayoutJson Tips
+If you have DebugMode turned on you can see in the console log three important items: `DynamicDetailsList fetchXml` (with the RecordIdPlaceholder replaced), `DynamicDetailsList columnLayout `, and `webAPI.retrieveMultipleRecords : this._allItems` which shows the records returned.
+![Alt text](images/DebugModeOn-ShowConsoleLog.png)
 
 ***
-## Initial Setup
+
+# Initial Setup to Build
 
 1. Ensure you have [Node.js](https://nodejs.org/en/) installed, 
 
@@ -229,7 +237,7 @@ $ buildAndDeploy.ps1
 # Notes
 ## Response Details
 The response to the FetchXml get multiple query should have details in it which we need for the rendering to work.  Essentially the Xrm Web Api sets the headers and returns details we can work with.
-`prefer: odata.include-annotations="*"`
+`prefer: odata.include-annotations="*"`  Enable DebugMode and check the F11 console log.  This will give you a good idea how to include columns for the ColumnLayoutJson.
 
 # Issues
 ## Dynamics-Web-Api library initial set up issue
@@ -266,14 +274,17 @@ Another option if it's a date issue is to be sure to use a dateFormat in the col
 ***
 
 ## TODOs:
-- Make documentation better!
+- Improve documentation.
  
 - Paging!  Paging is not implemented yet. Page size is locked at 5000 for now.
-  
-- Add an example FetchXml using out of the box entities instead of the current one with custom entities.  Try to include a number of entities and solve a real problem.  Could also include the Contract entity to show how you can support the deprecated/removed contract entity links to the old non-UCI interface.
 
 - Perhaps allow styling via input parameter.  i.e. alternate row color endable/disable, etc.
 
 - When not using the Dynamics-Web-Api 3rd party libary, don't include (require) it.  This will make the final bundle.js smaller.
-  
+    
 - Export is very rudimentary.  It would be much better if the header was the actual column name instead of column fieldName.
+
+- If you have fewer fields, the column widths are not right.  But with enough fields, it seems to space them out fine.
+
+- Test harness layout has issues, overlaying the whole test page and issues with control width.  But seems to work when rendered on the form.
+  
