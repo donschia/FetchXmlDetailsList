@@ -5,15 +5,15 @@ This PCF Control generates a FluentUI DetailsList for subgrids loaded via a cust
 ---
 ![Alt text](images/ContractSubgrid.png)
 
-This solution was created to meet some recent challenges.  Specifically I have fairly complex data model that varies based on some data points.  I am able to create multiple subgrids and switch between via simple form JavaScript.  Another challange was when Microsoft removed the Contract entity making it longer possible to view in the modern UI.  So until we are able to migrate all of the data (and the super complex data models) to a new entity, we need to be able to navigate to Contract records.  This solution allow us to render links to Contracts using the classic web interface.
+This solution was created to meet some recent challenges.  Specifically, I have fairly complex data model that varies based on some data points.  I am able to create multiple subgrids and switch between via simple form JavaScript.  Another challenge was when Microsoft removed the Contract entity making it longer possible to view in the modern UI.  So until we are able to migrate all of the data (and the super complex data models) to a new entity, we need to be able to navigate to Contract records.  This solution allows us to render links to Contracts using the classic web interface.
 
-I had searched in vain for a similar FetchXml driven subgrid control so this seemed like a good enough reason to roll up the sleeves and try my hand at a PCF control.  It's far from perfect and uses some hacks, but it does solve some real issues fopr us in the meantime.
+I had searched in vain for a similar FetchXml driven subgrid control so this seemed like a good enough reason to roll up the sleeves and try my hand at a PCF control.  It's far from perfect and uses some hacks, but it does solve some real issues for us in the meantime.
 
 ## Features
-- Dynamic queries can be more complex than model driven apps views allow, for example with many more linked entities.  You can even include links to entities that are no longer available in the new user interface (i.e. Contract).
+- Dynamic queries can be more complex than model driven apps views allow, for example with many more linked entities.  You can even include links to entities that are no longer available in the new user interface (i.e., Contract).
 - Uses [FluentUI DetailsList]( https://developer.microsoft.com/en-us/fluentui#/controls/web/detailslist) with a familiar look and feel - similar to model-driven read-only subgrid, supporting basic sorting and resizing of columns.  
 - Double clicking a row navigates to the base record and supports navigation to linked entities.
-- Customization options for each column include date formatting, toggleable entity linking, absolute urls, relative urls, and so on.
+- Customization options for each column include date formatting, toggleable entity linking, absolute URLs, relative URLs, and so on.
 - Debug mode shows all data returned from FetchXml query for building the column layout.
 - Uses Placeholder to filter by a record id.  This defaults to the current record.  But this can be overridden with another lookup on the current form.
 - Quick rendering, even for larger datasets.  
@@ -30,7 +30,7 @@ A [Managed or Unmanaged Solution](https://github.com/donschia/FetchXmlDetailsLis
 
 3. Go to the Controls tab and pick the `FetchXml DetailsList`.
 ![Alt text](images/AddControl_Pick.png)
-4. Set the radio buttons so the control is visiable, and set the Input Parameters.
+4. Set the radio buttons so the control is visible, and set the Input Parameters.
 ![Alt text](images/AddControl_SetProperties.png)
 
 ### Set Up Notes
@@ -75,7 +75,7 @@ i.e. <code>[RECORDID]</code>
 - The <code>Record Id</code> is read from the current record in a bit of a hack at the moment as it's not super easy to get this in the Power Apps framework.  This can also be overridden with another lookup on the current form.  Simply set the <code>OverriddenRecordIdFieldName</code> to a lookup field on the current form and this id will be used instead of the id of the current record.
 
 - <code>ColumnLayoutJson</code> is a collection of columns used for the table layout.  See details below.
-- <code>ItemsPerPage</code> is defaults to 5000 as paging is currently not implemented.  // [NOT SUPPORTED CURRENTLY] ItemsPerPage is how many items to show per page. For now this is set at 5000 since paging and sorting seem to be at odds with eachother.
+- <code>ItemsPerPage</code> is defaults to 5000 as paging is currently not implemented.  // [NOT SUPPORTED CURRENTLY] ItemsPerPage is how many items to show per page. For now this is set at 5000 since paging and sorting seem to be at odds with each other.
 - <code>DebugMode</code> can be set to <code>On</code> or <code>Off</code>.  When enabled, this will write extra details to console, break when entering the main control, and break on handled exceptions.
 
 
@@ -89,7 +89,7 @@ This is a list of [IColumn](https://learn.microsoft.com/en-us/javascript/api/sp-
 | fieldName | Yes |  String |  Column Label |
 | name | Yes |  String |  Field name matched from the returned Xrm Data |
 | minWidth | Yes |  Number |  Minimum field width (ie. 50) |
-| data | No | Object| Data Object with special stuff.  See defination below. |
+| data | No | Object| Data Object with special stuff.  See definition below. |
 
 ### data Object
 | Field Name | Required | Type | Description |
@@ -230,7 +230,7 @@ If you have DebugMode turned on you can see in the console log three important i
 You can build and deploy to your currently configured DEVELOPMENT Environment using the CLI [PAC PCF PUSH](https://learn.microsoft.com/en-us/power-platform/developer/cli/reference/pcf#pac-pcf-push) by running:  <code>buildAndDeploy.ps1</code>.  Note that the CLI requires connecting to your development org first. See the documentation for more details.
 You will need to ensure you have installed the [Microsoft PowerApps CLI](https://learn.microsoft.com/en-us/power-platform/developer/cli/introduction#install-power-apps-cli). 
    - <code>buildAndDeploy.ps1</code> will build the component, add it to a temporary solution (PowerAppsTools_YourOrg) , import to your DEV environment and Publish All.
-Prerequitiste is to make sure you can connect to your DEV environment using the CLI tools.
+Prerequisite is to make sure you can connect to your DEV environment using the CLI tools.
 ```bash
 $ buildAndDeploy.ps1
 ```
@@ -278,9 +278,9 @@ Another option if it's a date issue is to be sure to use a dateFormat in the col
  
 - Paging!  Paging is not implemented yet. Page size is locked at 5000 for now.
 
-- Perhaps allow styling via input parameter.  i.e. alternate row color endable/disable, etc.
+- Perhaps allow styling via input parameter.  i.e. alternate row color enable/disable, etc.
 
-- When not using the Dynamics-Web-Api 3rd party libary, don't include (require) it.  This will make the final bundle.js smaller.
+- When not using the Dynamics-Web-Api 3rd party library, don't include (require) it.  This will make the final bundle.js smaller.
     
 - Export is very rudimentary.  It would be much better if the header was the actual column name instead of column fieldName.
 
