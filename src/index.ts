@@ -54,15 +54,18 @@ export class FetchXmlDetailsList implements ComponentFramework.ReactControl<IInp
         if (this._context.parameters.DebugMode) {
             this._isDebugMode = this._context.parameters.DebugMode.raw == "1";
         }
-        if (this._isDebugMode) { 
-            debugger;  // eslint-disable-line no-debugger
-        }
+
+        // If you want this to break every time you set isDebugMode to true
+        //if (this._isDebugMode) { 
+        //    debugger;  // eslint-disable-line no-debugger        
+        //}
+
         if (this._context.parameters.ItemsPerPage) {
             this._itemsPerPage = this._context.parameters.ItemsPerPage.raw;
         }
         
-        // TODO: Validate the input parameters to make sure we get a friendly error instead of wierd errors
-        var fetchXML : string | null = this._context.parameters.FetchXml.raw; // ?? this.DEFAULT_FETCHXML;
+        // TODO: Validate the input parameters to make sure we get a friendly error instead of weird errors
+        var fetchXML : string | null = this._context.parameters.FetchXml.raw; 
         var recordIdPlaceholder : string | null = this._context.parameters.RecordIdPlaceholder.raw; // ?? "";  
     
         // This is just the simple control where the subgrid will be placed on the form
@@ -119,7 +122,7 @@ export class FetchXmlDetailsList implements ComponentFramework.ReactControl<IInp
         }
 
         // Update FetchXml, replace Record Id Placeholder with an actual Id
-        // Grab primary entity Name from FetchXml and re
+        // Grab primary entity Name from FetchXml
         // Test harness always initially passes in "val", so we can skip the following
         if (fetchXML != null && fetchXML != "val") {
             fetchXML =  fetchXML.replace(/"/g, "'");
@@ -129,8 +132,6 @@ export class FetchXmlDetailsList implements ComponentFramework.ReactControl<IInp
         }
 
         // Column Layout provides field ordering, names, and widths
-        // let fieldLayoutJson = this._context.parameters.FieldLayoutJson.raw;
-        // this._fieldLayout = JSON.parse(fieldLayoutJson); //this.DEFAULT_FIELDLAYOUT);
         let columnLayoutJson = this._context.parameters.ColumnLayoutJson.raw;
         this._columnLayout = columnLayoutJson != null && columnLayoutJson != "val" ? JSON.parse(columnLayoutJson) : null;
 
@@ -146,13 +147,14 @@ export class FetchXmlDetailsList implements ComponentFramework.ReactControl<IInp
     private replacePlaceholderWithId(fetchXML: string, recordId: string, recordIdPlaceholder: string) : string {
         if (recordId && recordIdPlaceholder) {
             if (fetchXML.indexOf(recordIdPlaceholder) > -1) {
-                //return fetchXML.replace(recordIdPlaceholder, recordId); // only replaces first occurance of string       
+                //return fetchXML.replace(recordIdPlaceholder, recordId); // only replaces first occurrence of string       
                 return this.replaceAll(fetchXML, recordIdPlaceholder, recordId);
             }
         }
         return fetchXML;
     }
 
+    // Replace ALL occurrences of a string
     private replaceAll(source: string, find: string, replace: string) : string{
         // eslint-disable-next-line no-useless-escape
         return source.replace(new RegExp(find.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&'), 'g'), replace);
@@ -164,8 +166,7 @@ export class FetchXmlDetailsList implements ComponentFramework.ReactControl<IInp
         let filter = fetchXml.matchAll(/<entity name='(.*?)'>/g).next();
         if (filter && filter.value && filter.value[1]) {
             primaryEntityName = filter.value[1];
-        }
-        
+        }        
         return primaryEntityName;
     }
     /**
@@ -175,34 +176,12 @@ export class FetchXmlDetailsList implements ComponentFramework.ReactControl<IInp
      */
     public updateView(context: ComponentFramework.Context<IInputs>): React.ReactElement {
         // debugger;  // eslint-disable-line no-debugger
-        //this.renderControl(context);
-        //let dataAndLayout: any;
-    
-        //ReactDOM.render(React.createElement(FluentUIDetailsListControl, data, {}), this.container);
-        //ata = require("../data/fetchXML.Response.json");
-
         let props = {  columns: this._columnLayout, primaryEntityName: this._primaryEntityName, fetchXml: this._fetchXML, isDebugMode: this._isDebugMode, context: context, baseD365Url: this._baseEnvironmentUrl };
         return React.createElement(DynamicDetailsList, props, {});
 
-        // TODO: Can we support a grid without a columnlayout?
-        // ie. Just use the fields in the dataset as the layout...
-        /*
-        if (this._fetchXML && this._fetchXML != "" && this._columnLayout) {
-            let props = {  columns: this._columnLayout, primaryEntityName: this._primaryEntityName, fetchXml: this._fetchXML, context: context }                     
-            return React.createElement(DynamicDetailsList, props, {});
-        }
-        else{
-            // Get some sample data while testing
-            let sampleData = GetSampleData();
-            let props = { dataItems: sampleData.dataItems, columns: sampleData.columns, primaryEntityName: sampleData.primaryEntityName, fetchXml: "", context: context }                     
-            return React.createElement(DynamicDetailsList, props, {});
-        }
-        */
-
-        //const props: IHelloWorldProps = { name: 'Hello, World!' };
-        //return React.createElement(
-        //    HelloWorld, props
-        //);
+        // TODO: Is it possible to support a grid without a columnlayout?
+        // i.e. Create a default columnListLayout from the data
+     
     }
 
     /**

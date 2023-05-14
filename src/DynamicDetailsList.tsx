@@ -79,7 +79,7 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
         // Check we actually have a query to run, otherwise try to use sample data
         // Don't bother with Web Api if we aren't actually fetching data
         // This way we can quickly see changes in the PCF Test harness and not have to endure a full deploy cycle
-        // Test harness will not have FetchXml input varaible available when debugging in test harness
+        // Test harness will not have FetchXml input variable available when debugging in test harness
         if (props.fetchXml) {
 
             // columnLayout with click handler added
@@ -110,7 +110,6 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
                         // this._pagingCookie = data["@Microsoft.Dynamics.CRM.fetchxmlpagingcookie"];
                         // this._totalNumberOfRecords =  data.count;
                         // Sometimes data is an array[]                
-                        // parentThis.loadGrid(data.length && data.length > 0 ? data[0] : data);
                         if (data && data.value && data.value.length > 0) {
                             this._allItems = data.value;
 
@@ -146,11 +145,10 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
                     });
             }
             else {
-                // use the regular out of the box Web Api (lacks _Formatted helpers)
+                // use the regular out of the box Web Api
                 this._pcfContext.webAPI.retrieveMultipleRecords(this._primaryEntityName, "?fetchXml=" + encodeURIComponent(this._fetchXml)).then(
                     (results: any) => {
                         if (results && results.entities && results.entities.length > 0) {
-                            //_accountActivitiesItems = this.populateRecords(results);
                             this._allItems = results.entities;
                             if (this._isDebugMode) {
                                 // console.log('webAPI.retrieveMultipleRecords : results', results);
@@ -252,7 +250,7 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
 
     // FluentUI DetailsList documentation:
     // https://developer.microsoft.com/en-us/fluentui#/controls/web/detailslist
-    // ScollablePane is helpful to recreate the standard Model-driven app experience
+    // ScrollablePane is helpful to recreate the standard Model-driven app experience
     // But seems to not play super nice with the PCF Test Harness as it can overlay the fields on the left side
     public render(): JSX.Element {
         const { columns, items, announcedMessage } = this.state;
@@ -266,16 +264,16 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
                                 <Text>{announcedMessage}</Text>
                             </Stack.Item>
                         )}
-                        <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto} style={{ top: '10px', zIndex: 0, bottom: '10px' }}>
+                        <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto} style={{ top: '5px', zIndex: 0, bottom: '5px' }}>
                             <Stack.Item>
                                 <DetailsList
                                     items={items}
                                     columns={columns}
-                                    /* layoutMode={DetailsListLayoutMode.justified} */
+                                    layoutMode={DetailsListLayoutMode.fixedColumns}
                                     compact={true}
                                     selectionMode={SelectionMode.none}
                                     isHeaderVisible={true}
-                                    /* constrainMode={ConstrainMode.unconstrained}*/
+                                    constrainMode={ConstrainMode.unconstrained}
                                     onRenderRow={this._onRenderRow}
                                     onRenderDetailsHeader={this._onRenderDetailsHeader}
                                     // Custom Rendering to support entity linking, Absolute Urls, formatted dates, etc.

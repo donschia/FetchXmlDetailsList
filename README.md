@@ -292,6 +292,8 @@ Another option if it's a date issue is to be sure to use a dateFormat in the col
 ***
 
 # TODOs:
+- The DetailsList is inside a FluentUI ScrollablePane to allow the subgrid to expand and scroll correctly, but it doesn't fit into it's parent container correctly in the *vertical* aspect.  It just overlays the rest of the elements after it.  So for now, add the subgrid as the last item on your form, or on a separate tab itself.   This is very evident in the test harness. I am looking into how to fix this. 
+![Alt text](img/TestHarnessOverlayIssue.png)  
 - Improve documentation.
  
 - Paging!  Paging is not implemented yet. Page size is locked at 5000 for now.
@@ -304,5 +306,5 @@ Another option if it's a date issue is to be sure to use a dateFormat in the col
 
 - If you have fewer fields, the column widths are not right.  But with enough fields, it seems to space them out fine.
 
-- Test harness layout has issues, overlaying the whole test page and issues with control width.  But seems to work when rendered on the form.
+
   
