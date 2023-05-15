@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <manifest>
   <!-- Manifest schema reference: https://learn.microsoft.com/en-us/power-apps/developer/component-framework/manifest-schema-reference/ -->
-  <control namespace="Schiavone" constructor="FetchXmlDetailsList" version="0.0.12" display-name-key="FetchXml DetailsList" 
+  <control namespace="Schiavone" constructor="FetchXmlDetailsList" version="0.0.13" display-name-key="FetchXml DetailsList" 
   description-key="Control generates a FluentUI DetailsList for subgrids loaded via a custom FetchXml query and column layout" control-type="virtual" preview-image="../img/Preview.png" >
     <!--external-service-usage node declares whether this 3rd party PCF control is using external service or not, if yes, this control will be considered as premium and please also add the external domain it is using.
     If it is not using any external service, please set the enabled="false" and DO NOT add any domain below. The "enabled" will be false by default.

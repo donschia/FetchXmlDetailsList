@@ -97,7 +97,8 @@ export class FetchXmlDetailsList implements ComponentFramework.ReactControl<IInp
             try {
                 // Hack to get the field value from parent Model Driven App
                 // eslint-disable-next-line no-undef
-                let tmpLookupField = Xrm.Page.getAttribute(overriddenRecordIdFieldName);
+                // @ts-ignore
+                let tmpLookupField: any = Xrm.Page.getAttribute(overriddenRecordIdFieldName);
                 if (tmpLookupField && tmpLookupField.getValue() && tmpLookupField.getValue()[0] && tmpLookupField.getValue()[0].id) {
                     recordId = tmpLookupField.getValue()[0].id;
                     if (this._isDebugMode){
