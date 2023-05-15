@@ -255,25 +255,26 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
     public render(): JSX.Element {
         const { columns, items, announcedMessage } = this.state;
         // if (this._isDebugMode) { console.log(items); }
+        let isSubgrid: boolean = true;
         if (items) {
             return (
                 <>
-                    <Stack>
+                    <Stack grow verticalFill className="container" style={{ height: "100%", width: "100%" }}>
                         {announcedMessage && (
                             <Stack.Item align="center">
                                 <Text>{announcedMessage}</Text>
                             </Stack.Item>
                         )}
-                        <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto} style={{ top: '5px', zIndex: 0, bottom: '5px' }}>
-                            <Stack.Item>
+                        <Stack.Item grow className="gridContainer">
+                            <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto} >
                                 <DetailsList
                                     items={items}
                                     columns={columns}
-                                    layoutMode={DetailsListLayoutMode.fixedColumns}
+                                    // layoutMode={DetailsListLayoutMode.fixedColumns}
                                     compact={true}
                                     selectionMode={SelectionMode.none}
                                     isHeaderVisible={true}
-                                    constrainMode={ConstrainMode.unconstrained}
+                                    // constrainMode={ConstrainMode.unconstrained}
                                     onRenderRow={this._onRenderRow}
                                     onRenderDetailsHeader={this._onRenderDetailsHeader}
                                     // Custom Rendering to support entity linking, Absolute Urls, formatted dates, etc.
@@ -287,12 +288,15 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
                                         });
                                     }}
                                 />
-                            </Stack.Item>
-                            <Stack.Item align="start" >
-                                <Text>Total Records: {items.length} ...  </Text>
-                                <Link onClick={() => ExportToCSVUtil(items, `export.${Date.now()}.csv`)}>[ Export dataset to CSV ] </Link>
-                            </Stack.Item>
-                        </ScrollablePane>
+
+                            </ScrollablePane>
+
+                        </Stack.Item>
+
+                        <Stack.Item align="start" >
+                            <Text>Total Records: {items.length} ...  </Text>
+                            <Link onClick={() => ExportToCSVUtil(items, `export.${Date.now()}.csv`)}>[ Export dataset to CSV ] </Link>
+                        </Stack.Item>
                     </Stack >
                 </>
             );

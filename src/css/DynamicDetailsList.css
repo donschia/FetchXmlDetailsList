@@ -1,0 +1,11 @@
+ .container{
+    width: 100%;
+    position: relative;
+    min-height: 200px ;  
+}
+ .gridContainer{
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: auto;
+    position: relative;
+}
