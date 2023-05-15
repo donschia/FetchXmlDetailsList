@@ -276,7 +276,7 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
                                     compact={true}
                                     selectionMode={SelectionMode.none}
                                     isHeaderVisible={true}
-                                    //constrainMode={ConstrainMode.unconstrained}
+                                    constrainMode={ConstrainMode.unconstrained}
                                     onRenderRow={this._onRenderRow}
                                     onRenderDetailsHeader={this._onRenderDetailsHeader}
                                     // Custom Rendering to support entity linking, Absolute Urls, formatted dates, etc.
@@ -298,9 +298,9 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
                         </ScrollablePane>
                     </Stack >
                 </>
-                /* // This version fixes the overlay issue but fitting it neatly into the section container
+                /* // This version fixes the overlay issue by fitting it neatly into the section container
                    // But if you have more than 4 rows, you will be scrolling a bunch since it's backed by a single line text field
-                   //  Perhaps a  workaround might be to use a multi line text field in the section and set the number of lines to auto expend?
+                   // Perhaps a workaround might be to use a multi line text field in the section and set the number of lines to auto expend?
                 <>
                     <Stack grow verticalFill className="container" style={{ height: "100%", width: "100%" }}>
                         {announcedMessage && (
