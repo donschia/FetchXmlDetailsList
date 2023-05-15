@@ -292,7 +292,7 @@ Another option if it's a date issue is to be sure to use a dateFormat in the col
 ***
 
 # TODOs:
-- The DetailsList is inside a FluentUI ScrollablePane to allow the subgrid to expand and scroll correctly, but it doesn't fit into it's parent container correctly in the *vertical* aspect.  It just overlays the rest of the elements after it.  So for now, add the subgrid as the last item on your form, or on a separate tab itself.   This is very evident in the test harness. I am looking into how to fix this. 
+- The DetailsList is inside a FluentUI ScrollablePane to allow the subgrid to expand and scroll correctly, but it doesn't fit into it's parent container correctly in the *vertical* aspect.  It just overlays the rest of the elements after it.  So for now, add the subgrid on a separate tab by itself.  This is very evident in the test harness. I am looking into how to fix this.   There is a commented out alternate layout that keeps the subgrid inside it's section, but it doesn't grow when you have more than 4 rows.  So using the overlay version for now. 
 ![Alt text](img/TestHarnessOverlayIssue.png)  
 - Improve documentation.
  

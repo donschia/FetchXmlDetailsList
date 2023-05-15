@@ -258,6 +258,49 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
         let isSubgrid: boolean = true;
         if (items) {
             return (
+                // This version works great as long as your FetchXml Details List subgrid is the only thing on the tab
+                // Otherwise this will overlay any other controls following the anchor text field
+                <>
+                    <Stack>
+                        {announcedMessage && (
+                            <Stack.Item align="center">
+                                <Text>{announcedMessage}</Text>
+                            </Stack.Item>
+                        )}
+                        <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto} style={{ top: '5px', zIndex: 0, bottom: '5px' }}>
+                            <Stack.Item>
+                                <DetailsList
+                                    items={items}
+                                    columns={columns}
+                                    //layoutMode={DetailsListLayoutMode.fixedColumns}
+                                    compact={true}
+                                    selectionMode={SelectionMode.none}
+                                    isHeaderVisible={true}
+                                    //constrainMode={ConstrainMode.unconstrained}
+                                    onRenderRow={this._onRenderRow}
+                                    onRenderDetailsHeader={this._onRenderDetailsHeader}
+                                    // Custom Rendering to support entity linking, Absolute Urls, formatted dates, etc.
+                                    onRenderItemColumn={this._renderItemColumn}
+                                    // Double clicking a row opens the record in Model Driven App
+                                    // PCF test harness will instead give error "Your control is trying to open a form. This is not yet supported."
+                                    onItemInvoked={(item: any) => {
+                                        this._pcfContext.navigation.openForm({
+                                            entityName: this._primaryEntityName,
+                                            entityId: item[this._primaryEntityName + "id"]
+                                        });
+                                    }}
+                                />
+                            </Stack.Item>
+                            <Stack.Item align="start" >
+                                <Text>Total Records: {items.length} ...  </Text>
+                                <Link onClick={() => ExportToCSVUtil(items, `export.${Date.now()}.csv`)}>[ Export dataset to CSV ] </Link>
+                            </Stack.Item>
+                        </ScrollablePane>
+                    </Stack >
+                </>
+                /* // This version fixes the overlay issue but fitting it neatly into the section container
+                   // But if you have more than 4 rows, you will be scrolling a bunch since it's backed by a single line text field
+                   //  Perhaps a  workaround might be to use a multi line text field in the section and set the number of lines to auto expend?
                 <>
                     <Stack grow verticalFill className="container" style={{ height: "100%", width: "100%" }}>
                         {announcedMessage && (
@@ -288,17 +331,15 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
                                         });
                                     }}
                                 />
-
                             </ScrollablePane>
-
                         </Stack.Item>
-
                         <Stack.Item align="start" >
                             <Text>Total Records: {items.length} ...  </Text>
                             <Link onClick={() => ExportToCSVUtil(items, `export.${Date.now()}.csv`)}>[ Export dataset to CSV ] </Link>
                         </Stack.Item>
                     </Stack >
                 </>
+                */
             );
         }
         else if (announcedMessage) {
