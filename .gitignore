@@ -17,5 +17,10 @@
 *.binlog
 .vs\
 
+# Visual Studio cache directory
+.vs/
+.vscode/
+
 # igonore backups too  
-#*.zip
+# Lets keep the builds in source control for ease of use
+# *.zip
