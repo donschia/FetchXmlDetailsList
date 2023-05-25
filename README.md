@@ -249,7 +249,7 @@ msbuild
 
 To build Release solutions
 ```bash
-msbuild /p:configuration=Release
+  msbuild /p:configuration=Release
 ```
 
 # Notes
