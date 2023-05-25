@@ -9,7 +9,6 @@ $StartTime = $(get-date)
 pac pcf push --publisher-prefix schia
 $elapsedTime = $(get-date) - $StartTime
 $pushTotalTime = "PCF PCF PUSH: {0:HH:mm:ss}" -f ([datetime]$elapsedTime.Ticks)
-
 "--------------"
 $buildTotalTime
 $pushTotalTime
