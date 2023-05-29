@@ -126,13 +126,10 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
                             );
                         }
                         else {
-                            this._announcedMessage = 'DynamicsWebApi.executeFetchXml has no results.';
+                            this._announcedMessage = 'Query returned no results.';
                             this.setState({
                                 announcedMessage: this._announcedMessage
                             });
-                            if (this._isDebugMode) {
-                                console.log(this._announcedMessage);
-                            }
                         }
                     }).catch((e) => {
                         if (this._isDebugMode) {
@@ -151,7 +148,6 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
                         if (results && results.entities && results.entities.length > 0) {
                             this._allItems = results.entities;
                             if (this._isDebugMode) {
-                                // console.log('webAPI.retrieveMultipleRecords : results', results);
                                 console.log('webAPI.retrieveMultipleRecords : this._allItems', this._allItems);
                             }
                             this.setState(
@@ -163,13 +159,10 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
                             );
                         }
                         else {
-                            this._announcedMessage = "webAPI.executeFetchXml has no results.";
+                            this._announcedMessage = "Query returned no results.";
                             this.setState({
                                 announcedMessage: this._announcedMessage
                             });
-                            if (this._isDebugMode) {
-                                this._announcedMessage = 'webAPI.executeFetchXml has no results.';
-                            }
                         }
                     },
                     (e: any) => {
