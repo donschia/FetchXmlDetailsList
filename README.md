@@ -261,9 +261,14 @@ The response to the FetchXml get multiple query should have details in it which 
 ## Dynamics-Web-Api library initial set up issue
 For ease of use, this control can be switched to use the dynamics-web-api library.  You can reference the field name with the _Formatted suffix.  But the default is to just use the out of the box xrm web api.
 
-There seems to be an issue with the dynamics-web-api 3rd party library. This gives a strange crypto error. You can either use the out of the box Web Api, or you can fix it by hacking the webpackConfig.js for pcf-scripts to tell it to ignore it.
+But there seems to be an issue with this dynamics-web-api 3rd party library. Initially it may give a strange crypto error:
 
-../FetchXmlDetailsList/blob/master/node_modules/pcf-scripts/webpackConfig.js#L61
+`ERROR in ./node_modules/dynamics-web-api/lib/utilities/Utility.js 2:14-31
+Module not found: Error: Can't resolve 'crypto' in 'C:\Projects\Web\FetchXmlDetailsList\node_modules\dynamics-web-api\lib\utilities'`
+
+I am considering removing dynamics-web-api support as the out of the box Web Api works fine.  For now you can fix it by editing the webpackConfig.js for pcf-scripts to tell it to ignore it.
+
+../FetchXmlDetailsList/node_modules/pcf-scripts/webpackConfig.js#L61
 
 Change this:
 ```javascript
