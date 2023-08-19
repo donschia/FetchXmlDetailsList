@@ -1,0 +1,26 @@
+<fetch top="50">
+  <entity name="connection">
+    <attribute name="record1id" />
+    <attribute name="record2id" />
+    <attribute name="record1objecttypecode" />
+    <attribute name="record2objecttypecode" />
+    <link-entity name="account" from="accountid" to="record1id" alias="account">
+      <attribute name="emailaddress1" />
+      <attribute name="name" />
+      <attribute name="modifiedon" />
+      <filter>
+        <condition attribute="accountid" operator="eq" value="[RECORDID]" />
+      </filter>
+    </link-entity>
+    <link-entity name="contact" from="contactid" to="record2id" link-type="outer" alias="contact">
+      <attribute name="emailaddress1" />
+      <attribute name="fullname" />
+      <attribute name="modifiedon" />
+    </link-entity>
+    <link-entity name="systemuser" from="systemuserid" to="record2id" link-type="outer" alias="systemuser">
+      <attribute name="internalemailaddress" />
+      <attribute name="fullname" />
+      <attribute name="modifiedon" />
+    </link-entity>
+  </entity>
+</fetch>
