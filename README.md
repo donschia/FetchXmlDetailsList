@@ -228,7 +228,7 @@ If you have DebugMode turned on you can see in the console log three important i
 
 ## Build and Deploy
 You can build and deploy to your currently configured DEVELOPMENT Environment using the CLI [PAC PCF PUSH](https://learn.microsoft.com/en-us/power-platform/developer/cli/reference/pcf#pac-pcf-push) by running:  <code>buildAndDeploy.ps1</code>.  Note that the CLI requires connecting to your development org first. See the documentation for more details.
-You will need to ensure you have installed the [Microsoft PowerApps CLI](https://learn.microsoft.com/en-us/power-platform/developer/cli/introduction#install-power-apps-cli). 
+You will need to ensure you have installed the [Microsoft PowerApps CLI](https://learn.microsoft.com/en-us/power-platform/developer/cli/introduction#install-power-apps-cli).  You will need to do a [pac auth create](https://learn.microsoft.com/en-us/power-platform/developer/cli/reference/auth#pac-auth-create) before running this script to get you connected to your DataVerse environment.
    - <code>buildAndDeploy.ps1</code> will build the component, add it to a temporary solution (PowerAppsTools_YourOrg) , import to your DEV environment and Publish All.
 Prerequisite is to make sure you can connect to your DEV environment using the CLI tools.
 ```bash
@@ -251,6 +251,12 @@ To build Release solutions
 ```bash
   msbuild /p:configuration=Release
 ```
+I have been unable to get the MSBUILD to make the ZIP files for some kind of strange errors.  So lately I have been using the MSBUILD that comes with the dotnet framework.  So you can try the script here:
+```bash
+C:\Projects\Web\FetchXmlDetailsList\solution\buildSolutions_Dotnet.ps1
+```
+
+You may have to change the path to match where your MSBuild.dll lives.  For me it is currently here: C:\Program Files\dotnet\sdk\7.0.304\MSBuild.dll.
 
 # Notes
 ## Response Details
