@@ -301,6 +301,93 @@ Objects are not valid as a React child (found: Wed Dec 31 9000 00:00:00 GMT-0600
 Another option if it's a date issue is to be sure to use a dateFormat in the column layout data object.
 
 ***
+# New Features
+## Combined Fields
+If you have a need to "coalesce" multiple fields and group multiple fields into one field, you can try this feature.  This is useful for data such as Connections where you may be joining multiple entity (table) types.  It technically will also allow joining the data from multiple fields too if you nave a need for that. 
+
+Essentially you can set up a CombinedField in your column layout like the following.  The <code>data.joinValuesFormTheseFields</code> is a list of all field names that are grouped and shown for that column.  If there are values in more than one of the fields, then we show them all (delimited by semicolons -- for now anyhow).  Of course, for mutually exclusive fields (like on the To side of Connections), you won't see more than one show up.
+
+```json
+     {
+        "key": "CombinedNameField",
+        "fieldName": "CombinedNameField",
+        "name": "Combined Names",
+        "minWidth": 200,
+        "data": {
+          "joinValuesFromTheseFields": ["contact.fullname","systemuser.fullname"]
+        }
+      },
+      {
+        "key": "CombinedEmailField",
+        "fieldName": "CombinedEmailField1",
+        "name": "Combined Emails",
+        "minWidth": 200,
+        "data": {
+          "joinValuesFromTheseFields": ["contact.emailaddress1","systemuser.internalemailaddress"]
+        }
+      },
+      {
+        "key": "CombinedModifiedOnField",
+        "fieldName": "CombinedModifiedOnField",
+        "name": "Combined ModifiedOn",
+        "minWidth": 80,
+        "data": {
+          "joinValuesFromTheseFields": ["contact.modifiedon","systemuser.modifiedon"],
+          "dateFormat": "yyyy-MM-dd hh:mm:ss"
+        }
+      },
+```
+The sample FetchXml starts on an Account record and shows any connected Contacts or SystemUsers.
+```XML
+<fetch top="50">
+  <entity name="connection">
+    <attribute name="record1id" />
+    <attribute name="record2id" />
+    <attribute name="record1objecttypecode" />
+    <attribute name="record2objecttypecode" />
+    <link-entity name="account" from="accountid" to="record1id" alias="account">
+      <attribute name="emailaddress1" />
+      <attribute name="name" />
+      <attribute name="modifiedon" />
+      <filter>
+        <condition attribute="accountid" operator="eq" value="[RECORDID]" />
+      </filter>
+    </link-entity>
+    <link-entity name="contact" from="contactid" to="record2id" link-type="outer" alias="contact">
+      <attribute name="emailaddress1" />
+      <attribute name="fullname" />
+      <attribute name="modifiedon" />
+    </link-entity>
+    <link-entity name="systemuser" from="systemuserid" to="record2id" link-type="outer" alias="systemuser">
+      <attribute name="internalemailaddress" />
+      <attribute name="fullname" />
+      <attribute name="modifiedon" />
+    </link-entity>
+  </entity>
+</fetch>
+```
+![image](https://github.com/donschia/FetchXmlDetailsList/assets/19396416/aa593d8c-ee5e-4b79-bf8d-9f94f4c409fb)
+
+## Alternate Sample Dataset has two options
+You can choose between a sample Contract dataset or Connections dataset by swapping out the lines in the *\src\GetSampleData.ts*.
+```Typescript
+// Use these two lines for Sample Contract dataset
+//import * as sampleResponseData from './data/sample.Contracts.Response.webapi.json';
+//import * as sampleResponseColumnLayout from './data/sample.Contracts.columnLayout.webapi.json';
+
+// Use these two lines for Sample Connections dataset
+import * as sampleResponseData from './data/sample.Connections.Response.webapi.json';
+import * as sampleResponseColumnLayout from './data/sample.Connections.columnLayout.webapi.json';
+
+export function GetSampleData() {
+    // Use following for Sample Contract dataset
+    // return { dataItems : sampleResponseData.value, columns : sampleResponseColumnLayout, primaryEntityName : 'account' };
+    
+    // Use following for Sample Connections dataset
+    return { dataItems : sampleResponseData.value, columns : sampleResponseColumnLayout, primaryEntityName : 'connection' };
+
+  }
+```
 
 # TODOs:
 - The DetailsList is inside a FluentUI ScrollablePane to allow the subgrid to expand and scroll correctly, but it doesn't fit into it's parent container correctly in the *vertical* aspect.  It just overlays the rest of the elements after it.  So for now, add the subgrid on a separate tab by itself.  This is very evident in the test harness. I am looking into how to fix this.   There is a commented out alternate layout that keeps the subgrid inside it's section, but it doesn't grow when you have more than 4 rows.  So using the overlay version for now. 
