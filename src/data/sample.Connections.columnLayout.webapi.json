@@ -26,7 +26,7 @@
         "name": "Combined Emails",
         "minWidth": 200,
         "data": {
-          "joinValuesFromTheseFields": ["contact.emailaddress1","systemuser.internalemailaddress","account.emailadddress1"]
+          "joinValuesFromTheseFields": ["contact.emailaddress1","systemuser.internalemailaddress"]
         }
       },
       {
@@ -35,7 +35,7 @@
         "name": "Combined ModifiedOn",
         "minWidth": 80,
         "data": {
-          "joinValuesFromTheseFields": ["contact.modifiedon","systemuser.modifiedon","account.modifedon"],
+          "joinValuesFromTheseFields": ["contact.modifiedon","systemuser.modifiedon"],
           "dateFormat": "yyyy-MM-dd hh:mm:ss"
         }
       },
