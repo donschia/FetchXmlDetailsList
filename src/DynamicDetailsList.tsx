@@ -358,8 +358,35 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
             fieldContent = item[column.key + _FORMATTEDVALUE];
         }
         // console.log(fieldContent, column, column.data);
+        
+        // Support joining more than one field into one table field    
+        if (column.data && column.data.joinValuesFromTheseFields) {
+            //debugger;
 
-        if (item[column.key]) {
+            let finalFieldContent = fieldContent ? fieldContent : "";
+            column.data.joinValuesFromTheseFields.forEach((extraFieldName: string) => {
+                let extrafieldContent = item[extraFieldName];
+                //if (item[column.data.alsoJoinTheseFields + _FORMATTEDVALUE]) {
+                //    extrafieldContent = item[column.data.joinValuesFromTheseFields + _FORMATTEDVALUE];
+                //}
+                // TODO: Make delimiter configurable
+                // TODO: Don't show Undefined for empty items
+                let delimiter = "; "; 
+                if(extrafieldContent && extrafieldContent != null) {
+                    finalFieldContent = finalFieldContent != "" ? `${finalFieldContent}${delimiter}${extrafieldContent}` : extrafieldContent;
+                }
+            });
+
+            return this.renderItem(finalFieldContent, item, column);
+        }
+
+        return this.renderItem(fieldContent, item, column);
+
+     
+    }
+
+    private renderItem = (fieldContent: any, item: any,  column: any): any => {
+        if (item[column.key] || fieldContent) {           
             // Handle any custom Date Formats via date=fns format string
             // DateFormat string options are here: https://date-fns.org/v2.29.3/docs/format
             // i.e.  "yyyy-dd-MM hh:mm:ss"
@@ -431,7 +458,6 @@ export class DynamicDetailsList extends React.Component<any, IDynamicDetailsList
             }
         }
     }
-
 
     private _onColumnClick = (ev: React.MouseEvent<HTMLElement>, column: IColumn): void => {
         // Handle sorting

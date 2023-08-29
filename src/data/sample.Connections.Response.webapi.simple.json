@@ -1,0 +1,91 @@
+{
+    "value": [
+      {
+        "connectionid": "df49e57b-b04c-ec11-8f8e-000d3a11ea15",
+        "record1id": "56d6fc80-39a5-e511-80e5-3863bb2e33b0",
+        "account.name": "Don Account",
+        "account.emailaddress1": "Don.Account@Test.com",
+        "account.modifiedon": "2023-08-18T15:01:53Z",
+        "record2id": "faa0d957-7fd6-41a5-8c9f-f48942c14d85",
+        "contact.fullname": "Don Contact 1",
+        "contact.emailaddress1": "Don.Contact1@Test.com",
+        "contact.modifiedon": "2021-11-23T22:55:41Z"
+
+      },
+      {
+        "connectionid": "9c05f81b-9cf0-eb11-bacb-000d3a52ca5e",
+        "record1id": "56d6fc80-39a5-e511-80e5-3863bb2e33b0",
+        "account.name": "Don Account",
+        "account.emailaddress1": "Don.Account@Test.com",
+        "account.modifiedon": "2023-08-18T15:01:53Z",
+        "record2id": "f7826234-f3fd-4f4e-8da1-1419eb9d9186",
+        "contact.fullname": "Don Contact 1",
+        "contact.emailaddress1": "DON.CONTACT2@TEST.COM",
+        "contact.modifiedon": "2021-07-29T18:37:56Z"
+      },
+      {
+        "connectionid": "1a3d2910-c7e4-eb11-bacb-000d3a8dddec",
+        "record1id": "56d6fc80-39a5-e511-80e5-3863bb2e33b0",
+        "account.name": "Don Account",
+        "account.emailaddress1": "Don.Account@Test.com",
+        "account.modifiedon": "2023-08-18T15:01:53Z",
+        "record2id": "01e53557-2e90-40cf-bbe6-5985f944bd52",
+        "contact.fullname": "Another Contact",
+        "contact.emailaddress1": "Another.Contact@test.COM",
+        "contact.modifiedon": "2021-07-14T17:15:16Z"
+      },
+      {
+        "connectionid": "b72c92a5-49d8-eb11-bacb-0022481d4007",
+        "record1id": "56d6fc80-39a5-e511-80e5-3863bb2e33b0",
+        "account.name": "Don Account",
+        "account.emailaddress1": "Don.Account@Test.com",
+        "account.modifiedon": "2023-08-18T15:01:53Z",
+        "record2id": "368cbed0-9a0a-4e49-88d1-16897315a558",
+        "contact.fullname": "Contact 123",
+        "contact.emailaddress1": "Contact123@test.COM",
+        "contact.modifiedon": "2021-06-28T19:47:19Z"
+      },
+      {
+        "connectionid": "57227996-b147-ec11-8c60-0022482657d8",
+        "record1id": "56d6fc80-39a5-e511-80e5-3863bb2e33b0",
+        "account.name": "Don Account",
+        "account.emailaddress1": "Don.Account@Test.com",
+        "account.modifiedon": "2023-08-18T15:01:53Z",
+        "record2id": "27412dbb-23cd-4717-8a9a-5fb8a9a63cac",
+        "contact.fullname": "Contact NoEmail",
+        "contact.modifiedon": "2021-11-17T14:20:57Z"
+      },
+      {
+        "connectionid": "bae2109e-b53e-ee11-bdf3-0022482a4562",
+        "record1id": "56d6fc80-39a5-e511-80e5-3863bb2e33b0",
+        "account.name": "Don Account",
+        "account.emailaddress1": "Don.Account@Test.com",
+        "account.modifiedon": "2023-08-18T15:01:53Z",
+        "record2id": "ad968e9c-872d-e611-80ed-5065f38b3281",      
+        "systemuser.fullname": "Don SystemUser1",      
+        "systemuser.internalemailaddress": "don.Systemuser1@testing.com",
+        "systemuser.modifiedon": "2023-07-30T09:08:50Z"
+      },
+      {
+        "connectionid": "bae2109e-b53e-ee11-bdf3-0022482a4562",
+        "record1id": "56d6fc80-39a5-e511-80e5-3863bb2e33b0",
+        "account.name": "Don Account",
+        "account.emailaddress1": "Don.Account@Test.com",
+        "account.modifiedon": "2023-08-18T15:01:53Z",
+        "record2id": "ad968e9c-872d-e611-80ed-5065f38b3282",      
+        "systemuser.fullname": "Don SystemUser2",      
+        "systemuser.internalemailaddress": "don.Systemuser2@testing.com",
+        "systemuser.modifiedon": "2022-07-22T09:08:50Z"
+      },
+      {
+        "connectionid": "bae2109e-b53e-ee11-bdf3-0022482a4562",
+        "record1id": "56d6fc80-39a5-e511-80e5-3863bb2e33b0",
+        "account.name": "Don Account",
+        "account.emailaddress1": "Don.Account@Test.com",
+        "account.modifiedon": "2023-08-18T15:01:53Z",
+        "record2id": "ad968e9c-872d-e611-80ed-5065f38b3282",      
+        "systemuser.fullname": "Don SystemUser NoEmail",
+        "systemuser.modifiedon": "2019-03-11T09:00:50Z"
+      }
+    ]
+  }

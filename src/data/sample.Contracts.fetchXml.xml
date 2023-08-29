@@ -3,6 +3,7 @@
     <attribute name='contractnumber' />
     <attribute name='contractid' />
     <attribute name='title' />
+    <attribute name='contractlanguage' />    
     <attribute name='statuscode' />
     <attribute name='createdon' />
     <attribute name='activeon' />

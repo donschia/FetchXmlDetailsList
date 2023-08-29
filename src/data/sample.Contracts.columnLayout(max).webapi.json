@@ -25,6 +25,13 @@
     "maxWidth": 170
   },
   {
+    "key": "contractlanguage",
+    "fieldName": "contractlanguage",
+    "name": "Description",
+    "minWidth": 100,
+    "maxWidth": 170
+  },
+  {
     "key": "statuscode",
     "fieldName": "statuscode",
     "name": "Contract Status",
