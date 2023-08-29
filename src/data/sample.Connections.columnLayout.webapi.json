@@ -1,87 +1,87 @@
 [
+  {
+      "key": "account.name",
+      "fieldName": "account.name",
+      "name": "Account Name",
+      "minWidth": 60
+    },
+  {
+      "key": "account.emailaddress1",
+      "fieldName": "account.emailaddress1",
+      "name": "Account Email",
+      "minWidth": 60
+    },
     {
-        "key": "account.name",
-        "fieldName": "account.name",
-        "name": "Account Name",
-        "minWidth": 60
-      },
-    {
-        "key": "account.emailaddress1",
-        "fieldName": "account.emailaddress1",
-        "name": "Account Email",
-        "minWidth": 60
-      },
-      {
-        "key": "CombinedNameField",
-        "fieldName": "CombinedNameField",
-        "name": "Combined Names",
-        "minWidth": 200,
-        "data": {
-          "joinValuesFromTheseFields": ["contact.fullname","systemuser.fullname"]
-        }
-      },
-      {
-        "key": "CombinedEmailField",
-        "fieldName": "CombinedEmailField1",
-        "name": "Combined Emails",
-        "minWidth": 200,
-        "data": {
-          "joinValuesFromTheseFields": ["contact.emailaddress1","systemuser.internalemailaddress","account.emailadddress1"]
-        }
-      },
-      {
-        "key": "CombinedModifiedOnField",
-        "fieldName": "CombinedModifiedOnField",
-        "name": "Combined ModifiedOn",
-        "minWidth": 80,
-        "data": {
-          "joinValuesFromTheseFields": ["contact.modifiedon","systemuser.modifiedon","account.modifedon"],
-          "dateFormat": "yyyy-MM-dd hh:mm:ss"
-        }
-      },
-      {
-        "key": "contact.fullname",
-        "fieldName": "contact.fullname",
-        "name": "Contact Name",
-        "minWidth": 100,
-        "data": {
-          "entityLinking": true
-        }
-      },
-      {
-        "key": "contact.emailaddress1",
-        "fieldName": "contact.emailaddress1",
-        "name": "Contact Email",
-        "minWidth": 100
-      },
-      {
-        "key": "systemuser.fullname",
-        "fieldName": "systemuser.fullname",
-        "name": "User Name",
-        "minWidth": 100
-      },
-      {
-        "key": "systemuser.internalemailaddress",
-        "fieldName": "systemuser.internalemailaddress",
-        "name": "User Email",
-        "minWidth": 100
-      },
-      {
-        "key": "_record1id_value",
-        "fieldName": "_record1id_value",
-        "name": "From",
-        "minWidth": 100,
-        "data": {
-          "entityLinking": true
-        }
-      },
-      {
-        "key": "_record2id_value",
-        "fieldName": "_record2id_value",
-        "name": "To",
-        "minWidth": 100,
-        "data": {
-          "entityLinking": true
-        }
+      "key": "CombinedNameField",
+      "fieldName": "CombinedNameField",
+      "name": "Combined Names",
+      "minWidth": 200,
+      "data": {
+        "joinValuesFromTheseFields": ["contact.fullname","systemuser.fullname"]
       }
+    },
+    {
+      "key": "CombinedEmailField",
+      "fieldName": "CombinedEmailField1",
+      "name": "Combined Emails",
+      "minWidth": 200,
+      "data": {
+        "joinValuesFromTheseFields": ["contact.emailaddress1","systemuser.internalemailaddress"]
+      }
+    },
+    {
+      "key": "CombinedModifiedOnField",
+      "fieldName": "CombinedModifiedOnField",
+      "name": "Combined ModifiedOn",
+      "minWidth": 80,
+      "data": {
+        "joinValuesFromTheseFields": ["contact.modifiedon","systemuser.modifiedon"],
+        "dateFormat": "yyyy-MM-dd hh:mm:ss"
+      }
+    },
+    {
+      "key": "contact.fullname",
+      "fieldName": "contact.fullname",
+      "name": "Contact Name",
+      "minWidth": 100,
+      "data": {
+        "entityLinking": true
+      }
+    },
+    {
+      "key": "contact.emailaddress1",
+      "fieldName": "contact.emailaddress1",
+      "name": "Contact Email",
+      "minWidth": 100
+    },
+    {
+      "key": "systemuser.fullname",
+      "fieldName": "systemuser.fullname",
+      "name": "User Name",
+      "minWidth": 100
+    },
+    {
+      "key": "systemuser.internalemailaddress",
+      "fieldName": "systemuser.internalemailaddress",
+      "name": "User Email",
+      "minWidth": 100
+    },
+    {
+      "key": "_record1id_value",
+      "fieldName": "_record1id_value",
+      "name": "From",
+      "minWidth": 100,
+      "data": {
+        "entityLinking": true
+      }
+    },
+    {
+      "key": "_record2id_value",
+      "fieldName": "_record2id_value",
+      "name": "To",
+      "minWidth": 100,
+      "data": {
+        "entityLinking": true
+      }
+    }
 ]
