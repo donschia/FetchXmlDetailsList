@@ -13,7 +13,7 @@ I had searched in vain for a similar FetchXml driven subgrid control so this see
 - Dynamic queries can be more complex than model driven apps views allow, for example with many more linked entities.  You can even include links to entities that are no longer available in the new user interface (i.e., Contract).
 - Uses [FluentUI DetailsList]( https://developer.microsoft.com/en-us/fluentui#/controls/web/detailslist) with a familiar look and feel - similar to model-driven read-only subgrid, supporting basic sorting and resizing of columns.  
 - Double clicking a row navigates to the base record and supports navigation to linked entities.
-- Customization options for each column include date formatting, toggleable entity linking, absolute URLs, relative URLs, and so on.
+- Customization options for each column include date formatting, toggleable entity linking, absolute URLs, relative URLs, [Combined Fields](#CombinedFields), and so on.
 - Debug mode shows all data returned from FetchXml query for building the column layout.
 - Uses Placeholder to filter by a record id.  This defaults to the current record.  But this can be overridden with another lookup on the current form.
 - Quick rendering, even for larger datasets.  
@@ -302,7 +302,7 @@ Another option if it's a date issue is to be sure to use a dateFormat in the col
 
 ***
 # New Features
-## Combined Fields
+## <a name="CombinedFields"></a>Combined Fields
 If you have a need to "coalesce" multiple fields and group multiple fields into one field, you can try this feature.  This is useful for data such as Connections where you may be joining multiple entity (table) types.  It technically will also allow joining the data from multiple fields too if you nave a need for that. 
 
 Essentially you can set up a CombinedField in your column layout like the following.  The <code>data.joinValuesFormTheseFields</code> is a list of all field names that are grouped and shown for that column.  If there are values in more than one of the fields, then we show them all (delimited by semicolons -- for now anyhow).  Of course, for mutually exclusive fields (like on the To side of Connections), you won't see more than one show up.
