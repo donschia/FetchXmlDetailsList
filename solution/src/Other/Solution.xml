@@ -7,7 +7,7 @@
       <LocalizedName description="FetchXml DetailsList" languagecode="1033" />
     </LocalizedNames>
     <Descriptions />
-    <Version>1.0.36</Version>
+    <Version>1.0.39</Version>
     <!-- Solution Package Type: Unmanaged(0)/Managed(1)/Both(2)-->
     <Managed>2</Managed>
     <Publisher>
@@ -15,16 +15,16 @@
       <UniqueName>DefaultPublishera4f65688be054bacb43f1d96aa57ef75</UniqueName>
       <LocalizedNames>
         <!-- Localized Cds Publisher Name in language code-->
-        <LocalizedName description="GLI" languagecode="1033" />
+        <LocalizedName description="Donschia" languagecode="1033" />
       </LocalizedNames>
       <Descriptions>
         <!-- Description of Cds Publisher in language code -->
-        <Description description="GLI" languagecode="1033" />
+        <Description description="Donschia" languagecode="1033" />
       </Descriptions>
       <EMailAddress xsi:nil="true"></EMailAddress>
       <SupportingWebsiteUrl xsi:nil="true"></SupportingWebsiteUrl>
       <!-- Customization Prefix for the Cds Publisher-->
-      <CustomizationPrefix>gli</CustomizationPrefix>
+      <CustomizationPrefix>donschia</CustomizationPrefix>
       <!-- Derived Option Value Prefix for the Customization Prefix of Cds Publisher -->
       <CustomizationOptionValuePrefix>68451</CustomizationOptionValuePrefix>
       <Addresses>

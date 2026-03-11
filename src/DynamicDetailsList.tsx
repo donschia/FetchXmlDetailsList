@@ -6,6 +6,8 @@ import { renderItemColumn } from './CellRenderer';
 import { DataGridWrapper } from './DataGridWrapper';
 import { compareValues, normalizeColumns } from './columnUtils';
 import { openCustomPage } from './utils/customPageNavigation';
+import packageJson from '../package.json';
+
 
 export class DynamicDetailsList extends React.Component<IDynamicDetailsListProps, IDynamicDetailsListState> {
     private _allItems: any[];
@@ -84,6 +86,9 @@ export class DynamicDetailsList extends React.Component<IDynamicDetailsListProps
         this._allItems = props.items || [];
         this._baseEnvironmentUrl = props.baseD365Url;
 
+        // Log version to console for debugging
+        console.log(`FetchXml DetailsList Control v${packageJson.version}`);
+        
         // Parse custom button configuration(s) from JSON string
         // Supports both single object and array format
         if (props.CustomButtonConfig) {

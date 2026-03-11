@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <manifest>
   <!-- Manifest schema reference: https://learn.microsoft.com/en-us/power-apps/developer/component-framework/manifest-schema-reference/ -->
-  <control namespace="GLI" constructor="FetchXmlDetailsList" version="0.0.50" display-name-key="FetchXml DetailsList" description-key="Control generates a FluentUI DetailsList for subgrids loaded via a custom FetchXml query and column layout" control-type="virtual" preview-image="../img/Preview.png">
+  <control namespace="SchiavoneGLI" constructor="FetchXmlDetailsList" version="1.0.39" display-name-key="FetchXml DetailsList" description-key="Control generates a FluentUI DetailsList for subgrids loaded via a custom FetchXml query and column layout" control-type="virtual" preview-image="../img/Preview.png">
     <!--external-service-usage node declares whether this 3rd party PCF control is using external service or not, if yes, this control will be considered as premium and please also add the external domain it is using.
     If it is not using any external service, please set the enabled="false" and DO NOT add any domain below. The "enabled" will be false by default.
     Example1:
@@ -60,6 +60,8 @@
       <value name="On" display-name-key="On" description-key="Hide Bulk Edit button" default="true">1</value>
     </property>
     <property name="CustomButtonConfig" display-name-key="Custom Button Configuration" description-key="JSON configuration for custom ribbon button (e.g., {buttonText:Create Projects, functionName:createProjects, customPageName:gli_projectcreator_cc71d, webResourceName:gli_projectribbon.js})" of-type="Multiple" usage="input" required="false" />
+    <!--Read-only output property to display version -->
+    <property name="ControlVersion" display-name-key="Control Version" description-key="Version of the FetchXml DetailsList control" of-type="SingleLine.Text" usage="output" />
     <resources>
       <code path="index.ts" order="1" />
       <css path="css/DynamicDetailsList.css" order="1" />

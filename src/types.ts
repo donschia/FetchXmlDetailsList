@@ -74,3 +74,4 @@ export interface IDynamicDetailsListState {
     selectedRowIds: Set<TableRowId>;
     focusedCellId?: string;
 }
+

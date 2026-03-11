@@ -9,8 +9,8 @@
 
   <PropertyGroup>
     <Name>FetchXmlDetailsList</Name>
-    <ProjectGuid>f886440b-98a6-4172-9717-1768020c3e20</ProjectGuid>
-    <OutputPath>$(MSBuildThisFileDirectory)out\controls</OutputPath>
+    <ProjectGuid>1b3b957d-a3c5-40ba-bc50-b0cf2a4b96a6</ProjectGuid>
+    <OutputPath>$(MSBuildThisFileDirectory)\out\controls</OutputPath>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -18,6 +18,8 @@
     <!--Remove TargetFramework when this is available in 16.1-->
     <TargetFramework>net462</TargetFramework>
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
+    <PcfBuildMode>production</PcfBuildMode>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
 
   <ItemGroup>
@@ -29,16 +31,38 @@
     <ExcludeDirectories Include="$(MSBuildThisFileDirectory)\.gitignore" />
     <ExcludeDirectories Include="$(MSBuildThisFileDirectory)\bin\**" />
     <ExcludeDirectories Include="$(MSBuildThisFileDirectory)\obj\**" />
-    <ExcludeDirectories Include="$(OutputPath)\**" />
+    <ExcludeDirectories Include="$(MSBuildThisFileDirectory)\solution\**" />
     <ExcludeDirectories Include="$(MSBuildThisFileDirectory)\*.pcfproj" />
     <ExcludeDirectories Include="$(MSBuildThisFileDirectory)\*.pcfproj.user" />
     <ExcludeDirectories Include="$(MSBuildThisFileDirectory)\*.sln" />
-    <ExcludeDirectories Include="$(MSBuildThisFileDirectory)\node_modules\**" />
   </ItemGroup>
 
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)\**" Exclude="@(ExcludeDirectories)" />
+    <None Include="$(MSBuildThisFileDirectory)\node_modules\**" Exclude="@(ExcludeDirectories)" />
   </ItemGroup>
+
+  <!-- Add missing target that solution project expects -->
+  <Target Name="GetProjectOutputPath">
+    <PropertyGroup>
+      <ProjectOutputPath>$(OutputPath)</ProjectOutputPath>
+    </PropertyGroup>
+  </Target>
+
+  <!-- Read version from Solution.xml and update package.json -->
+  <Target Name="UpdatePackageVersion" BeforeTargets="BeforeBuild">
+    <XmlPeek XmlInputPath="$(MSBuildThisFileDirectory)solution\src\Other\Solution.xml" Query="/ImportExportXml/SolutionManifest/Version/text()">
+      <Output TaskParameter="Result" PropertyName="SolutionVersion" />
+    </XmlPeek>
+    
+    <Message Text="Solution Version: $(SolutionVersion)" Importance="high" />
+    
+    <!-- Update package.json version -->
+    <Exec Command="npm version $(SolutionVersion) --no-git-tag-version --allow-same-version" WorkingDirectory="$(MSBuildThisFileDirectory)" />
+    
+    <!-- Update ControlManifest.Input.xml version -->
+    <XmlPoke XmlInputPath="$(MSBuildThisFileDirectory)src\ControlManifest.Input.xml" Query="/manifest/control/@version" Value="$(SolutionVersion)" />
+  </Target>
 
   <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" />
   <Import Project="$(PowerAppsTargetsPath)\Microsoft.PowerApps.VisualStudio.Pcf.targets" Condition="Exists('$(PowerAppsTargetsPath)\Microsoft.PowerApps.VisualStudio.Pcf.targets')" />

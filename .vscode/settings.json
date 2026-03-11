@@ -1,5 +1,8 @@
 {
     "cSpell.words": [
         "lookuplogicalname"
-    ]
+    ],
+  "files.associations": {
+    "*.cdsproj": "xml"
+  }
 }

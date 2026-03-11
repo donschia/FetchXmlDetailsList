@@ -2,6 +2,7 @@ import { IInputs, IOutputs } from "./generated/ManifestTypes";
 import * as React from "react";
 import { DynamicDetailsList } from "./DynamicDetailsList";
 import { TableColumnDefinition } from "@fluentui/react-components";
+import packageJson from '../package.json';
 
 export class FetchXmlDetailsList implements ComponentFramework.ReactControl<IInputs, IOutputs> {
     private _primaryEntityName: string;
@@ -155,7 +156,9 @@ export class FetchXmlDetailsList implements ComponentFramework.ReactControl<IInp
      * @returns an object based on nomenclature defined in manifest, expecting object[s] for property marked as “bound” or “output”
      */
     public getOutputs(): IOutputs {
-        return { };
+        return {
+            ControlVersion: packageJson.version
+        };
     }
 
     /**

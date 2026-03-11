@@ -1,4 +1,4 @@
-// eslint-disable-next-line no-undef
+/* eslint-env node */
 const webpack = require('webpack');
 
 module.exports = {

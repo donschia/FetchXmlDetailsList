@@ -1,39 +1,39 @@
 {
-  "name": "pcf-project",
-  "version": "1.0.0",
-  "description": "Project containing your PowerApps Component Framework (PCF) control.",
-  "scripts": {
-    "build": "pcf-scripts build",
-    "clean": "pcf-scripts clean",
-    "lint": "pcf-scripts lint",
-    "lint:fix": "pcf-scripts lint fix",
-    "rebuild": "pcf-scripts rebuild",
-    "start": "pcf-scripts start",
-    "refreshTypes": "pcf-scripts refreshTypes"
-  },
-  "dependencies": {
-    "@fluentui/react-components": "9.46.2",
-    "@fluentui/react-table": "^9.1.13",
-    "date-fns": "^2.29.3",
-    "react": "16.14.0",
-    "react-dom": "16.14.0"
-  },
-  "devDependencies": {
-    "@microsoft/eslint-plugin-power-apps": "^0.2.6",
-    "@types/date-fns": "^2.5.3",
-    "@types/node": "^18.8.2",
-    "@types/powerapps-component-framework": "^1.3.4",
-    "@typescript-eslint/eslint-plugin": "^5.39.0",
-    "@typescript-eslint/parser": "^5.39.0",
-    "baseline-browser-mapping": "^2.9.19",
-    "eslint": "^8.24.0",
-    "eslint-plugin-import": "^2.26.0",
-    "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-promise": "^6.0.1",
-    "eslint-plugin-react": "^7.31.8",
-    "pcf-scripts": "^1",
-    "pcf-start": "^1",
-    "react": "^16.14",
-    "typescript": "^4.8.4"
-  }
+    "name": "pcf-project",
+    "version": "1.0.39",
+    "description": "Project containing your PowerApps Component Framework (PCF) control.",
+    "scripts": {
+        "build": "pcf-scripts build",
+        "clean": "pcf-scripts clean",
+        "lint": "pcf-scripts lint",
+        "lint:fix": "pcf-scripts lint fix",
+        "rebuild": "pcf-scripts rebuild",
+        "start": "pcf-scripts start",
+        "refreshTypes": "pcf-scripts refreshTypes"
+    },
+    "dependencies": {
+        "@fluentui/react-components": "9.46.2",
+        "@fluentui/react-table": "^9.1.13",
+        "date-fns": "^2.29.3",
+        "react": "16.14.0",
+        "react-dom": "16.14.0"
+    },
+    "devDependencies": {
+        "@microsoft/eslint-plugin-power-apps": "^0.2.6",
+        "@types/date-fns": "^2.5.3",
+        "@types/node": "^18.8.2",
+        "@types/powerapps-component-framework": "^1.3.4",
+        "@typescript-eslint/eslint-plugin": "^5.39.0",
+        "@typescript-eslint/parser": "^5.39.0",
+        "baseline-browser-mapping": "^2.9.19",
+        "eslint": "^8.24.0",
+        "eslint-plugin-import": "^2.26.0",
+        "eslint-plugin-node": "^11.1.0",
+        "eslint-plugin-promise": "^6.0.1",
+        "eslint-plugin-react": "^7.31.8",
+        "pcf-scripts": "^1",
+        "pcf-start": "^1",
+        "react": "^16.14",
+        "typescript": "^4.8.4"
+    }
 }
